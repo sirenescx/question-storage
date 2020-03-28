@@ -1,0 +1,50 @@
+﻿@model QuestionStorage.Models.QuestionsInfo
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<head>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+
+<div>
+    <h4>Question #@Html.DisplayFor(model => model.QuestId)</h4>
+    <hr />
+
+    <p>
+        <pre class="pre">@Html.Raw(Model.QuestionText)</pre>
+    </p>
+        
+    @foreach (var answer in Model.QuestionAnswerVariants)
+    {
+        <ul style="list-style-type: square; line-height: 0.5em;">
+            <li>@answer.Answer</li>
+        </ul>
+    }
+
+     <p><b>Type: </b>@Model.Type.Name</p>
+     <p><b>Correct answers: </b></p>
+     @foreach (var variant in Model.QuestionAnswerVariants)
+     {
+         if (variant.IsCorrect)
+         {
+             <ul style="list-style-type: square; line-height: 0.5em;">
+                 <li>@variant.Answer</li>
+             </ul>
+         }
+     }
+
+    <p><b>Tags</b></p>
+    @foreach (var tag in Model.TagsQuestions)
+    {
+        <ul style="list-style-type: square; line-height: 0.5em;">
+            <li>@Html.ActionLink($"{tag.Tag.Name}", "Display", new { id = tag.Tag.TagId })</li>
+        </ul>
+    }
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.QuestId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

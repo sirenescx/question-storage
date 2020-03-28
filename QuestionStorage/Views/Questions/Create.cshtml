@@ -1,0 +1,76 @@
+﻿@model QuestionsInfo
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<head>
+    <title>Create new question</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <script src="/js/add-to-table.js"></script>
+    <script src="/js/display-answer-variants.js"></script>
+</head>
+
+@using (Html.BeginForm("Create", "Questions", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <body onload="displayAnswerVariants()">
+    <h1 class="page-header">Edit question</h1>
+
+    <label for="questionText">Question content</label>
+    <br/>
+    @Html.TextAreaFor(model => model.QuestionText, 8, 100,
+        new {@class = "textarea", id = "questionText"})
+    @*<textarea id="questionText" rows="8" cols="100"
+            class="textarea"></textarea>*@
+    <hr/>
+
+    @*<label for="typeOfQuestionSelector">Question type</label>
+            <br />
+            <select class="select"
+                    id="typeOfQuestionSelector"
+                    onchange="displayAnswerVariants()">
+                <option selected>Single choice</option>
+                <option>Multiple choice</option>
+                <option>Open answer</option>
+            </select>*@
+
+    @{
+        var qTypes = new Dictionary<string, string>
+        {
+            {"sc", "Single choice"},
+            {"mc", "Multiple choice"},
+            {"oa", "Open answer"}
+        };
+
+        var selectList = new SelectList(qTypes.Select(
+            x => new {Value = x.Key, Text = x.Value}), "Value", "Text");
+    }
+    
+    @Html.DropDownListFor(model => model.Type.Name, selectList,
+        new {@class = "select", onchange = "displayAnswerVariants()", id = "typeOfQuestionSelector"})
+    <hr/>
+
+    <p id="answerInfo"></p>
+    <hr/>
+
+    <label for="tagTable">Tags</label>
+    <table id="tagTable">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+    </table>
+
+    <p>
+        <button class="button" id="addTags"
+                type="button" onclick="addNewRow('tagTable')">
+            Add new tag
+        </button>
+    </p>
+    <br/>
+    
+    <input type="submit" class="submit-button" value="Create"/>
+
+    </body>
+}

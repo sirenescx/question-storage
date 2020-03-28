@@ -1,0 +1,131 @@
+﻿@model QuestionStorage.Models.QuestionsInfo
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<head>
+    <title>Edit question</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <script src="/js/add-to-table.js"></script>
+    <script src="/js/remove-from-table.js"></script>
+    <script src="/js/display-answer-variants.js"></script>
+</head>
+
+@* <body onload="displayAnswerVariants()"> *@
+<body>
+    <h1 style="color: #6839cf">Edit question</h1>
+
+    <label for="questionText">Question content</label>
+    <br />
+    <textarea id="questionText" rows="8" cols="100"
+        class="textarea">@Html.DisplayFor(model => model.QuestionText)
+    </textarea>
+    <hr />
+
+    <label for="typeOfQuestionSelector">Question type</label>
+    <br />
+    <select class="select"
+            id="typeOfQuestionSelector"
+            onchange="displayAnswerVariants()">
+        @if (Model.TypeId == 1)
+        {
+            <option selected value="sc">Single choice</option>
+            <option value="mc">Multiple choice</option>
+            <option value="oa">Open answer</option>
+        }
+        else if (Model.TypeId == 2)
+        {
+            <option value="sc">Single choice</option>
+            <option selected value="mc">Multiple choice</option>
+            <option value="oa">Open answer</option>
+        }
+        else
+        {
+            <option value="sc">Single choice</option>
+            <option value="mc">Multiple choice</option>
+            <option selected value="oa">Open answer</option>
+        }
+    </select>
+
+    <hr />
+    <p id="answerInfo"></p>
+     <label id="answerTableLabel" for="answerTable">Response options</label>
+        <table id="answerTable">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            @{
+                @foreach (var variant in @Model.QuestionAnswerVariants)
+                {
+                    <tr>
+                        <td><textarea class="textarea" rows="1" cols="60">@variant.Answer</textarea></td>
+                        <td>
+                            @if (variant.IsCorrect)
+                            {
+                                <input type="checkbox" checked id="correct">
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="correct">
+                            }
+                            <label for="correct">Correct</label>
+                        </td>
+                        <td><button class="remove-button" onclick="removeRow(this, 'answerTable')">✕</button></td>
+                    </tr>
+                }
+            }
+        </table>
+        
+         <p>
+            <button class="button" id="addAnswers"
+                    type="button" onclick="addNewRow('answerTable')">
+                Add new response option
+            </button>
+         </p>
+
+<hr />
+    <label for="tagTable">Tags</label>
+    <table id="tagTable">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        @{
+            List<TagsInfo> currentTags = ViewBag.CurrentTags;
+            List<TagsInfo> tags = ViewBag.AllTags;
+            @foreach (var tag in tags)
+            {
+                <tr>
+                    <td><textarea class="textarea" rows="1" cols="60">@tag.Name</textarea></td>
+                    <td>
+                        @if (currentTags.Contains(tag))
+                        {
+                            <input type="checkbox" checked id="use">
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="use">
+                        }
+                        <label for="use">Use</label>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
+    <p>
+        <button class="button" id="addTags"
+                type="button" onclick="addNewRow('tagTable')">
+            Add new tag
+        </button>
+    </p>
+
+    <br />
+    <p>
+        <input type="submit" class="submit-button" value="Submit" />
+    </p>
+
+</body>

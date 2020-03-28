@@ -1,0 +1,27 @@
+﻿@model IEnumerable<QuestionsInfo>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>@ViewBag.TagName</h1>
+
+@foreach (var item in Model)
+{
+    <div>
+        @*Question @Html.DisplayFor(modelItem => item.QuestId)
+        <br />
+        Tags:
+        @foreach (var tag in item.TagsQuestions)
+        {
+            <div>
+                <span>
+                    @tag.Tag.Name
+                </span>
+            </div>
+        }*@
+
+        <a asp-action="About" asp-route-id="@item.QuestId">Question #@item.QuestId</a>
+    </div>
+    <br />
+}
