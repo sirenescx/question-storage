@@ -1,8 +1,25 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Homepage | QStorage";
 }
 
-<div class="text-center">
-    <h1 class="display-4"></h1>
-    <p></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+@{
+    var bodyClass = User.Identity.IsAuthenticated ? string.Empty : "gradient";
+}
+<body class="@bodyClass">
+<div class="div-center">
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h1 class="lighter-text">Welcome to QStorage!</h1>
+        <p>QStorage is tests & questions constructor with an export option</p>
+        <input type="submit" class="user-data-submit-button" value="Get Started"
+               onclick="@("window.location.href='" + Url.Action("Login", "Account") + "'")"/>
+    }
 </div>
+</body>
+</html>

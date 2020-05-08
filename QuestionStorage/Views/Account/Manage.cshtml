@@ -1,0 +1,17 @@
+@model QuestionStorage.Models.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Manage";
+}
+
+<!DOCTYPE html>
+<head>
+    <title>Manage users</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+<body>
+@using (Html.BeginForm("Manage", "Account", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+}
+</body>

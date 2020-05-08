@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuestionStorage.Models
+namespace QuestionStorage.Models.QuizzesQuestionsModels
 {
     public partial class QuizesInfo
     {
@@ -17,8 +17,11 @@ namespace QuestionStorage.Models
         [Column("QuizID")]
         public int QuizId { get; set; }
         [Column(TypeName = "date")]
+        [Required(ErrorMessage = "Quiz date is required.")]
+        [DataType(DataType.Date, ErrorMessage = "Incorrect data format.")]
         public DateTime Date { get; set; }
         [StringLength(64)]
+        [Required(ErrorMessage = "Quiz title is required.")]
         public string Name { get; set; }
         public string Comment { get; set; }
 

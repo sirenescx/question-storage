@@ -1,27 +1,28 @@
-﻿@model IEnumerable<QuestionsInfo>
+﻿@model IEnumerable<QuestionStorage.Models.QuizzesQuestionsModels.QuestionsInfo>
 
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = ViewBag.TagName;
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ViewBag.TagName</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+
+<body>
 <h1>@ViewBag.TagName</h1>
 
 @foreach (var item in Model)
 {
     <div>
-        @*Question @Html.DisplayFor(modelItem => item.QuestId)
-        <br />
-        Tags:
-        @foreach (var tag in item.TagsQuestions)
-        {
-            <div>
-                <span>
-                    @tag.Tag.Name
-                </span>
-            </div>
-        }*@
-
-        <a asp-action="About" asp-route-id="@item.QuestId">Question #@item.QuestId</a>
+        <a asp-action="About" asp-route-id="@item.QuestId">#@item.QuestId. @item.QuestionName</a>
+        <div class="less-bottom-space">
+            <pre class="pre smaller-text">@Html.Raw(string.Join(' ', item.QuestionText.Split().Take(20)) + "</code>")...</pre>
+        </div>
     </div>
-    <br />
+    <br/>
 }
+</body>
+</html>

@@ -1,0 +1,64 @@
+﻿@using QuestionStorage.Models.QuizzesQuestionsModels
+@model IEnumerable<QuestionStorage.Models.QuizzesQuestionsModels.QuestionsInfo>
+
+@{
+    ViewData["Title"] = "Questions";
+    HashSet<TagsInfo> tags = ViewBag.Tags;
+    var tagList = new SelectList(tags.Select(t => new {Value = t.TagId, Text = t.Name}),
+        "Value", "Text");
+    HashSet<QuestionsInfo> questions = ViewBag.Question;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>List questions</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+
+<body>
+<br/>
+@using (Html.BeginForm("ListQuestions", "Display", FormMethod.Post))
+{
+    <div>
+        <div class="t">
+            @Html.DropDownList("Tags", tagList, new {id = "test", multiple = "multiple"})
+        </div>
+        <button type="submit" style="margin-left: 5px;" class="search-button t">Search</button>
+    </div>
+
+    <br/>
+
+    @if (Model != null)
+    {
+        @foreach (var item in Model)
+        {
+            <div>
+                <a asp-action="About" asp-route-id="@item.QuestId">#@item.QuestId. @item.QuestionName</a>
+                <div class="less-bottom-space">
+                    <pre class="pre smaller-text">@Html.Raw(string.Join(' ', item.QuestionText.Split().Take(20)) + "</code>")...</pre>
+                </div>
+                @foreach (var tag in item.TagsQuestions)
+                {
+                    <a class="tag-button"
+                       href='@Url.Action("ListByTag", "Display", new {id = tag.Tag.TagId})'>
+                        <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
+                    </a>
+                }
+            </div>
+            <br/>
+        }
+    }
+}
+</body>
+</html>
+
+@section Scripts {
+    <script>
+    $(function() {
+        $('#test').select2({
+        width : "100%",
+        });
+    });
+    </script>
+}

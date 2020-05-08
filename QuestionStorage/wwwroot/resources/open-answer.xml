@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+    <question type="shortanswer">
+        <name>
+            <text>$NAME</text>
+        </name>
+        <questiontext format="html">
+            <text><![CDATA[<p>$TEXT</p>]]></text>
+        </questiontext>
+        <generalfeedback format="html">
+            <text></text>
+        </generalfeedback>
+        <defaultgrade>1.0000000</defaultgrade>
+        <penalty>0.3333333</penalty>
+        <hidden>0</hidden>
+        <usecase>0</usecase>
+        $ANSWER
+    </question>
+</quiz>

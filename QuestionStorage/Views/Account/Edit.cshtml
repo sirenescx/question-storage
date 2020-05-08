@@ -1,0 +1,39 @@
+@model QuestionStorage.Models.ViewModels.EditViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<!DOCTYPE html>
+<head>
+    <title>Edit</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+<body>
+@using (Html.BeginForm("Edit", "Account", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <h1 class="page-header">Manage account</h1>
+    <br/>
+    <p class="ok">@ViewBag.Success</p>
+    <h5 class="content-header">Change Password</h5>
+    <p class="smaller-text less-bottom-space">Password</p>
+    @Html.ValidationMessageFor(model => model.Password, string.Empty,
+        new {@class = "text-danger smaller-text"})
+    <p>
+        @Html.EditorFor(model => model.Password,
+            new {htmlAttributes = new {@class = "password-textarea"}})</p>
+    <p class="smaller-text less-bottom-space less-top-space">Confirmation Password</p>
+    @Html.ValidationMessageFor(model => model.ConfirmPassword, string.Empty,
+        new {@class = "text-danger smaller-text"})
+    <p>
+        @Html.EditorFor(model => model.ConfirmPassword,
+            new {htmlAttributes = new {@class = "password-textarea"}})</p>
+                                                                      
+    <input type="submit" class="edit-submit-button" value="Change"/>
+}
+</body>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

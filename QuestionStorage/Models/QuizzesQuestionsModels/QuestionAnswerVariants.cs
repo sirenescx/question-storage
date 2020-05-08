@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuestionStorage.Models
+namespace QuestionStorage.Models.QuizzesQuestionsModels
 {
     public partial class QuestionAnswerVariants
     {
@@ -19,6 +19,8 @@ namespace QuestionStorage.Models
         public int QuestId { get; set; }
         public int SortCode { get; set; }
         [StringLength(256)]
+        [Required(ErrorMessage = "Response option text is required.")]
+        [MinLengthAttribute(1)]
         public string Answer { get; set; }
         public bool IsCorrect { get; set; }
 

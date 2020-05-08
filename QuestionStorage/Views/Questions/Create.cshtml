@@ -1,76 +1,127 @@
-﻿@model QuestionsInfo
+﻿@using QuestionStorage.Models.QuizzesQuestionsModels
+@model QuestionStorage.Models.QuizzesQuestionsModels.QuestionViewModel
 
 @{
     ViewData["Title"] = "Create";
+
+    var qTypes = new Dictionary<string, string>
+    {
+        {"sc", "Single choice"},
+        {"mc", "Multiple choice"},
+        {"oa", "Open answer"}
+    };
+
+    var selectList = new SelectList(qTypes.Select(
+        x => new {Value = x.Key, Text = x.Value}), "Value", "Text");
+
+    HashSet<TagsInfo> tags = ViewBag.Tags;
+    var tagList = new SelectList(tags.Select(t => new {Value = $"ŧ{t.TagId}", Text = t.Name}),
+        "Value", "Text");
 }
 
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html lang="en">
 <head>
-    <title>Create new question</title>
+    <title>Create</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
     <script src="/js/add-to-table.js"></script>
     <script src="/js/display-answer-variants.js"></script>
 </head>
 
+<body>
 @using (Html.BeginForm("Create", "Questions", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-    <body onload="displayAnswerVariants()">
-    <h1 class="page-header">Edit question</h1>
+    @Html.ValidationSummary("Please provide the details below and then click submit.",
+        new {@class = "text-danger"})
 
-    <label for="questionText">Question content</label>
-    <br/>
-    @Html.TextAreaFor(model => model.QuestionText, 8, 100,
+    <h1 class="page-header">Create question</h1>
+
+    <p class="less-bottom-space">Question title*</p>
+    @Html.TextAreaFor(model => model.Question.QuestionName, 1, 100,
+        new {@class = "textarea", id = "questionName"})
+
+    <p class="less-bottom-space">Question content*</p>
+    @Html.TextAreaFor(model => model.Question.QuestionText, 15, 100,
         new {@class = "textarea", id = "questionText"})
-    @*<textarea id="questionText" rows="8" cols="100"
-            class="textarea"></textarea>*@
     <hr/>
 
-    @*<label for="typeOfQuestionSelector">Question type</label>
-            <br />
-            <select class="select"
-                    id="typeOfQuestionSelector"
-                    onchange="displayAnswerVariants()">
-                <option selected>Single choice</option>
-                <option>Multiple choice</option>
-                <option>Open answer</option>
-            </select>*@
-
-    @{
-        var qTypes = new Dictionary<string, string>
-        {
-            {"sc", "Single choice"},
-            {"mc", "Multiple choice"},
-            {"oa", "Open answer"}
-        };
-
-        var selectList = new SelectList(qTypes.Select(
-            x => new {Value = x.Key, Text = x.Value}), "Value", "Text");
-    }
-    
-    @Html.DropDownListFor(model => model.Type.Name, selectList,
+    @Html.Label("Question type")
+    <br/>
+    @Html.DropDownListFor(model => model.Question.Type.Name, selectList,
         new {@class = "select", onchange = "displayAnswerVariants()", id = "typeOfQuestionSelector"})
     <hr/>
 
     <p id="answerInfo"></p>
-    <hr/>
-
-    <label for="tagTable">Tags</label>
-    <table id="tagTable">
+    <table id="answerTable">
+        <thead>
         <tr>
-            <th></th>
-            <th></th>
-        </tr>
+        <th style="font-weight: normal">Response options*</th>
+        <th style="font-weight: normal">Correct</th>
+        <th>
+        <tbody>
+        @{
+            for (var i = 0; i <= 1; ++i)
+            {
+                <tr>
+                    <td>
+                        @Html.TextAreaFor(model => model.AnswerOption.Answer, 1, 60,
+                            new {@class = "textarea"})
+                    </td>
+                    <td style="text-align: center; vertical-align: top">
+                        <input type="hidden" value="off" name="Correct">
+                        <input name="Correct" type="radio" value="on">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            }
+        }
     </table>
 
     <p>
-        <button class="button" id="addTags"
-                type="button" onclick="addNewRow('tagTable')">
-            Add new tag
+        <button class="button" id="addResponseOptions" type="button" onclick="addNewRow('answerTable')">
+            Add new response option
         </button>
     </p>
-    <br/>
-    
-    <input type="submit" class="submit-button" value="Create"/>
 
-    </body>
+    <hr/>
+
+    @Html.Label("Tags")
+    @Html.DropDownList("Tags", tagList, new {id = "tagView", multiple = "multiple"})
+    <br/>
+
+    <br/>
+    <input type="submit" class="submit-button" value="Create question"/>
+}
+</body>
+</html>
+
+@section Scripts {
+    <script>
+    $(function() {
+        $('#tagView').select2({
+        width : "100%",
+        tags: true,
+        });
+    });
+    </script>
+
+    <script>
+        let textareas = document.getElementsByTagName('textarea');
+        let count = textareas.length;
+        for (let i = 0; i < count; ++i) {
+            textareas[i].onkeydown = function(e) {
+                if(e.keyCode === 9 || e.which === 9){
+                    e.preventDefault();
+                    let s = this.selectionStart;
+                    this.value = this.value.substring(0, this.selectionStart) + "    " + this.value.substring(this.selectionEnd);
+                    this.selectionEnd = s + 1;
+                }
+            }
+        }
+        </script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

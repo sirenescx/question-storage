@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuestionStorage.Models
+namespace QuestionStorage.Models.QuizzesQuestionsModels
 {
     [Table("Tags_Questions")]
     public partial class TagsQuestions

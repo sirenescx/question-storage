@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuestionStorage.Models
+namespace QuestionStorage.Models.QuizzesQuestionsModels
 {
     public partial class QuestionsInfo
     {
@@ -22,10 +22,13 @@ namespace QuestionStorage.Models
         [Column("TypeID")]
         public int TypeId { get; set; }
         public int Flags { get; set; }
+        [Required(ErrorMessage = "Question title is required.")]
         [StringLength(256)]
+        [MinLengthAttribute(1)]
         public string QuestionName { get; set; }
+        [Required(ErrorMessage = "Question content is required.")]
+        [MinLengthAttribute(1)]
         public string QuestionText { get; set; }
-
         [ForeignKey(nameof(RubricId))]
         [InverseProperty(nameof(RubricsInfo.QuestionsInfo))]
         public virtual RubricsInfo Rubric { get; set; }

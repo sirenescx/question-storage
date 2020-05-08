@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/maria/Documents/UNIVERSITY/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj": {}
+    "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj": {}
   },
   "projects": {
-    "/Users/maria/Documents/UNIVERSITY/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj": {
+    "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/maria/Documents/UNIVERSITY/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj",
+        "projectUniqueName": "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj",
         "projectName": "QuestionStorage",
-        "projectPath": "/Users/maria/Documents/UNIVERSITY/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj",
+        "projectPath": "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj",
         "packagesPath": "/Users/maria/.nuget/packages/",
-        "outputPath": "/Users/maria/Documents/UNIVERSITY/coursework/QuestionStorage/QuestionStorage/obj/",
+        "outputPath": "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/maria/.config/NuGet/NuGet.Config"
@@ -36,6 +36,18 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.2, )"
@@ -53,6 +65,14 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[3.1.1, )"
+            },
+            "itext7": {
+              "target": "Package",
+              "version": "[7.1.11, )"
+            },
+            "itext7.pdfhtml": {
+              "target": "Package",
+              "version": "[3.0.0, )"
             }
           },
           "imports": [
@@ -73,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.200/RuntimeIdentifierGraph.json"
         }
       }
     }

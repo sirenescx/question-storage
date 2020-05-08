@@ -1,19 +1,34 @@
 ﻿function addNewRow(tableId) {
     const tableRef = document.getElementById(tableId);
     const newRow = tableRef.insertRow(-1);
-    const cell1 = newRow.insertCell(0);
-    const cell2 = newRow.insertCell(1);
+    let cell1 = newRow.insertCell(0);
+    let cell2 = newRow.insertCell(1);
+    let cell3 = newRow.insertCell(2);
     if (tableId === "answerTable") {
-        cell1.innerHTML = '<textarea name="AnswerText" class="textarea" rows="1" cols="60" width="100%"></textarea>';
-        cell2.innerHTML = '<input type="hidden" value="off" name="Correct"><input name="Correct" type="checkbox" id="correct" value="on"><label for="correct">Correct</label>';
-        const cell3 = newRow.insertCell(2);
-        cell3.innerHTML = '<button class="remove-button" onclick="removeRow(this, \'answerTable\')">✕</button>';
-    } else if (tableId === "tagTable") {
-        cell1.innerHTML = '<textarea name="TagName" class="textarea" rows="1" cols="60" width="100%"></textarea>';
-        cell2.innerHTML = '<input name="Use" type="checkbox" id="use"><label for="use">Use</label>';
-    }
+        let textarea = document.getElementsByName("AnswerOption.Answer")[0].cloneNode(false);
+        textarea.value = "";
+        cell1.appendChild(textarea);
+        setCellStyle(cell2);
+        setCellStyle(cell3);
+        let selected = document.getElementById("typeOfQuestionSelector").value;
+        if (selected === "sc") {
+            cell2.innerHTML = '<input type="hidden" value="off" name="Correct">' +
+                              '<input name="Correct" type="radio" value="on">';
+        } else if (selected === "mc") {
+            cell2.innerHTML = '<input type="hidden" value="off" name="Correct">' +
+                              '<input name="Correct" type="checkbox" value="on">';
+        }
+        cell3.innerHTML = '<button class="remove-button" id="addResponseOptions" onclick="removeRow(this, \'answerTable\')">✕</button>';
+    } 
 }
 
 function removeRow(oButton, table) {
     document.getElementById(table).deleteRow(oButton.parentNode.parentNode.rowIndex);
 }
+
+function setCellStyle(cell) {
+    cell.style.textAlign = "center";
+    cell.style.verticalAlign = "top";
+}
+
+

@@ -1,0 +1,40 @@
+@using QuestionStorage.Models.QuizzesQuestionsModels
+@{
+    ViewData["Title"] = "Export to XML";
+    HashSet<TagsInfo> tags = ViewBag.Tags;
+    var tagList = new SelectList(tags.Select(t => new {Value = t.TagId, Text = t.Name}),
+        "Value", "Text");
+    HashSet<QuestionsInfo> questions = ViewBag.Question;
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Export to XML</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+
+<body>
+@using (Html.BeginForm("Export", "Questions", FormMethod.Post))
+{
+    <h1 class="page-header">Export questions to XML</h1>
+    <br/>
+    <label>Select tags</label>
+    @Html.DropDownList("Tags", tagList, new {id = "test", multiple = "multiple"})
+    <br/>
+    <br/>
+    <input type="submit" class="search-button" value="Export"/>
+}
+</body>
+</html>
+
+@section Scripts {
+    <script>
+    $(function() {
+        $('#test').select2({
+        width : "100%",
+        });
+    });
+    </script>
+}

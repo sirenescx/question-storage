@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<quiz>
+    <question type="multichoice">
+        <name>
+            <text>$NAME</text>
+        </name>
+        <questiontext format="html">
+            <text><![CDATA[<p>$TEXT</p>]]></text>
+        </questiontext>
+        <generalfeedback format="html">
+            <text></text>
+        </generalfeedback>
+        <defaultgrade>1.0000000</defaultgrade>
+        <penalty>0.3333333</penalty>
+        <hidden>0</hidden>
+        <single>true</single>
+        <shuffleanswers>true</shuffleanswers>
+        <answernumbering>none</answernumbering>
+        <correctfeedback format="html">
+            <text>Ваш ответ верный.</text>
+        </correctfeedback>
+        <partiallycorrectfeedback format="html">
+            <text>Ваш ответ частично правильный.</text>
+        </partiallycorrectfeedback>
+        <incorrectfeedback format="html">
+            <text>Ваш ответ неправильный.</text>
+        </incorrectfeedback>
+        <shownumcorrect/>
+        $ANSWER
+    </question>
+</quiz>

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace QuestionStorage.Models
+namespace QuestionStorage.Models.QuizzesQuestionsModels
 {
     public partial class HSE_QuestContext : DbContext
     {
@@ -25,14 +25,14 @@ namespace QuestionStorage.Models
         public virtual DbSet<TagsQuestions> TagsQuestions { get; set; }
         public virtual DbSet<TypesInfo> TypesInfo { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=localhost;Database=HSE_quest;Trusted_Connection=False;user id=sa;password=Apple111");
-            }
-        }
+//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//             if (!optionsBuilder.IsConfigured)
+//             {
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//                 optionsBuilder.UseSqlServer(/* connection string from appsettings.json*/);
+//             }
+//         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

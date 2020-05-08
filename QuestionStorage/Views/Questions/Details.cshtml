@@ -1,50 +1,79 @@
-﻿@model QuestionStorage.Models.QuestionsInfo
+﻿@model QuestionStorage.Models.QuizzesQuestionsModels.QuestionsInfo
 
 @{
     ViewData["Title"] = "Details";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <head>
+    <title>Details</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
 </head>
 
+<body>
 <div>
-    <h4>Question #@Html.DisplayFor(model => model.QuestId)</h4>
-    <hr />
-
+    <h3 class="page-header">#@Html.DisplayFor(model => model.QuestId)</h3>
+    <p>
+        <b>@Model.QuestionName</b>
+    </p>
     <p>
         <pre class="pre">@Html.Raw(Model.QuestionText)</pre>
     </p>
-        
-    @foreach (var answer in Model.QuestionAnswerVariants)
+
+    @if (Model.TypeId != 3)
     {
-        <ul style="list-style-type: square; line-height: 0.5em;">
-            <li>@answer.Answer</li>
-        </ul>
+        @foreach (var answer in Model.QuestionAnswerVariants)
+        {
+            <ul class="ul-circle">
+                <li>
+                    <pre class="pre">@Html.Raw(answer.Answer)</pre>
+                </li>
+            </ul>
+        }
     }
 
-     <p><b>Type: </b>@Model.Type.Name</p>
-     <p><b>Correct answers: </b></p>
-     @foreach (var variant in Model.QuestionAnswerVariants)
-     {
-         if (variant.IsCorrect)
-         {
-             <ul style="list-style-type: square; line-height: 0.5em;">
-                 <li>@variant.Answer</li>
-             </ul>
-         }
-     }
+    <hr/>
 
-    <p><b>Tags</b></p>
+    <p>
+        <b class="content-header">Type: </b>@Model.Type.Name.ToLower()</p>
+
+    @{
+        var correctAnswerText = Model.TypeId == 2 ? "Correct answers" : "Correct answer";
+    }
+    <p>
+        <b class="content-header">@correctAnswerText</b>
+    </p>
+    @foreach (var variant in Model.QuestionAnswerVariants)
+    {
+        if (variant.IsCorrect)
+        {
+            <ul class="ul-circle">
+                <li>
+                    <pre class="pre">@Html.Raw(variant.Answer)</pre>
+                </li>
+            </ul>
+        }
+    }
+
+    <p>
+        <b class="content-header">Tags</b>
+    </p>
     @foreach (var tag in Model.TagsQuestions)
     {
-        <ul style="list-style-type: square; line-height: 0.5em;">
-            <li>@Html.ActionLink($"{tag.Tag.Name}", "Display", new { id = tag.Tag.TagId })</li>
-        </ul>
+        @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
+            new {id = tag.Tag.TagId}, new {@class = "tag-button"})
     }
 </div>
+
+<br/>
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model.QuestId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to List</a> |
+    <a asp-action="ExportToPdf" asp-route-id="@Model.QuestId">Export to PDF</a> |
+    <a asp-action="ExportToXml" asp-route-id="@Model.QuestId">Export to XML</a>
 </div>
+</body>
+</html>

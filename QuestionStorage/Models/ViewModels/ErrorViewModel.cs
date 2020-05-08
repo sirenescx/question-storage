@@ -1,4 +1,4 @@
-namespace QuestionStorage.Models
+namespace QuestionStorage.Models.ViewModels
 {
     public class ErrorViewModel
     {
