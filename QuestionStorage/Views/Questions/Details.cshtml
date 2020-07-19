@@ -42,18 +42,22 @@
     @{
         var correctAnswerText = Model.TypeId == 2 ? "Correct answers" : "Correct answer";
     }
-    <p>
-        <b class="content-header">@correctAnswerText</b>
-    </p>
-    @foreach (var variant in Model.QuestionAnswerVariants)
+    
+    @if (Model.TypeId != 4)
     {
-        if (variant.IsCorrect)
+        <p>
+            <b class="content-header">@correctAnswerText</b>
+        </p>
+        @foreach (var variant in Model.QuestionAnswerVariants)
         {
-            <ul class="ul-circle">
-                <li>
-                    <pre class="pre">@Html.Raw(variant.Answer)</pre>
-                </li>
-            </ul>
+            if (variant.IsCorrect)
+            {
+                <ul class="ul-circle">
+                    <li>
+                        <pre class="pre">@Html.Raw(variant.Answer)</pre>
+                    </li>
+                </ul>
+            }
         }
     }
 
@@ -73,7 +77,13 @@
     <a asp-action="Edit" asp-route-id="@Model.QuestId">Edit</a> |
     <a asp-action="Index">Back to List</a> |
     <a asp-action="ExportToPdf" asp-route-id="@Model.QuestId">Export to PDF</a> |
-    <a asp-action="ExportToXml" asp-route-id="@Model.QuestId">Export to XML</a>
+    <a asp-action="ExportToXml" asp-route-id="@Model.QuestId">Export to XML</a> |
+    @if (Model.IsTemplate)
+    {
+        <a asp-action="Generate" asp-route-id="@Model.QuestId">Generate questions</a>
+    }
 </div>
 </body>
 </html>
+
+

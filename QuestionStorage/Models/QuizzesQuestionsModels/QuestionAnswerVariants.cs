@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuestionStorage.Models.QuizzesQuestionsModels
 {
-    public partial class QuestionAnswerVariants
+    public class QuestionAnswerVariants
     {
-        public QuestionAnswerVariants()
-        {
-            QuizesInfoQuestionsInfoQuestionAnswerVariants = new HashSet<QuizesInfoQuestionsInfoQuestionAnswerVariants>();
-        }
-
         [Key]
         [Column("VariantID")]
         public int VariantId { get; set; }
@@ -27,7 +20,5 @@ namespace QuestionStorage.Models.QuizzesQuestionsModels
         [ForeignKey(nameof(QuestId))]
         [InverseProperty(nameof(QuestionsInfo.QuestionAnswerVariants))]
         public virtual QuestionsInfo Quest { get; set; }
-        [InverseProperty("Variant")]
-        public virtual ICollection<QuizesInfoQuestionsInfoQuestionAnswerVariants> QuizesInfoQuestionsInfoQuestionAnswerVariants { get; set; }
     }
 }

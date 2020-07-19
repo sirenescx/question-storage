@@ -12,6 +12,9 @@ function displayAnswerVariants() {
             generateTableCode(checkboxCode, document.getElementById("answerInfo"), true);
         } else if (selected === "oa") {
             generateCorrectAnswerCode();
+        } else if (selected === "o" && document.getElementById("answerOption") != null) {
+            removeElement("answerOption");
+            removeElement("correctAnswerLabel");
         }
     } else {
         if (selected === "sc") {
@@ -22,6 +25,15 @@ function displayAnswerVariants() {
             removeElement("answerTable");
             removeElement("addResponseOptions");
             generateCorrectAnswerCode();
+        } else if (selected === "o") {
+            if (document.getElementById("answerTable") != null) {
+                removeElement("answerTable");
+                removeElement("addResponseOptions");
+                document.getElementById("answerInfo").innerHTML = '';
+            } else if (document.getElementById("answerOption") != null) {
+                removeElement("answerOption");
+                removeElement("correctAnswerLabel");
+            }
         }
     }
 }
@@ -77,7 +89,7 @@ function generateTableCode(choiceCode, element, isNull) {
 }
 
 function getTextAreaCode(rowsCount, id) {
-    return '<textarea class="textarea input-validation-error" cols="60" data-val="true" ' +
+    return '<textarea class="textarea input-validation-error" cols="60" id="answerOption" data-val="true" ' +
                      'data-val-length="The field Answer must be a string with a maximum length of 256." ' +
                      'data-val-length-max="256" data-val-minlength="The field Answer must be a string or array type with a minimum length of \'1\'." ' +
                      'data-val-minlength-min="1" data-val-required="Response option text is required." ' +

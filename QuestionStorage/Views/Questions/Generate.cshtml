@@ -1,0 +1,110 @@
+@model QuestionStorage.Models.ViewModels.TemplateQuestionViewModel
+
+@{
+    ViewData["Title"] = "Generate questions from template";
+}
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html lang="en">
+<head>
+    <title>Generate questions from template</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <script src="/js/add-to-table.js"></script>
+    <script src="/js/display-answer-variants.js"></script>
+</head>
+<body>
+@using (Html.BeginForm("Generate", "Questions", new { id = Model.Question.QuestId}, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("Please provide the details below and then click submit.",
+        new {@class = "text-danger"})
+        
+    <h1 class="page-header">Generate questions from template</h1>
+                                                    
+    <p>
+        <b>@Model.Question.QuestionName</b>
+    </p>
+    <p>
+        <pre class="pre">@Html.Raw(Model.Question.QuestionText)</pre>
+    </p>
+
+    @if (Model.Question.TypeId != 3)
+    {
+        @foreach (var answer in Model.Question.QuestionAnswerVariants)
+        {
+            <ul class="ul-circle">
+                <li>
+                    <pre class="pre">@Html.Raw(answer.Answer)</pre>
+                </li>
+            </ul>
+        }
+    }
+    
+    var correctAnswerText = Model.Question.TypeId == 2 ? "Correct answers" : "Correct answer";
+
+    <p><b class="content-header">Type: </b>@Model.Question.Type.Name.ToLower()</p>
+
+    @if (Model.Question.TypeId != 4)
+    {
+    <p>
+    <b class="content-header">@correctAnswerText</b>
+    </p>
+      @foreach (var variant in Model.Question.QuestionAnswerVariants)
+        {
+            if (variant.IsCorrect)
+            {
+            <ul class="ul-circle">
+            <li>
+            <pre class="pre">@Html.Raw(variant.Answer)</pre>
+            </li>
+            </ul>
+            }
+        }
+    }
+    
+    <hr/>
+
+    <p class="less-bottom-space">Amount of questions*</p>
+    @Html.TextAreaFor(model => model.Amount, 1, 100,
+        new {@class = "textarea-amount", id = "questionAmount"})
+    
+    <p class="less-bottom-space">Code*</p>   
+    @Html.TextAreaFor(model => model.Code, 20, 100,
+        new {@class = "textarea-code", id = "code"})
+    
+    <br/>
+    <input type="submit" class="submit-button" value="Generate questions"/>
+                                                                      
+}
+</body>
+</html>
+
+@section Scripts {
+    <script>
+    $(function() {
+        $('#tagView').select2({
+        width : "100%",
+        tags: true,
+        });
+    });
+    </script>
+    
+    <script>
+        let textareas = document.getElementsByTagName('textarea');
+        let count = textareas.length;
+        for (let i = 0; i < count; ++i) {
+            textareas[i].onkeydown = function(e) {
+                if (e.key === 'Tab' || e.code === 'Tab' || e.keyCode === 9) {
+                    e.preventDefault();
+                    let s = this.selectionStart;
+                    this.value = this.value.substring(
+                        0, this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
+                    this.selectionEnd = s + 1;
+                }
+            }
+        }
+        </script>
+}

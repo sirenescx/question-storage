@@ -1,0 +1,52 @@
+@using QuestionStorage.Models.QuizzesQuestionsModels
+@{
+    ViewData["Title"] = "Import from XML";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Import from XML</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <link rel="contents" href="/lib/resources/answer-open.xml">
+</head>
+
+<body>
+
+@using (Html.BeginForm("Import", "Questions", FormMethod.Post, 
+    new { enctype="multipart/form-data"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("Please provide the details below and then click submit.", 
+        new {@class = "text-danger"})
+    <h1 class="page-header">Import question from XML</h1>
+    <br/>
+
+    <div class="custom-file">
+        <input type="file" name="file" class="custom-file-input" accept="text/xml">
+        <label class="custom-file-label">no file selected</label>
+    </div>
+    
+    <br/>
+    <br/>
+    <input type="submit" class="search-button" value="Import"/>
+}
+</body>
+</html>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#test').select2({
+            width : "100%",
+            });
+        });
+    </script>
+    
+    <script>
+        $('.custom-file-input').on('change', function() { 
+            let fileName = $(this).val().split('\\').pop(); 
+            $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+        });
+    </script>
+}

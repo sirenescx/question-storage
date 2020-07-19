@@ -30,7 +30,6 @@ namespace QuestionStorage.Controllers
             return View();
         }
         
-        [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -92,7 +91,7 @@ namespace QuestionStorage.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit()
+        public IActionResult Edit()
         {
             return View();
         }

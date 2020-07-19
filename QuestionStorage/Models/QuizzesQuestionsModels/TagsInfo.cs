@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuestionStorage.Models.QuizzesQuestionsModels
 {
-    public partial class TagsInfo
+    public class TagsInfo
     {
         public TagsInfo()
         {
@@ -22,9 +21,9 @@ namespace QuestionStorage.Models.QuizzesQuestionsModels
         public string Name { get; set; }
 
         [ForeignKey(nameof(ParentId))]
-        [InverseProperty(nameof(TagsInfo.InverseParent))]
+        [InverseProperty(nameof(InverseParent))]
         public virtual TagsInfo Parent { get; set; }
-        [InverseProperty(nameof(TagsInfo.Parent))]
+        [InverseProperty(nameof(Parent))]
         public virtual ICollection<TagsInfo> InverseParent { get; set; }
         [InverseProperty("Tag")]
         public virtual ICollection<TagsQuestions> TagsQuestions { get; set; }

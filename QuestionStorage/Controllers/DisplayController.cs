@@ -36,8 +36,7 @@ namespace QuestionStorage.Controllers
             return questionIds;
         }
         
-        [HttpPost]
-        public async Task<ActionResult> ListQuestions(IFormCollection collection)
+        public async Task<IActionResult> ListQuestions(IFormCollection collection)
         {
             ViewData["Tags"] = new HashSet<TagsInfo>(await _context.TagsInfo.ToListAsync());
 
@@ -67,7 +66,7 @@ namespace QuestionStorage.Controllers
             return View(questions);
         }
 
-        public async Task<ActionResult> ListByTag(int id)
+        public async Task<IActionResult> ListByTag(int id)
         {
             var tagsQuestionsInfo = await _context.TagsQuestions.Where(
                 tq => tq.TagId == id).ToListAsync();

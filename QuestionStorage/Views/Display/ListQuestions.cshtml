@@ -15,8 +15,15 @@
     <title>List questions</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
 </head>
-
 <body>
+<style>
+    .select2-container--default .select2-selection--multiple {
+        background-color: white;
+        border: 1px solid #aaa;
+        border-radius: 5px 0 0 5px;
+        cursor: text; 
+    }
+</style>
 <br/>
 @using (Html.BeginForm("ListQuestions", "Display", FormMethod.Post))
 {
@@ -24,7 +31,7 @@
         <div class="t">
             @Html.DropDownList("Tags", tagList, new {id = "test", multiple = "multiple"})
         </div>
-        <button type="submit" style="margin-left: 5px;" class="search-button t">Search</button>
+        <button type="submit" style="margin-left: -5px;" class="search-button t">Search</button>
     </div>
 
     <br/>
@@ -57,7 +64,7 @@
     <script>
     $(function() {
         $('#test').select2({
-        width : "100%",
+        width : "100%"
         });
     });
     </script>

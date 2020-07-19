@@ -1,5 +1,5 @@
 ﻿@using QuestionStorage.Models.QuizzesQuestionsModels
-@model QuestionStorage.Models.QuizzesQuestionsModels.QuestionViewModel
+@model QuestionStorage.Models.ViewModels.QuestionViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -45,6 +45,12 @@
     <p class="less-bottom-space">Question content*</p>
     @Html.TextAreaFor(model => model.Question.QuestionText, 15, 100,
         new {@class = "textarea", id = "questionText"})
+    
+    <p class="less-bottom-space">Template
+        <input type="hidden" value="off" name="IsTemplate"> 
+        <input name="IsTemplate" type="checkbox" value="on">
+    </p>   
+
     <hr/>
 
     @Html.Label("Question type")
@@ -113,10 +119,11 @@
         let count = textareas.length;
         for (let i = 0; i < count; ++i) {
             textareas[i].onkeydown = function(e) {
-                if(e.keyCode === 9 || e.which === 9){
+                if (e.key === 'Tab' || e.code === 'Tab' || e.keyCode === 9) {
                     e.preventDefault();
                     let s = this.selectionStart;
-                    this.value = this.value.substring(0, this.selectionStart) + "    " + this.value.substring(this.selectionEnd);
+                    this.value = this.value.substring(
+                        0, this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
                     this.selectionEnd = s + 1;
                 }
             }

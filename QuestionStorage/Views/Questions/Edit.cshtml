@@ -49,17 +49,27 @@
                 <option selected value="sc">Single choice</option>
                 <option value="mc">Multiple choice</option>
                 <option value="oa">Open answer</option>
+                <option value="o">Other</option>
                 break;
             case 2:
                 <option value="sc">Single choice</option>
                 <option selected value="mc">Multiple choice</option>
                 <option value="oa">Open answer</option>
+                <option value="o">Other</option>
                 break;
             case 3:
                 <option value="sc">Single choice</option>
                 <option value="mc">Multiple choice</option>
                 <option selected value="oa">Open answer</option>
+                <option value="o">Other</option>
                 break;
+            case 4:
+                <option value="sc">Single choice</option>
+                <option value="mc">Multiple choice</option>
+                <option value="oa">Open answer</option>
+                <option selected value="o">Other</option>
+                break;
+                    
         }
     </select>
 
@@ -69,15 +79,16 @@
         if (Model.TypeId == 3)
         {
             <label id="correctAnswerLabel">Correct answer*</label>
-            <textarea class="textarea input-validation-error" cols="60" data-val="true" 
+            <textarea class="textarea input-validation-error" cols="60" id="answerOption" data-val="true" 
                           data-val-length="The field Answer must be a string with a maximum length of 256."
                           data-val-length-max="256" data-val-minlength="The field Answer must be a string or array type with a minimum length of \'1\'." 
                           data-val-minlength-min="1" data-val-required="Response option text is required."
                           maxlength="256" name="AnswerOption.Answer" rows="2" aria-describedby="answerOption-error AnswerOption.Answer-error" 
                           aria-invalid="true" id="correctAnswer">@Model.QuestionAnswerVariants.First().Answer
-                </textarea>
+            </textarea>
+            <hr/>
         }
-        else
+        else if (Model.TypeId == 1 || Model.TypeId == 2)
         {
             <table id="answerTable">
                 <tr>
@@ -145,10 +156,11 @@
                     Add new response option
                 </button>
             </p>
+            <hr/>
         }
     }
 
-    <hr/>
+
     @Html.Label("Tags")
     @{
         var currentTags = ViewBag.CurrentTags;
@@ -193,7 +205,8 @@
             if(e.keyCode === 9 || e.which === 9){
                 e.preventDefault();
                 let s = this.selectionStart;
-                this.value = this.value.substring(0, this.selectionStart) + "    " + this.value.substring(this.selectionEnd);
+                this.value = this.value.substring(
+                    0, this.selectionStart) + "    " + this.value.substring(this.selectionEnd);
                 this.selectionEnd = s + 1;
             }
         }

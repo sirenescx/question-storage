@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using QuestionStorage.Models.QuizzesQuestionsModels;
 
@@ -109,14 +110,14 @@ namespace QuestionStorage.Utils
             var dictionary = new Dictionary<string, string>
             {
                 ["$NAME"] = question.QuestionName, 
-                ["$TEXT"] = ReplaceUselessHtmlTags(question.QuestionText)
+                ["$TEXT"] = ReplaceHtmlTags(question.QuestionText)
             };
             
             var node = result.ImportNode(questionNode, true);
 
             if (question.TypeId == 3)
             {
-                dictionary["$CORRECT"] = TrimParagraph(ReplaceUselessHtmlTags(responseOptions.First().Answer));
+                dictionary["$CORRECT"] = TrimParagraph(ReplaceHtmlTags(responseOptions.First().Answer));
             }
             else
             {
@@ -127,11 +128,11 @@ namespace QuestionStorage.Utils
                 {
                     if (option.IsCorrect)
                     {
-                        dictionary[$"$CORRECT{++correct}"] = ReplaceUselessHtmlTags(option.Answer);
+                        dictionary[$"$CORRECT{++correct}"] = ReplaceHtmlTags(option.Answer);
                     }
                     else
                     {
-                        dictionary[$"$INCORRECT{++incorrect}"] = ReplaceUselessHtmlTags(option.Answer);
+                        dictionary[$"$INCORRECT{++incorrect}"] = ReplaceHtmlTags(option.Answer);
                     }
                 }
             }
@@ -173,6 +174,84 @@ namespace QuestionStorage.Utils
 
             return questionsXmlDocument;
         }
+        
+        internal static string FindQuestionType(XmlDocument document)
+        {
+            var node = document.GetElementsByTagName("question");
+            if (node.Count == 0)
+            {
+                throw new XmlException("Invalid XML file format.");
+            }
+
+            var type = node[0].Attributes.GetNamedItem("type");
+            if (type is null)
+            {
+                throw new XmlException("XML file does not contain information about question type.");
+            }
+
+            return type.Value;
+        }
+        
+        internal static string GetElementTextFromXml(XmlDocument document, string tagName)
+        {
+            var element = document.GetElementsByTagName(tagName);
+            if (element.Count == 0)
+            {
+                throw new Exception("Invalid XML file format.");
+            }
+            
+            return (from XmlNode node in element select TrimParagraph(node.InnerText)).FirstOrDefault();
+        }
+
+        private static List<string> GetElementsFromXml(XmlDocument document, string tagName)
+        {
+            var elements = document.GetElementsByTagName(tagName);
+            if (elements.Count == 0)
+            {
+                throw new Exception("Invalid XML file format.");
+            }
+
+            return (from XmlNode node in elements select node.InnerXml).ToList();
+        }
+
+        private static List<string> GetResponseOptionsFromXml(List<string> strings)
+        {
+            var regex = new Regex("<p>.*?</p>");
+            
+            return strings.Select
+                    (s => regex.Matches(s).Count != 0 ? TrimParagraph(regex.Matches(s)[0].Value) : s).ToList();
+        }
+        
+        private static bool[] GetResponseOptionsCorrectness(XmlDocument document, string tagName)
+        {
+            var elements = document.GetElementsByTagName(tagName);
+            if (elements.Count == 0)
+            {
+                throw new XmlException("Invalid XML file format.");
+            }
+
+            var values = new List<bool>();
+
+            foreach (XmlNode node in elements)
+            {
+                var fraction = node.Attributes.GetNamedItem("fraction");
+                if (fraction is null)
+                {
+                    throw new XmlException("XML file does not contain information about correct answer.");
+                }
+                
+                values.Add(fraction.Value == "100");
+                
+            }
+            
+            return values.ToArray();
+        }
+
+        public static (List<string> responseOptions, bool[] correct) GetResponseInfo(XmlDocument document)
+        {
+            return (GetResponseOptionsFromXml(GetElementsFromXml(document, "answer")), 
+                    GetResponseOptionsCorrectness(document, "answer"));
+        }
 
         private static string TrimParagraph(string responseOption) =>
             responseOption.Replace("<p>", string.Empty)
@@ -185,7 +264,7 @@ namespace QuestionStorage.Utils
                 .Replace("</quiz>", string.Empty);
         }
 
-        private static string ReplaceUselessHtmlTags(string questionText) =>
+        private static string ReplaceHtmlTags(string questionText) =>
             questionText.Replace("<code>", CodeOpeningTag)
                         .Replace("</code>", CodeClosingTag)
                         .Replace("    ", "&nbsp; &nbsp;");

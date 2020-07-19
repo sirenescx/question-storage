@@ -2,7 +2,8 @@
 @{
     ViewData["Title"] = "Export to XML";
     HashSet<TagsInfo> tags = ViewBag.Tags;
-    var tagList = new SelectList(tags.Select(t => new {Value = t.TagId, Text = t.Name}),
+    var tagList = new SelectList(tags
+        .Select(t => new {Value = t.TagId, Text = t.Name}),
         "Value", "Text");
     HashSet<QuestionsInfo> questions = ViewBag.Question;
 }
@@ -13,6 +14,7 @@
 <head>
     <title>Export to XML</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <link rel="contents" href="/lib/resources/answer-open.xml">
 </head>
 
 <body>
@@ -21,7 +23,8 @@
     <h1 class="page-header">Export questions to XML</h1>
     <br/>
     <label>Select tags</label>
-    @Html.DropDownList("Tags", tagList, new {id = "test", multiple = "multiple"})
+    @Html.DropDownList("Tags", tagList, 
+        new {id = "test", multiple = "multiple"})
     <br/>
     <br/>
     <input type="submit" class="search-button" value="Export"/>
