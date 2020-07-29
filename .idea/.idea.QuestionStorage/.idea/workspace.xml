@@ -48,7 +48,6 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/18C/EncodingProvider.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/2F6/MemoryStream.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Questions/Import.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Controllers/DisplayController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Home/Contact.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Controllers/HomeController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -56,41 +55,63 @@
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/39D/Dictionary.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/D66FA6A7-0570-4AEE-BC03-E61BF3A27460/B2/IHtmlHelper.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/2E/RuntimeType.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/186/Encoding.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/163/Task.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/0/IIdentity.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/276/MethodBase.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/163/Task.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/D66FA6A7-0570-4AEE-BC03-E61BF3A27460/3B/HtmlHelperSelectExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8A5C3216-9D05-44D4-B256-B7F620B9E14A/ef/b6d77279/ControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/C73C8BD0-D730-4B3D-AA3C-06DCDFD9C548/7/ClaimsPrincipal.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/27A/RuntimeConstructorInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A6E256D3-DCB9-4C81-A93D-81B0F0A2812B/f0/3586e902/CSharpCodeProvider.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/406B1CFD-8421-4508-8540-7824C430B45D/8/DefaultHttpContext.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/167/TaskContinuation.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/22A/AsyncMethodBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/167/TaskContinuation.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/22A/AsyncMethodBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/147/ExecutionContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8A5C3216-9D05-44D4-B256-B7F620B9E14A/F3/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/EditViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Questions/Generate.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/UserDataModels/User.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/UserDataModels/UserDataContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/4B/Activator.RuntimeType.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8A5C3216-9D05-44D4-B256-B7F620B9E14A/FE/ControllerActionInvoker.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/LoginViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/174/StringBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/D66FA6A7-0570-4AEE-BC03-E61BF3A27460/C/Controller.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Utils/XmlGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/38/Type.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/178/StringBuilderCache.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8A5C3216-9D05-44D4-B256-B7F620B9E14A/11C/ResourceInvoker.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/326640AB-B62A-4E18-BC95-548FF720F56F/17/75235498/Controller.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/_ViewImports.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/35/String.Manipulation.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/03D7B4E8-3B5E-4860-A3D7-EB23D1C5B3FC/d0/84b14d0f/IFormCollection.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Account/Login.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/BD64A338-243E-4C9C-83AC-31AEFC3FC09C/13/EndpointMiddleware.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/78D7DDE3-30F4-46D1-AF96-6B567E523D41/A/StringValues.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/406B1CFD-8421-4508-8540-7824C430B45D/A/FormCollection.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/C8/StringComparer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/EF13DF44-8B34-44A3-A538-27D97809732E/6/AuthenticationMiddleware.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Display/ListTests.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/A7276A8E-3303-416D-82B1-45A7D91C37C6/4/DeveloperExceptionPageMiddleware.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9EE8EE86-E367-481B-BF0E-11BEFE86882F/147/ExecutionContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/22D/AsyncValueTaskMethodBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/160/Future.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Controllers/AccountController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/137/ThreadPool.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/TemplateQuestionViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/136/ThreadPool.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizzesInfoQuestionsInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/2D/Object.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/TestViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizzesInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8A5C3216-9D05-44D4-B256-B7F620B9E14A/24/ControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Quizzes/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Controllers/QuizzesController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/QuestionViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Questions/Import.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizzesInfoQuestionsInfoQuestionAnswerVariants.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/2E/RuntimeType.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/0/IIdentity.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/276/MethodBase.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/C73C8BD0-D730-4B3D-AA3C-06DCDFD9C548/7/ClaimsPrincipal.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A6E256D3-DCB9-4C81-A93D-81B0F0A2812B/f0/3586e902/CSharpCodeProvider.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/EditViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Questions/Generate.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/174/StringBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/178/StringBuilderCache.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/_ViewImports.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/35/String.Manipulation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/_ViewStart.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Home/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Questions/Export.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
@@ -101,73 +122,39 @@
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Display/ListQuestions.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/UserDataModels/Role.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Questions/Details.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/406B1CFD-8421-4508-8540-7824C430B45D/A/FormCollection.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Questions/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Questions/Edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/C8/StringComparer.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/EF13DF44-8B34-44A3-A538-27D97809732E/6/AuthenticationMiddleware.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/TypesInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/ErrorViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuestionAnswerVariants.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/HSE_QuestContext.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/A7276A8E-3303-416D-82B1-45A7D91C37C6/4/DeveloperExceptionPageMiddleware.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/obj/Debug/netcoreapp3.1/Razor/Views/Account/Edit.cshtml.g.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Account/Edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuestionsInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/TagsInfo.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/22D/AsyncValueTaskMethodBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/TagsQuestions.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/160/Future.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/QuestionStorage/Controllers/AccountController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/137/ThreadPool.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/TemplateQuestionViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/136/ThreadPool.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/D66FA6A7-0570-4AEE-BC03-E61BF3A27460/1B/ViewResult.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Utils/QRandom.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Utils/StorageUtils.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/D66FA6A7-0570-4AEE-BC03-E61BF3A27460/82/ViewExecutor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/2D/Object.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/1D8/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/B1515979-1371-426E-8D6E-0CFD659B817E/12/RazorView.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/C2F82446-E914-423F-8A90-FAC6B878B61C/3/IdentityUser.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Startup.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Account/Manage.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8A5C3216-9D05-44D4-B256-B7F620B9E14A/24/ControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/QuestionStorage/Views/Quizzes/Details.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/QuestionStorage/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/B1515979-1371-426E-8D6E-0CFD659B817E/37/afa5631d/RazorPage`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/92882F58-11D9-44E2-9819-BF62BA26EB87/266/Assembly.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/QuestionStorage/Models/ViewModels/QuestionViewModel.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/_ViewImports.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Account/Manage.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Home/Contact.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Home/Index.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Display/ListByTag.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/resources/open-answer.xml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/resources/answer-open.xml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizesInfo.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/RubricsInfo.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/TagsQuestions.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/TagsInfo.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/TypesInfo.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Shared/Error.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Export.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/appsettings.json" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuestionAnswerVariants.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/UserDataModels/Role.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/UserDataModels/User.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Models/UserDataModels/UserDataContext.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/DisplayController.cs" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/5e5bb331-73c9-4067-a918-3c44241c9f0e/console.sql" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/HSE_QuestContext.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Utils/IQuerableExtensions.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Controllers/AccountController.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Startup.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Edit.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Edit.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/js/display-answer-variants.js" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Import.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/Utils/XmlGenerator.cs" />
@@ -175,23 +162,45 @@
         <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/lib/bootstrap/dist/css/bootstrap.css" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Display/ListQuestions.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/Utils/IQueryableExtensions.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Utils/QRandom.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Models/ViewModels/QuestionViewModel.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/CreateTemplateQuestion.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuestionsInfo.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Shared/_Layout.cshtml" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Shared/_Layout.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/Models/ViewModels/TemplateQuestionViewModel.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Create.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/test.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/lib/bootstrap/dist/css/custom-stylesheet.css" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Details.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Utils/QRandom.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/TestsController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizesInfo.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Tests/Create.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesInfo_QuestionsInfo.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizzesInfo_QuestionsInfo.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/TagsInfo.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizzesInfo.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/TagsQuestions.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuestionsInfo.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuestionAnswerVariants.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizzesInfoQuestionsInfoQuestionAnswerVariants.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/QuizzesInfoQuestionsInfo.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/QuizzesQuestionsModels/HSE_QuestContext.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Create.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Edit.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Edit.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Generate.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/js/add-to-table.js" />
+        <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/lib/bootstrap/dist/css/custom-stylesheet.css" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/ViewModels/TestViewModel.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Quizzes/Create.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Shared/_Layout.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Shared/_Layout.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/HomeController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/DisplayController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Utils/StorageUtils.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" />
-        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Details.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Display/ListTests.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuizzesController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Quizzes/Details.cshtml" />
       </list>
     </option>
   </component>
@@ -382,7 +391,13 @@
       <workItem from="1594717890606" duration="342000" />
       <workItem from="1594768252327" duration="17029000" />
       <workItem from="1595009965295" duration="24233000" />
-      <workItem from="1595190179335" duration="2261000" />
+      <workItem from="1595190179335" duration="4296000" />
+      <workItem from="1595582378738" duration="208000" />
+      <workItem from="1595742138422" duration="4484000" />
+      <workItem from="1595836486978" duration="3465000" />
+      <workItem from="1595844698496" duration="238000" />
+      <workItem from="1595844940612" duration="10178000" />
+      <workItem from="1596007735031" duration="3558000" />
     </task>
     <servers />
   </component>
@@ -423,244 +438,249 @@
     </state>
     <state width="899" height="480" key="DebuggerActiveHint/0.0.1280.800@0.0.1280.800" timestamp="1595184083384" />
     <state width="863" height="466" key="DebuggerActiveHint/51.23.1229.777@51.23.1229.777" timestamp="1590072366061" />
-    <state width="1238" height="443" key="GridCell.Tab.0.bottom" timestamp="1595195576674">
+    <state width="1238" height="280" key="GridCell.Tab.0.bottom" timestamp="1596016811110">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="443" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1595195576674" />
+    <state width="1238" height="280" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1596016811110" />
     <state width="1398" height="156" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1588850414526" />
     <state width="1238" height="156" key="GridCell.Tab.0.bottom/41.23.1239.777@41.23.1239.777" timestamp="1588946177736" />
     <state width="1238" height="69" key="GridCell.Tab.0.bottom/43.23.1237.777@43.23.1237.777" timestamp="1588090740890" />
     <state width="1238" height="157" key="GridCell.Tab.0.bottom/46.23.1234.777@46.23.1234.777" timestamp="1588442709004" />
     <state width="1238" height="156" key="GridCell.Tab.0.bottom/47.23.1233.777@47.23.1233.777" timestamp="1588936701973" />
-    <state width="1238" height="218" key="GridCell.Tab.0.bottom/49.23.1231.777@49.23.1231.777" timestamp="1595188756274" />
+    <state width="1238" height="95" key="GridCell.Tab.0.bottom/49.23.1231.777@49.23.1231.777" timestamp="1595853373250" />
     <state width="1238" height="156" key="GridCell.Tab.0.bottom/50.23.1230.777@50.23.1230.777" timestamp="1588858021213" />
     <state width="1398" height="156" key="GridCell.Tab.0.bottom/50.23.1390.877/1440.23.1600.877@50.23.1390.877" timestamp="1588850312595" />
-    <state width="1238" height="254" key="GridCell.Tab.0.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595077891590" />
-    <state width="1238" height="331" key="GridCell.Tab.0.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595023266781" />
+    <state width="1238" height="199" key="GridCell.Tab.0.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595747669024" />
+    <state width="1238" height="280" key="GridCell.Tab.0.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595973952802" />
     <state width="1068" height="185" key="GridCell.Tab.0.bottom/56.23.1224.777@56.23.1224.777" timestamp="1595020164305" />
+    <state width="1238" height="280" key="GridCell.Tab.0.bottom/57.23.1223.777@57.23.1223.777" timestamp="1595970171846" />
     <state width="1238" height="156" key="GridCell.Tab.0.bottom/62.23.1218.777@62.23.1218.777" timestamp="1588769608155" />
-    <state width="1238" height="443" key="GridCell.Tab.0.center" timestamp="1595195576672">
+    <state width="1238" height="280" key="GridCell.Tab.0.center" timestamp="1596016811109">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="443" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1595195576672" />
+    <state width="1238" height="280" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1596016811109" />
     <state width="1398" height="156" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1588850414524" />
     <state width="1238" height="156" key="GridCell.Tab.0.center/41.23.1239.777@41.23.1239.777" timestamp="1588946177735" />
     <state width="1238" height="69" key="GridCell.Tab.0.center/43.23.1237.777@43.23.1237.777" timestamp="1588090740889" />
     <state width="1238" height="157" key="GridCell.Tab.0.center/46.23.1234.777@46.23.1234.777" timestamp="1588442709003" />
     <state width="1238" height="156" key="GridCell.Tab.0.center/47.23.1233.777@47.23.1233.777" timestamp="1588936701972" />
-    <state width="1238" height="218" key="GridCell.Tab.0.center/49.23.1231.777@49.23.1231.777" timestamp="1595188756272" />
+    <state width="1238" height="95" key="GridCell.Tab.0.center/49.23.1231.777@49.23.1231.777" timestamp="1595853373249" />
     <state width="1238" height="156" key="GridCell.Tab.0.center/50.23.1230.777@50.23.1230.777" timestamp="1588858021212" />
     <state width="1398" height="156" key="GridCell.Tab.0.center/50.23.1390.877/1440.23.1600.877@50.23.1390.877" timestamp="1588850312594" />
-    <state width="1238" height="254" key="GridCell.Tab.0.center/51.23.1229.777@51.23.1229.777" timestamp="1595077891588" />
-    <state width="1238" height="331" key="GridCell.Tab.0.center/54.23.1226.777@54.23.1226.777" timestamp="1595023266779" />
+    <state width="1238" height="199" key="GridCell.Tab.0.center/51.23.1229.777@51.23.1229.777" timestamp="1595747669023" />
+    <state width="1238" height="280" key="GridCell.Tab.0.center/54.23.1226.777@54.23.1226.777" timestamp="1595973952800" />
     <state width="1068" height="185" key="GridCell.Tab.0.center/56.23.1224.777@56.23.1224.777" timestamp="1595020164303" />
+    <state width="1238" height="280" key="GridCell.Tab.0.center/57.23.1223.777@57.23.1223.777" timestamp="1595970171845" />
     <state width="1238" height="156" key="GridCell.Tab.0.center/62.23.1218.777@62.23.1218.777" timestamp="1588769608154" />
-    <state width="1238" height="443" key="GridCell.Tab.0.left" timestamp="1595195576671">
+    <state width="1238" height="280" key="GridCell.Tab.0.left" timestamp="1596016811109">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="443" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1595195576671" />
+    <state width="1238" height="280" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1596016811109" />
     <state width="1238" height="157" key="GridCell.Tab.0.left/0.0.1280.800@46.23.1234.777" timestamp="1588442707314" />
     <state width="1238" height="156" key="GridCell.Tab.0.left/0.0.1280.800@49.23.1231.777" timestamp="1588842937916" />
+    <state width="1238" height="280" key="GridCell.Tab.0.left/0.0.1280.800@54.23.1226.777" timestamp="1595973950145" />
     <state width="1398" height="156" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1588850414524" />
     <state width="1238" height="156" key="GridCell.Tab.0.left/41.23.1239.777@41.23.1239.777" timestamp="1588946177734" />
     <state width="1238" height="69" key="GridCell.Tab.0.left/43.23.1237.777@43.23.1237.777" timestamp="1588090740888" />
     <state width="1238" height="157" key="GridCell.Tab.0.left/46.23.1234.777@46.23.1234.777" timestamp="1588442709002" />
     <state width="1238" height="156" key="GridCell.Tab.0.left/47.23.1233.777@47.23.1233.777" timestamp="1588936701972" />
-    <state width="1238" height="218" key="GridCell.Tab.0.left/49.23.1231.777@49.23.1231.777" timestamp="1595188756270" />
+    <state width="1238" height="95" key="GridCell.Tab.0.left/49.23.1231.777@49.23.1231.777" timestamp="1595853373248" />
     <state width="1238" height="156" key="GridCell.Tab.0.left/50.23.1230.777@50.23.1230.777" timestamp="1588858021211" />
     <state width="1398" height="156" key="GridCell.Tab.0.left/50.23.1390.877/1440.23.1600.877@50.23.1390.877" timestamp="1588850312592" />
-    <state width="1238" height="254" key="GridCell.Tab.0.left/51.23.1229.777@51.23.1229.777" timestamp="1595077891585" />
-    <state width="1238" height="331" key="GridCell.Tab.0.left/54.23.1226.777@54.23.1226.777" timestamp="1595023266779" />
+    <state width="1238" height="199" key="GridCell.Tab.0.left/51.23.1229.777@51.23.1229.777" timestamp="1595747669022" />
+    <state width="1238" height="280" key="GridCell.Tab.0.left/54.23.1226.777@54.23.1226.777" timestamp="1595973952799" />
     <state width="1068" height="185" key="GridCell.Tab.0.left/56.23.1224.777@56.23.1224.777" timestamp="1595020164302" />
+    <state width="1238" height="280" key="GridCell.Tab.0.left/57.23.1223.777@57.23.1223.777" timestamp="1595970171844" />
     <state width="1238" height="156" key="GridCell.Tab.0.left/62.23.1218.777@62.23.1218.777" timestamp="1588769608153" />
-    <state width="1238" height="443" key="GridCell.Tab.0.right" timestamp="1595195576673">
+    <state width="1238" height="280" key="GridCell.Tab.0.right" timestamp="1596016811110">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="443" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1595195576673" />
+    <state width="1238" height="280" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1596016811110" />
     <state width="937" height="188" key="GridCell.Tab.0.right/0.0.1280.800@51.23.1229.777" timestamp="1594734716790" />
     <state width="1398" height="156" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1588850414525" />
     <state width="1238" height="156" key="GridCell.Tab.0.right/41.23.1239.777@41.23.1239.777" timestamp="1588946177735" />
     <state width="1238" height="69" key="GridCell.Tab.0.right/43.23.1237.777@43.23.1237.777" timestamp="1588090740889" />
     <state width="1238" height="157" key="GridCell.Tab.0.right/46.23.1234.777@46.23.1234.777" timestamp="1588442709003" />
     <state width="1238" height="156" key="GridCell.Tab.0.right/47.23.1233.777@47.23.1233.777" timestamp="1588936701973" />
-    <state width="1238" height="218" key="GridCell.Tab.0.right/49.23.1231.777@49.23.1231.777" timestamp="1595188756273" />
+    <state width="1238" height="95" key="GridCell.Tab.0.right/49.23.1231.777@49.23.1231.777" timestamp="1595853373250" />
     <state width="1238" height="156" key="GridCell.Tab.0.right/50.23.1230.777@50.23.1230.777" timestamp="1588858021213" />
     <state width="1398" height="156" key="GridCell.Tab.0.right/50.23.1390.877/1440.23.1600.877@50.23.1390.877" timestamp="1588850312594" />
-    <state width="1238" height="254" key="GridCell.Tab.0.right/51.23.1229.777@51.23.1229.777" timestamp="1595077891589" />
-    <state width="1238" height="331" key="GridCell.Tab.0.right/54.23.1226.777@54.23.1226.777" timestamp="1595023266780" />
+    <state width="1238" height="199" key="GridCell.Tab.0.right/51.23.1229.777@51.23.1229.777" timestamp="1595747669023" />
+    <state width="1238" height="280" key="GridCell.Tab.0.right/54.23.1226.777@54.23.1226.777" timestamp="1595973952801" />
     <state width="1068" height="185" key="GridCell.Tab.0.right/56.23.1224.777@56.23.1224.777" timestamp="1595020164304" />
+    <state width="1238" height="280" key="GridCell.Tab.0.right/57.23.1223.777@57.23.1223.777" timestamp="1595970171845" />
     <state width="1238" height="156" key="GridCell.Tab.0.right/62.23.1218.777@62.23.1218.777" timestamp="1588769608155" />
-    <state width="1238" height="443" key="GridCell.Tab.1.bottom" timestamp="1595195506998">
-      <screen x="49" y="23" width="1231" height="777" />
+    <state width="1238" height="199" key="GridCell.Tab.1.bottom" timestamp="1596005771323">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.1.bottom/0.0.1280.800@0.0.1280.800" timestamp="1595195477491" />
+    <state width="1238" height="199" key="GridCell.Tab.1.bottom/0.0.1280.800@0.0.1280.800" timestamp="1596005771323" />
     <state width="1238" height="263" key="GridCell.Tab.1.bottom/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825250" />
     <state width="1238" height="234" key="GridCell.Tab.1.bottom/41.23.1239.777@41.23.1239.777" timestamp="1588096897527" />
     <state width="1238" height="234" key="GridCell.Tab.1.bottom/43.23.1237.777@43.23.1237.777" timestamp="1588111456739" />
     <state width="1238" height="279" key="GridCell.Tab.1.bottom/46.23.1234.777@46.23.1234.777" timestamp="1588446467593" />
     <state width="1238" height="234" key="GridCell.Tab.1.bottom/47.23.1233.777@47.23.1233.777" timestamp="1587833821102" />
-    <state width="1238" height="443" key="GridCell.Tab.1.bottom/49.23.1231.777@49.23.1231.777" timestamp="1595195506998" />
-    <state width="1238" height="254" key="GridCell.Tab.1.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595078803722" />
-    <state width="1238" height="254" key="GridCell.Tab.1.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595024100702" />
+    <state width="1238" height="175" key="GridCell.Tab.1.bottom/49.23.1231.777@49.23.1231.777" timestamp="1595249493041" />
+    <state width="1238" height="199" key="GridCell.Tab.1.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595747811418" />
+    <state width="1238" height="155" key="GridCell.Tab.1.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595746824213" />
     <state width="1067" height="185" key="GridCell.Tab.1.bottom/56.23.1224.777@56.23.1224.777" timestamp="1595020186616" />
-    <state width="1238" height="443" key="GridCell.Tab.1.center" timestamp="1595195506997">
-      <screen x="49" y="23" width="1231" height="777" />
+    <state width="1238" height="199" key="GridCell.Tab.1.center" timestamp="1596005771323">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.1.center/0.0.1280.800@0.0.1280.800" timestamp="1595195477489" />
+    <state width="1238" height="199" key="GridCell.Tab.1.center/0.0.1280.800@0.0.1280.800" timestamp="1596005771323" />
     <state width="1238" height="263" key="GridCell.Tab.1.center/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825248" />
     <state width="1238" height="234" key="GridCell.Tab.1.center/41.23.1239.777@41.23.1239.777" timestamp="1588096897526" />
     <state width="1238" height="234" key="GridCell.Tab.1.center/43.23.1237.777@43.23.1237.777" timestamp="1588111456738" />
     <state width="1238" height="279" key="GridCell.Tab.1.center/46.23.1234.777@46.23.1234.777" timestamp="1588446467592" />
     <state width="1238" height="234" key="GridCell.Tab.1.center/47.23.1233.777@47.23.1233.777" timestamp="1587833821101" />
-    <state width="1238" height="443" key="GridCell.Tab.1.center/49.23.1231.777@49.23.1231.777" timestamp="1595195506997" />
-    <state width="1238" height="254" key="GridCell.Tab.1.center/51.23.1229.777@51.23.1229.777" timestamp="1595078803721" />
-    <state width="1238" height="254" key="GridCell.Tab.1.center/54.23.1226.777@54.23.1226.777" timestamp="1595024100701" />
+    <state width="1238" height="175" key="GridCell.Tab.1.center/49.23.1231.777@49.23.1231.777" timestamp="1595249493039" />
+    <state width="1238" height="199" key="GridCell.Tab.1.center/51.23.1229.777@51.23.1229.777" timestamp="1595747811418" />
+    <state width="1238" height="155" key="GridCell.Tab.1.center/54.23.1226.777@54.23.1226.777" timestamp="1595746824212" />
     <state width="1067" height="185" key="GridCell.Tab.1.center/56.23.1224.777@56.23.1224.777" timestamp="1595020186615" />
-    <state width="1238" height="443" key="GridCell.Tab.1.left" timestamp="1595195506996">
-      <screen x="49" y="23" width="1231" height="777" />
+    <state width="1238" height="199" key="GridCell.Tab.1.left" timestamp="1596005771322">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.1.left/0.0.1280.800@0.0.1280.800" timestamp="1595195477488" />
+    <state width="1238" height="199" key="GridCell.Tab.1.left/0.0.1280.800@0.0.1280.800" timestamp="1596005771322" />
     <state width="1238" height="263" key="GridCell.Tab.1.left/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825247" />
     <state width="1238" height="234" key="GridCell.Tab.1.left/41.23.1239.777@41.23.1239.777" timestamp="1588096897526" />
     <state width="1238" height="234" key="GridCell.Tab.1.left/43.23.1237.777@43.23.1237.777" timestamp="1588111456737" />
     <state width="1238" height="279" key="GridCell.Tab.1.left/46.23.1234.777@46.23.1234.777" timestamp="1588446467591" />
     <state width="1238" height="234" key="GridCell.Tab.1.left/47.23.1233.777@47.23.1233.777" timestamp="1587833821100" />
-    <state width="1238" height="443" key="GridCell.Tab.1.left/49.23.1231.777@49.23.1231.777" timestamp="1595195506996" />
-    <state width="1238" height="254" key="GridCell.Tab.1.left/51.23.1229.777@51.23.1229.777" timestamp="1595078803721" />
-    <state width="1238" height="254" key="GridCell.Tab.1.left/54.23.1226.777@54.23.1226.777" timestamp="1595024100701" />
+    <state width="1238" height="175" key="GridCell.Tab.1.left/49.23.1231.777@49.23.1231.777" timestamp="1595249493039" />
+    <state width="1238" height="199" key="GridCell.Tab.1.left/51.23.1229.777@51.23.1229.777" timestamp="1595747811417" />
+    <state width="1238" height="155" key="GridCell.Tab.1.left/54.23.1226.777@54.23.1226.777" timestamp="1595746824212" />
     <state width="1067" height="185" key="GridCell.Tab.1.left/56.23.1224.777@56.23.1224.777" timestamp="1595020186615" />
-    <state width="1238" height="443" key="GridCell.Tab.1.right" timestamp="1595195506997">
-      <screen x="49" y="23" width="1231" height="777" />
+    <state width="1238" height="199" key="GridCell.Tab.1.right" timestamp="1596005771323">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.1.right/0.0.1280.800@0.0.1280.800" timestamp="1595195477490" />
+    <state width="1238" height="199" key="GridCell.Tab.1.right/0.0.1280.800@0.0.1280.800" timestamp="1596005771323" />
     <state width="1238" height="263" key="GridCell.Tab.1.right/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825249" />
     <state width="1238" height="234" key="GridCell.Tab.1.right/41.23.1239.777@41.23.1239.777" timestamp="1588096897527" />
     <state width="1238" height="234" key="GridCell.Tab.1.right/43.23.1237.777@43.23.1237.777" timestamp="1588111456739" />
     <state width="1238" height="279" key="GridCell.Tab.1.right/46.23.1234.777@46.23.1234.777" timestamp="1588446467593" />
     <state width="1238" height="234" key="GridCell.Tab.1.right/47.23.1233.777@47.23.1233.777" timestamp="1587833821102" />
-    <state width="1238" height="443" key="GridCell.Tab.1.right/49.23.1231.777@49.23.1231.777" timestamp="1595195506997" />
-    <state width="1238" height="254" key="GridCell.Tab.1.right/51.23.1229.777@51.23.1229.777" timestamp="1595078803722" />
-    <state width="1238" height="254" key="GridCell.Tab.1.right/54.23.1226.777@54.23.1226.777" timestamp="1595024100702" />
+    <state width="1238" height="175" key="GridCell.Tab.1.right/49.23.1231.777@49.23.1231.777" timestamp="1595249493040" />
+    <state width="1238" height="199" key="GridCell.Tab.1.right/51.23.1229.777@51.23.1229.777" timestamp="1595747811418" />
+    <state width="1238" height="155" key="GridCell.Tab.1.right/54.23.1226.777@54.23.1226.777" timestamp="1595746824213" />
     <state width="1067" height="185" key="GridCell.Tab.1.right/56.23.1224.777@56.23.1224.777" timestamp="1595020186616" />
-    <state width="1238" height="444" key="GridCell.Tab.2.bottom" timestamp="1595195477493">
+    <state width="1238" height="199" key="GridCell.Tab.2.bottom" timestamp="1596005771325">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.2.bottom/0.0.1280.800@0.0.1280.800" timestamp="1595195477493" />
+    <state width="1238" height="199" key="GridCell.Tab.2.bottom/0.0.1280.800@0.0.1280.800" timestamp="1596005771325" />
     <state width="1238" height="263" key="GridCell.Tab.2.bottom/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825255" />
     <state width="1238" height="44" key="GridCell.Tab.2.bottom/46.23.1234.777@46.23.1234.777" timestamp="1587764992944" />
     <state width="1238" height="404" key="GridCell.Tab.2.bottom/49.23.1231.777@49.23.1231.777" timestamp="1595185197996" />
-    <state width="1238" height="254" key="GridCell.Tab.2.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595077891277" />
-    <state width="1238" height="331" key="GridCell.Tab.2.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595023266610" />
+    <state width="1238" height="199" key="GridCell.Tab.2.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595747668889" />
+    <state width="1238" height="155" key="GridCell.Tab.2.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595746824215" />
     <state width="1068" height="185" key="GridCell.Tab.2.bottom/56.23.1224.777@56.23.1224.777" timestamp="1595020164311" />
-    <state width="1238" height="444" key="GridCell.Tab.2.center" timestamp="1595195477492">
+    <state width="1238" height="199" key="GridCell.Tab.2.center" timestamp="1596005771324">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.2.center/0.0.1280.800@0.0.1280.800" timestamp="1595195477492" />
+    <state width="1238" height="199" key="GridCell.Tab.2.center/0.0.1280.800@0.0.1280.800" timestamp="1596005771324" />
     <state width="1238" height="263" key="GridCell.Tab.2.center/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825253" />
     <state width="1238" height="44" key="GridCell.Tab.2.center/46.23.1234.777@46.23.1234.777" timestamp="1587764992943" />
     <state width="1238" height="404" key="GridCell.Tab.2.center/49.23.1231.777@49.23.1231.777" timestamp="1595185197995" />
-    <state width="1238" height="254" key="GridCell.Tab.2.center/51.23.1229.777@51.23.1229.777" timestamp="1595077891276" />
-    <state width="1238" height="331" key="GridCell.Tab.2.center/54.23.1226.777@54.23.1226.777" timestamp="1595023266609" />
+    <state width="1238" height="199" key="GridCell.Tab.2.center/51.23.1229.777@51.23.1229.777" timestamp="1595747668888" />
+    <state width="1238" height="155" key="GridCell.Tab.2.center/54.23.1226.777@54.23.1226.777" timestamp="1595746824214" />
     <state width="1068" height="185" key="GridCell.Tab.2.center/56.23.1224.777@56.23.1224.777" timestamp="1595020164310" />
-    <state width="1238" height="444" key="GridCell.Tab.2.left" timestamp="1595195477491">
+    <state width="1238" height="199" key="GridCell.Tab.2.left" timestamp="1596005771324">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.2.left/0.0.1280.800@0.0.1280.800" timestamp="1595195477491" />
+    <state width="1238" height="199" key="GridCell.Tab.2.left/0.0.1280.800@0.0.1280.800" timestamp="1596005771324" />
     <state width="1238" height="263" key="GridCell.Tab.2.left/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825252" />
     <state width="1238" height="44" key="GridCell.Tab.2.left/46.23.1234.777@46.23.1234.777" timestamp="1587764992942" />
     <state width="1238" height="404" key="GridCell.Tab.2.left/49.23.1231.777@49.23.1231.777" timestamp="1595185197995" />
-    <state width="1238" height="254" key="GridCell.Tab.2.left/51.23.1229.777@51.23.1229.777" timestamp="1595077891275" />
-    <state width="1238" height="331" key="GridCell.Tab.2.left/54.23.1226.777@54.23.1226.777" timestamp="1595023266609" />
+    <state width="1238" height="199" key="GridCell.Tab.2.left/51.23.1229.777@51.23.1229.777" timestamp="1595747668888" />
+    <state width="1238" height="155" key="GridCell.Tab.2.left/54.23.1226.777@54.23.1226.777" timestamp="1595746824214" />
     <state width="1068" height="185" key="GridCell.Tab.2.left/56.23.1224.777@56.23.1224.777" timestamp="1595020164309" />
-    <state width="1238" height="444" key="GridCell.Tab.2.right" timestamp="1595195477493">
+    <state width="1238" height="199" key="GridCell.Tab.2.right" timestamp="1596005771324">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.2.right/0.0.1280.800@0.0.1280.800" timestamp="1595195477493" />
+    <state width="1238" height="199" key="GridCell.Tab.2.right/0.0.1280.800@0.0.1280.800" timestamp="1596005771324" />
     <state width="1238" height="263" key="GridCell.Tab.2.right/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825254" />
     <state width="1238" height="44" key="GridCell.Tab.2.right/46.23.1234.777@46.23.1234.777" timestamp="1587764992943" />
     <state width="1238" height="404" key="GridCell.Tab.2.right/49.23.1231.777@49.23.1231.777" timestamp="1595185197995" />
-    <state width="1238" height="254" key="GridCell.Tab.2.right/51.23.1229.777@51.23.1229.777" timestamp="1595077891277" />
-    <state width="1238" height="331" key="GridCell.Tab.2.right/54.23.1226.777@54.23.1226.777" timestamp="1595023266609" />
+    <state width="1238" height="199" key="GridCell.Tab.2.right/51.23.1229.777@51.23.1229.777" timestamp="1595747668889" />
+    <state width="1238" height="155" key="GridCell.Tab.2.right/54.23.1226.777@54.23.1226.777" timestamp="1595746824215" />
     <state width="1068" height="185" key="GridCell.Tab.2.right/56.23.1224.777@56.23.1224.777" timestamp="1595020164311" />
-    <state width="1238" height="444" key="GridCell.Tab.3.bottom" timestamp="1595195477496">
+    <state width="1238" height="199" key="GridCell.Tab.3.bottom" timestamp="1596005771326">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.3.bottom/0.0.1280.800@0.0.1280.800" timestamp="1595195477496" />
+    <state width="1238" height="199" key="GridCell.Tab.3.bottom/0.0.1280.800@0.0.1280.800" timestamp="1596005771326" />
     <state width="1238" height="263" key="GridCell.Tab.3.bottom/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825258" />
     <state width="1238" height="44" key="GridCell.Tab.3.bottom/46.23.1234.777@46.23.1234.777" timestamp="1587764992946" />
     <state width="1238" height="404" key="GridCell.Tab.3.bottom/49.23.1231.777@49.23.1231.777" timestamp="1595185197998" />
-    <state width="1238" height="254" key="GridCell.Tab.3.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595077891280" />
-    <state width="1238" height="331" key="GridCell.Tab.3.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595023266611" />
+    <state width="1238" height="199" key="GridCell.Tab.3.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595747668891" />
+    <state width="1238" height="155" key="GridCell.Tab.3.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595746824217" />
     <state width="1068" height="185" key="GridCell.Tab.3.bottom/56.23.1224.777@56.23.1224.777" timestamp="1595020164314" />
-    <state width="1238" height="444" key="GridCell.Tab.3.center" timestamp="1595195477495">
+    <state width="1238" height="199" key="GridCell.Tab.3.center" timestamp="1596005771325">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.3.center/0.0.1280.800@0.0.1280.800" timestamp="1595195477495" />
+    <state width="1238" height="199" key="GridCell.Tab.3.center/0.0.1280.800@0.0.1280.800" timestamp="1596005771325" />
     <state width="1238" height="263" key="GridCell.Tab.3.center/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825257" />
     <state width="1238" height="44" key="GridCell.Tab.3.center/46.23.1234.777@46.23.1234.777" timestamp="1587764992945" />
     <state width="1238" height="404" key="GridCell.Tab.3.center/49.23.1231.777@49.23.1231.777" timestamp="1595185197997" />
-    <state width="1238" height="254" key="GridCell.Tab.3.center/51.23.1229.777@51.23.1229.777" timestamp="1595077891278" />
-    <state width="1238" height="331" key="GridCell.Tab.3.center/54.23.1226.777@54.23.1226.777" timestamp="1595023266611" />
+    <state width="1238" height="199" key="GridCell.Tab.3.center/51.23.1229.777@51.23.1229.777" timestamp="1595747668890" />
+    <state width="1238" height="155" key="GridCell.Tab.3.center/54.23.1226.777@54.23.1226.777" timestamp="1595746824216" />
     <state width="1068" height="185" key="GridCell.Tab.3.center/56.23.1224.777@56.23.1224.777" timestamp="1595020164312" />
-    <state width="1238" height="444" key="GridCell.Tab.3.left" timestamp="1595195477494">
+    <state width="1238" height="199" key="GridCell.Tab.3.left" timestamp="1596005771325">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.3.left/0.0.1280.800@0.0.1280.800" timestamp="1595195477494" />
+    <state width="1238" height="199" key="GridCell.Tab.3.left/0.0.1280.800@0.0.1280.800" timestamp="1596005771325" />
     <state width="1238" height="263" key="GridCell.Tab.3.left/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825256" />
     <state width="1238" height="44" key="GridCell.Tab.3.left/46.23.1234.777@46.23.1234.777" timestamp="1587764992944" />
     <state width="1238" height="404" key="GridCell.Tab.3.left/49.23.1231.777@49.23.1231.777" timestamp="1595185197996" />
-    <state width="1238" height="254" key="GridCell.Tab.3.left/51.23.1229.777@51.23.1229.777" timestamp="1595077891278" />
-    <state width="1238" height="331" key="GridCell.Tab.3.left/54.23.1226.777@54.23.1226.777" timestamp="1595023266610" />
+    <state width="1238" height="199" key="GridCell.Tab.3.left/51.23.1229.777@51.23.1229.777" timestamp="1595747668890" />
+    <state width="1238" height="155" key="GridCell.Tab.3.left/54.23.1226.777@54.23.1226.777" timestamp="1595746824216" />
     <state width="1068" height="185" key="GridCell.Tab.3.left/56.23.1224.777@56.23.1224.777" timestamp="1595020164312" />
-    <state width="1238" height="444" key="GridCell.Tab.3.right" timestamp="1595195477495">
+    <state width="1238" height="199" key="GridCell.Tab.3.right" timestamp="1596005771326">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.3.right/0.0.1280.800@0.0.1280.800" timestamp="1595195477495" />
+    <state width="1238" height="199" key="GridCell.Tab.3.right/0.0.1280.800@0.0.1280.800" timestamp="1596005771326" />
     <state width="1238" height="263" key="GridCell.Tab.3.right/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825257" />
     <state width="1238" height="44" key="GridCell.Tab.3.right/46.23.1234.777@46.23.1234.777" timestamp="1587764992945" />
     <state width="1238" height="404" key="GridCell.Tab.3.right/49.23.1231.777@49.23.1231.777" timestamp="1595185197997" />
-    <state width="1238" height="254" key="GridCell.Tab.3.right/51.23.1229.777@51.23.1229.777" timestamp="1595077891279" />
-    <state width="1238" height="331" key="GridCell.Tab.3.right/54.23.1226.777@54.23.1226.777" timestamp="1595023266611" />
+    <state width="1238" height="199" key="GridCell.Tab.3.right/51.23.1229.777@51.23.1229.777" timestamp="1595747668891" />
+    <state width="1238" height="155" key="GridCell.Tab.3.right/54.23.1226.777@54.23.1226.777" timestamp="1595746824217" />
     <state width="1068" height="185" key="GridCell.Tab.3.right/56.23.1224.777@56.23.1224.777" timestamp="1595020164313" />
-    <state width="1238" height="444" key="GridCell.Tab.4.bottom" timestamp="1595195477499">
+    <state width="1238" height="199" key="GridCell.Tab.4.bottom" timestamp="1596005771328">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.4.bottom/0.0.1280.800@0.0.1280.800" timestamp="1595195477499" />
+    <state width="1238" height="199" key="GridCell.Tab.4.bottom/0.0.1280.800@0.0.1280.800" timestamp="1596005771328" />
     <state width="1238" height="263" key="GridCell.Tab.4.bottom/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825262" />
     <state width="1238" height="44" key="GridCell.Tab.4.bottom/46.23.1234.777@46.23.1234.777" timestamp="1587764992949" />
     <state width="1238" height="404" key="GridCell.Tab.4.bottom/49.23.1231.777@49.23.1231.777" timestamp="1595185197999" />
-    <state width="1238" height="254" key="GridCell.Tab.4.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595077891282" />
-    <state width="1238" height="331" key="GridCell.Tab.4.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595023266613" />
+    <state width="1238" height="199" key="GridCell.Tab.4.bottom/51.23.1229.777@51.23.1229.777" timestamp="1595747668893" />
+    <state width="1238" height="155" key="GridCell.Tab.4.bottom/54.23.1226.777@54.23.1226.777" timestamp="1595746824220" />
     <state width="1068" height="185" key="GridCell.Tab.4.bottom/56.23.1224.777@56.23.1224.777" timestamp="1595020164316" />
-    <state width="1238" height="444" key="GridCell.Tab.4.center" timestamp="1595195477497">
+    <state width="1238" height="199" key="GridCell.Tab.4.center" timestamp="1596005771327">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.4.center/0.0.1280.800@0.0.1280.800" timestamp="1595195477497" />
+    <state width="1238" height="199" key="GridCell.Tab.4.center/0.0.1280.800@0.0.1280.800" timestamp="1596005771327" />
     <state width="1238" height="263" key="GridCell.Tab.4.center/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825260" />
     <state width="1238" height="44" key="GridCell.Tab.4.center/46.23.1234.777@46.23.1234.777" timestamp="1587764992948" />
     <state width="1238" height="404" key="GridCell.Tab.4.center/49.23.1231.777@49.23.1231.777" timestamp="1595185197998" />
-    <state width="1238" height="254" key="GridCell.Tab.4.center/51.23.1229.777@51.23.1229.777" timestamp="1595077891281" />
-    <state width="1238" height="331" key="GridCell.Tab.4.center/54.23.1226.777@54.23.1226.777" timestamp="1595023266612" />
+    <state width="1238" height="199" key="GridCell.Tab.4.center/51.23.1229.777@51.23.1229.777" timestamp="1595747668892" />
+    <state width="1238" height="155" key="GridCell.Tab.4.center/54.23.1226.777@54.23.1226.777" timestamp="1595746824219" />
     <state width="1068" height="185" key="GridCell.Tab.4.center/56.23.1224.777@56.23.1224.777" timestamp="1595020164315" />
-    <state width="1238" height="444" key="GridCell.Tab.4.left" timestamp="1595195477497">
+    <state width="1238" height="199" key="GridCell.Tab.4.left" timestamp="1596005771327">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.4.left/0.0.1280.800@0.0.1280.800" timestamp="1595195477497" />
+    <state width="1238" height="199" key="GridCell.Tab.4.left/0.0.1280.800@0.0.1280.800" timestamp="1596005771327" />
     <state width="1238" height="263" key="GridCell.Tab.4.left/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825260" />
     <state width="1238" height="44" key="GridCell.Tab.4.left/46.23.1234.777@46.23.1234.777" timestamp="1587764992946" />
     <state width="1238" height="404" key="GridCell.Tab.4.left/49.23.1231.777@49.23.1231.777" timestamp="1595185197998" />
-    <state width="1238" height="254" key="GridCell.Tab.4.left/51.23.1229.777@51.23.1229.777" timestamp="1595077891280" />
-    <state width="1238" height="331" key="GridCell.Tab.4.left/54.23.1226.777@54.23.1226.777" timestamp="1595023266612" />
+    <state width="1238" height="199" key="GridCell.Tab.4.left/51.23.1229.777@51.23.1229.777" timestamp="1595747668892" />
+    <state width="1238" height="155" key="GridCell.Tab.4.left/54.23.1226.777@54.23.1226.777" timestamp="1595746824218" />
     <state width="1068" height="185" key="GridCell.Tab.4.left/56.23.1224.777@56.23.1224.777" timestamp="1595020164315" />
-    <state width="1238" height="444" key="GridCell.Tab.4.right" timestamp="1595195477498">
+    <state width="1238" height="199" key="GridCell.Tab.4.right" timestamp="1596005771327">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="444" key="GridCell.Tab.4.right/0.0.1280.800@0.0.1280.800" timestamp="1595195477498" />
+    <state width="1238" height="199" key="GridCell.Tab.4.right/0.0.1280.800@0.0.1280.800" timestamp="1596005771327" />
     <state width="1238" height="263" key="GridCell.Tab.4.right/0.0.1440.900/1440.0.1600.900@0.0.1440.900" timestamp="1587678825261" />
     <state width="1238" height="44" key="GridCell.Tab.4.right/46.23.1234.777@46.23.1234.777" timestamp="1587764992948" />
     <state width="1238" height="404" key="GridCell.Tab.4.right/49.23.1231.777@49.23.1231.777" timestamp="1595185197999" />
-    <state width="1238" height="254" key="GridCell.Tab.4.right/51.23.1229.777@51.23.1229.777" timestamp="1595077891282" />
-    <state width="1238" height="331" key="GridCell.Tab.4.right/54.23.1226.777@54.23.1226.777" timestamp="1595023266613" />
+    <state width="1238" height="199" key="GridCell.Tab.4.right/51.23.1229.777@51.23.1229.777" timestamp="1595747668893" />
+    <state width="1238" height="155" key="GridCell.Tab.4.right/54.23.1226.777@54.23.1226.777" timestamp="1595746824219" />
     <state width="1068" height="185" key="GridCell.Tab.4.right/56.23.1224.777@56.23.1224.777" timestamp="1595020164316" />
     <state x="150" y="245" key="Rider.ProjectTemplateDialog.Size" timestamp="1588264607368">
       <screen x="0" y="0" width="1280" height="800" />
@@ -670,10 +690,10 @@
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="57" y="78" key="SettingsEditor/0.0.1280.800@0.0.1280.800" timestamp="1588025809197" />
-    <state width="640" height="400" key="XDebugger.FullValuePopup" timestamp="1595195575778">
+    <state width="640" height="400" key="XDebugger.FullValuePopup" timestamp="1595744404783">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="640" height="400" key="XDebugger.FullValuePopup/0.0.1280.800@0.0.1280.800" timestamp="1595195575778" />
+    <state width="640" height="400" key="XDebugger.FullValuePopup/0.0.1280.800@0.0.1280.800" timestamp="1595744404783" />
     <state width="640" height="400" key="XDebugger.FullValuePopup/49.23.1231.777@49.23.1231.777" timestamp="1595195515419" />
     <state width="640" height="400" key="XDebugger.FullValuePopup/54.23.1226.777@54.23.1226.777" timestamp="1588923722055" />
     <state width="640" height="400" key="XDebugger.FullValuePopup/56.23.1224.777@56.23.1224.777" timestamp="1595017046147" />
@@ -681,33 +701,16 @@
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state width="600" height="424" key="javadoc.popup/0.0.1280.800@0.0.1280.800" timestamp="1594152813513" />
-    <state x="332" y="185" width="672" height="677" key="run.anything.popup" timestamp="1594152280434">
+    <state x="332" y="185" width="672" height="677" key="run.anything.popup" timestamp="1595249187642">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="332" y="185" width="672" height="677" key="run.anything.popup/0.0.1280.800@0.0.1280.800" timestamp="1594152280434" />
+    <state x="332" y="185" width="672" height="677" key="run.anything.popup/0.0.1280.800@0.0.1280.800" timestamp="1595249187642" />
     <state x="303" y="121" width="672" height="678" key="search.everywhere.popup" timestamp="1595186890198">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="303" y="121" width="672" height="678" key="search.everywhere.popup/0.0.1280.800@0.0.1280.800" timestamp="1595186890198" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs</url>
-          <line>88</line>
-          <properties documentPath="$PROJECT_DIR$/QuestionStorage/Controllers/QuestionsController.cs" initialLine="86">
-            <startOffsets>
-              <option value="2701" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2776" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo typeName="Microsoft.AspNetCore.Http.FormCollection" fieldName="Count" />

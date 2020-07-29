@@ -40,11 +40,11 @@
 
     <p class="less-bottom-space">Question title*</p>
     @Html.TextAreaFor(model => model.Question.QuestionName, 1, 100,
-        new {@class = "textarea", id = "questionName"})
+        new {@class = "textarea long", id = "questionName"})
 
     <p class="less-bottom-space">Question content*</p>
     @Html.TextAreaFor(model => model.Question.QuestionText, 15, 100,
-        new {@class = "textarea", id = "questionText"})
+        new {@class = "textarea long", id = "questionText"})
     
     <p class="less-bottom-space">Template
         <input type="hidden" value="off" name="IsTemplate"> 
@@ -73,7 +73,7 @@
                 <tr>
                     <td>
                         @Html.TextAreaFor(model => model.AnswerOption.Answer, 1, 60,
-                            new {@class = "textarea"})
+                            new {@class = "textarea long"})
                     </td>
                     <td style="text-align: center; vertical-align: top">
                         <input type="hidden" value="off" name="Correct">

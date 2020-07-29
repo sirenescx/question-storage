@@ -10,6 +10,7 @@ namespace QuestionStorage.Models.QuizzesQuestionsModels
         {
             QuestionAnswerVariants = new HashSet<QuestionAnswerVariants>();
             TagsQuestions = new HashSet<TagsQuestions>();
+            QuizzesInfoQuestionsInfo = new HashSet<QuizzesInfoQuestionsInfo>();
         }
 
         [Key]
@@ -27,11 +28,12 @@ namespace QuestionStorage.Models.QuizzesQuestionsModels
         public string QuestionXml { get; set; }
         [ForeignKey(nameof(TypeId))]
         [InverseProperty(nameof(TypesInfo.QuestionsInfo))]
-        public virtual TypesInfo Type { get; set; }
+        public TypesInfo Type { get; set; }
         public bool IsTemplate { get; set; }
         [InverseProperty("Quest")]
-        public virtual ICollection<QuestionAnswerVariants> QuestionAnswerVariants { get; set; }
+        public ICollection<QuestionAnswerVariants> QuestionAnswerVariants { get; set; }
         [InverseProperty("Quest")]
-        public virtual ICollection<TagsQuestions> TagsQuestions { get; set; }
+        public ICollection<TagsQuestions> TagsQuestions { get; set; }
+        public ICollection<QuizzesInfoQuestionsInfo> QuizzesInfoQuestionsInfo { get; set; }
     }
 }

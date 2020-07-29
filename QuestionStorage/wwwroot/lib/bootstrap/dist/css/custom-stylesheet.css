@@ -20,33 +20,41 @@
     resize: none;
     white-space: nowrap;
     height: 50%;
-    width: 100%;
     border: thin solid #A9A9A9;
     -webkit-border-radius: 5px
 }
 
-.textarea-code {
-    overflow-x: auto;
-    overflow-y: auto;
-    resize: none;
-    white-space: nowrap;
-    height: 100%;
+textarea.short {
+    width: 40%;
+}
+
+textarea.long {
     width: 100%;
-    border: thin solid #A9A9A9;
-    -webkit-border-radius: 5px;
+}
+
+textarea.code {
     font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: small;
 }
 
-.textarea-amount {
+textarea.id {
+    width: 15%;
+    margin-bottom: -5px;
+}
+
+textarea.amount {
+    width: 10%;
+}
+
+.password-textarea {
     overflow-x: auto;
-    overflow-y: auto;
     resize: none;
     white-space: nowrap;
-    height: 50%;
-    width: 10%;
+    height: 1.7em;
+    width: 20%;
     border: thin solid #A9A9A9;
-    -webkit-border-radius: 5px
+    -webkit-border-radius: 5px;
+    font-size: larger;
 }
 
 .select {
@@ -112,7 +120,8 @@ a:hover {
     color: white;
     border-radius: 5px;
     border: none;
-    outline: none
+    outline: none;
+    height: calc(1.5em + 0.75rem + 1px);
 }
 
 .page-header {
@@ -216,17 +225,6 @@ td {
 :-moz-placeholder {
     color: #ffffff;
     font-weight: lighter
-}
-
-.password-textarea {
-    overflow-x: auto;
-    resize: none;
-    white-space: nowrap;
-    height: 1.7em;
-    width: 20%;
-    border: thin solid #A9A9A9;
-    -webkit-border-radius: 5px;
-    font-size: larger;
 }
 
 .edit-submit-button {

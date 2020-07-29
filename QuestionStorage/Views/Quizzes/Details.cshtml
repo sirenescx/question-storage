@@ -1,0 +1,65 @@
+@model QuestionStorage.Models.QuizzesQuestionsModels.QuizzesInfo
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<head>
+    <title>Details</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+<body>
+<div>
+    <h3 class="page-header">#@Model.QuizId. @Model.Name</h3>
+    <h5 class="page-header">@Model.Date.ToString("dd/MM/yyyy")</h5>
+    <br/>
+    @foreach (var question in ViewBag.Questions)
+    {
+        <p>
+            <b>@question.QuestionName</b>
+        </p>
+        <p>
+            <pre class="pre">@Html.Raw(question.QuestionText)</pre>
+        </p>
+
+        @if (question.TypeId != 3)
+        {
+            @foreach (var answer in question.QuestionAnswerVariants)
+            {
+                <ul class="ul-circle">
+                    <li>
+                        <pre class="pre">@Html.Raw(answer.Answer)</pre>
+                    </li>
+                </ul>
+            }
+        }
+    
+        var correctAnswerText = question.TypeId == 2 ? "Correct answers" : "Correct answer";
+
+         <p><b class="content-header">Type: </b>@question.Type.Name.ToLower()</p>
+
+        @if (question.TypeId != 4)
+        {
+            <p>
+                <b class="content-header">@correctAnswerText</b>
+            </p>
+            @foreach (var variant in question.QuestionAnswerVariants)
+            {
+                if (variant.IsCorrect)
+                {
+                    <ul class="ul-circle">
+                        <li>
+                            <pre class="pre">@Html.Raw(variant.Answer)</pre>
+                        </li>
+                    </ul>
+                }
+            }
+        }
+        <hr/>
+    }
+</div>
+</body>
+</html>

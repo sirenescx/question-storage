@@ -1,0 +1,34 @@
+@model System.Collections.Generic.List<QuestionStorage.Models.QuizzesQuestionsModels.QuizzesInfo>
+
+@{
+    ViewData["Title"] = "Tests";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Tests</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <link rel="contents" href="/lib/resources/answer-open.xml">
+</head>
+<body>
+@using (Html.BeginForm("ListTests", "Display", FormMethod.Post))
+{
+
+    <p> </p>
+    <br/>
+
+    @if (Model != null)
+    {
+        @foreach (var item in Model)
+        {
+            <div>
+                <a asp-action="AboutTest" asp-route-id="@item.QuizId">#@item.QuizId. @item.Name</a>
+            </div>
+            <br/>
+        }
+    }
+}
+</body>
+</html>

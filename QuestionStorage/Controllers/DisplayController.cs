@@ -88,11 +88,23 @@ namespace QuestionStorage.Controllers
 
             return View(questions);
         }
-        
 
-        public IActionResult About(int id)
+        public IActionResult AboutQuestion(int id) => RedirectToAction("Details", "Questions", new { id });
+
+        [HttpGet]
+        public async Task<IActionResult> ListTests()
         {
-            return RedirectToAction("Details", "Questions", new { id });
+            var tests = await _context.QuizzesInfo.ToListAsync();
+
+            return View(tests);
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> ListTests(IFormCollection collection)
+        {
+            return View();
+        }
+        
+        public IActionResult AboutTest(int id) => RedirectToAction("Details", "Quizzes", new { id });
     }
 }

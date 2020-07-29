@@ -69,11 +69,11 @@
 
     <p class="less-bottom-space">Amount of questions*</p>
     @Html.TextAreaFor(model => model.Amount, 1, 100,
-        new {@class = "textarea-amount", id = "questionAmount"})
+        new {@class = "textarea amount", id = "questionAmount"})
     
     <p class="less-bottom-space">Code*</p>   
     @Html.TextAreaFor(model => model.Code, 20, 100,
-        new {@class = "textarea-code", id = "code"})
+        new {@class = "textarea code", id = "code"})
     
     <br/>
     <input type="submit" class="submit-button" value="Generate questions"/>

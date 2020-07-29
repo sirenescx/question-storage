@@ -24,27 +24,20 @@ namespace QuestionStorage.Controllers
         }
 
         [Authorize]
-        public IActionResult Questions()
-        {
-            return RedirectToAction("ListQuestions", "Display");
-        }
+        public IActionResult Questions() => RedirectToAction("ListQuestions", "Display");
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() =>
+            View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         
-
         [Authorize(Roles = "administrator")]
         public IActionResult Manage()
         {
             throw new System.NotImplementedException();
         }
 
-        public IActionResult Contact()
-        {
-            return View();
-        }
+        public IActionResult Contact() => View();
+
+        public IActionResult Tests() => RedirectToAction("ListTests", "Display");
     }
 }

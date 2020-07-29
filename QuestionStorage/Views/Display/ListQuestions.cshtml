@@ -41,7 +41,7 @@
         @foreach (var item in Model)
         {
             <div>
-                <a asp-action="About" asp-route-id="@item.QuestId">#@item.QuestId. @item.QuestionName</a>
+                <a asp-action="AboutQuestion" asp-route-id="@item.QuestId">#@item.QuestId. @item.QuestionName</a>
                 <div class="less-bottom-space">
                     <pre class="pre smaller-text">@Html.Raw(string.Join(' ', item.QuestionText.Split().Take(20)) + "</code>")...</pre>
                 </div>

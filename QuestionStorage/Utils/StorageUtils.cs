@@ -8,8 +8,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using QuestionStorage.Models.QuizzesQuestionsModels;
 
@@ -53,6 +55,15 @@ namespace QuestionStorage.Utils
 
             return question;
         }
+        
+        internal static async Task SaveToDatabase<T>(HSE_QuestContext context, T item)
+        {
+            await context.AddAsync(item);
+            await context.SaveChangesAsync();
+        }
+
+        internal static async Task<bool> QuestionExists(HSE_QuestContext context, int id) =>
+            await context.QuestionsInfo.AnyAsync(q => q.QuestId == id);
 
         internal static QuestionAnswerVariants CreateAnswerVariant(int variantId, int questionId, string answer,
             bool isCorrect, int sortCode = 0)
@@ -68,7 +79,7 @@ namespace QuestionStorage.Utils
 
             return answerVariant;
         }
-
+        
         internal static TagsInfo CreateTag(int tagId, string name, int? parentId = null)
         {
             var tag = new TagsInfo
@@ -192,11 +203,13 @@ namespace QuestionStorage.Utils
                     new[] {CSharpSyntaxTree.ParseText(sourceCode)},
                     new[]
                     {
+                        MetadataReference.CreateFromFile(typeof(StorageUtils).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                         MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "mscorlib.dll")),
                         MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.dll")),
                         MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Core.dll")),
                         MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Runtime.dll")),
+                        MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Runtime.Extensions.dll"))
                     },
                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary).WithUsings(DefaultNamespaces)
                 );

@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using iText.Html2pdf;
@@ -15,8 +13,6 @@ using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using QuestionStorage.Models.QuizzesQuestionsModels;
@@ -88,10 +84,10 @@ namespace QuestionStorage.Controllers
                 // Adding question info to database.
                 var questionId = await _context.QuestionsInfo.MaxAsync(q => q.QuestId) + 1;
                 var question = StorageUtils.CreateQuestion(
-                    collection[QuestionText], questionId, StorageUtils.GetTypeId(collection[TypeInfo]), 
+                    collection[QuestionText], questionId, StorageUtils.GetTypeId(collection[TypeInfo]),
                     collection[QuestionName], collection["IsTemplate"]);
 
-                await SaveToDatabase(question);
+                await StorageUtils.SaveToDatabase(_context, question);
 
                 await AddResponseOptions(collection[TypeInfo], questionId, collection[AnswerText],
                     collection["Correct"]);
@@ -266,11 +262,11 @@ namespace QuestionStorage.Controllers
                 var type = StorageUtils.GetTypeIdFromFullName(XmlGenerator.FindQuestionType(document));
                 var questionId = await _context.QuestionsInfo.MaxAsync(q => q.QuestId) + 1;
                 var question = StorageUtils.CreateQuestion(
-                    XmlGenerator.GetElementTextFromXml(document, "questiontext"), questionId, 
-                    StorageUtils.GetTypeId(type), 
+                    XmlGenerator.GetElementTextFromXml(document, "questiontext"), questionId,
+                    StorageUtils.GetTypeId(type),
                     XmlGenerator.GetElementTextFromXml(document, "name"), xmlData);
 
-                await SaveToDatabase(question);
+                await StorageUtils.SaveToDatabase(_context, question);
 
                 if (question.TypeId != 4)
                 {
@@ -291,7 +287,7 @@ namespace QuestionStorage.Controllers
             //     return ErrorPage(400);
             // }
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Generate(int id)
         {
@@ -318,7 +314,7 @@ namespace QuestionStorage.Controllers
 
             return View(model);
         }
-        
+
         public async Task<IActionResult> Generate(IFormCollection collection, int id)
         {
             var template = await _context.QuestionsInfo
@@ -339,65 +335,86 @@ namespace QuestionStorage.Controllers
                 await _context.TagsInfo
                     .Where(t => t.TagId == tagQuestion.TagId).ToListAsync();
             }
-            
+
             var amountOfQuestions = int.Parse(collection["Amount"]);
             var variables = (string) collection["Code"];
 
+            var questionTexts = new string[amountOfQuestions];
+            var questionIds = new int[amountOfQuestions];
+            var questionAnswers = new string[amountOfQuestions][];
+            var correct = new bool[answers.Count];
+
             for (var i = 0; i < amountOfQuestions; ++i)
             {
-                var questionId = await _context.QuestionsInfo.MaxAsync(q => q.QuestId) + 1;
-                var questionText = $"$@\"{StorageUtils.GetInterpolatedString(template.QuestionText)}\"";
-                var responseOptionsText = StorageUtils.CreateStringArrayFromResponseOptions(answers);
-                var correct = StorageUtils.GetResponseOptionsCorrectness(answers);
+                questionIds[i] = await _context.QuestionsInfo.MaxAsync(q => q.QuestId) + 1;
+                questionTexts[i] = template.QuestionText;
+                // questionTexts[i] = $"$@\"{StorageUtils.GetInterpolatedString(template.QuestionText)}\"";
+                questionAnswers[i] = new string[answers.Count];
+                for (var j = 0; j < answers.Count; ++j)
+                {
+                    questionAnswers[i][j] = answers[j].Answer;
+                }
 
-                var sourceCode = $@"
-                using System;
-                using System.Collections.Generic;
-
-                class QuestionGenerator
-                {{
-                    public static Random rnd = new Random();
-
-                    public static (string, string[]) Generate()
-                    {{
-                        {variables}
-
-                        return ({questionText}, {responseOptionsText});
-                    }}
-                }}";
-                var assembly = StorageUtils.CompileSourceRoslyn(sourceCode);
-                var type = assembly.GetType("QuestionGenerator");
-                var instance = Activator.CreateInstance(type);
-                
-                string[] responseOptions;
-                (questionText, responseOptions) = ((string, string[])) type.InvokeMember("Generate",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, instance, null);
-
-                var question = StorageUtils.CreateQuestion(
-                    questionText, questionId, template.TypeId, $"{template.QuestionName}#{i + 1}", 
-                    new StringValues("off"));
-                
-                await SaveToDatabase(question);
-                
-                await AddResponseOptions(
-                    template.TypeId, questionId, new List<string>(responseOptions), correct);
+                correct = StorageUtils.GetResponseOptionsCorrectness(answers);
             }
 
-            return RedirectToAction("Display", new {id = 11});
-        }
+            var sourceCode1 = @"
+                using System;
+                using System.Collections.Generic;
+                using QuestionStorage.Utils;
 
-        private ActionResult ErrorPage(int errorCode)
-        {
-            Response.StatusCode = errorCode;
+                class QuestionGenerator
+                {
+                    private static QRandom rnd = new QRandom();
 
-            return View("Error");
-        }
+	                private static string ChangeTemplateFields(string text, ref string[] answers, Dictionary<string, object> list)
+	                {	var newText = text;
+		                foreach (var variable in list) {
+                            newText = newText.Replace($" + '\u0022' + "${variable.Key}$" +
+                              '\u0022' + ", $" + '\u0022' + "{variable.Value}" + '\u0022' + @");
+                        }
+                        for (int i = 0; i < answers.Length; ++i) {
+                            foreach (var variable in list) {
+                                answers[i] = answers[i].Replace($" + '\u0022' + "${variable.Key}$" +
+                              '\u0022' + ", $" + '\u0022' + "{variable.Value}" + '\u0022' + @");
+                            }
+                        }
 
-        private async Task SaveToDatabase<T>(T item)
-        {
-            await _context.AddAsync(item);
-            await _context.SaveChangesAsync();
+                        return newText;
+                    }  
+                    
+                    public static void Generate(ref string[] text, ref string[][] answers, int amount)
+                    {
+                        for (var i = 0; i < amount; ++i) {
+                            var d = new Dictionary<string, object>();
+
+                        ";
+
+                var sourceCode2 = @"    text[i] = ChangeTemplateFields(text[i], ref answers[i], d);
+                        }
+                    }
+                }";
+                var assembly = StorageUtils.CompileSourceRoslyn(sourceCode1 + variables + sourceCode2);
+                var type = assembly.GetType("QuestionGenerator");
+                var instance = Activator.CreateInstance(type);
+
+                type.InvokeMember("Generate",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, instance, new object[] {questionTexts, questionAnswers, amountOfQuestions});
+
+                for (var i = 0; i < amountOfQuestions; ++i)
+                {
+                    var question = StorageUtils.CreateQuestion(
+                        questionTexts[i], questionIds[i], template.TypeId, $"{template.QuestionName}#{i + 1}",
+                        new StringValues("off"));
+
+                    await StorageUtils.SaveToDatabase(_context, question);
+
+                    await AddResponseOptions(
+                        template.TypeId, questionIds[i], new List<string>(questionAnswers[i]), correct);
+                }
+
+                return RedirectToAction("Display", new {id = 11});
         }
 
         private async Task AddResponseOption(int questionId, string text, bool isCorrect = true)
@@ -406,7 +423,7 @@ namespace QuestionStorage.Controllers
                 .MaxAsync(v => v.VariantId) + 1;
             var answerVariant = StorageUtils.CreateAnswerVariant(variantId, questionId, text, isCorrect);
 
-            await SaveToDatabase(answerVariant);
+            await StorageUtils.SaveToDatabase(_context, answerVariant);
         }
 
         private async Task AddResponseOptions(
@@ -445,13 +462,20 @@ namespace QuestionStorage.Controllers
             }
         }
 
+        private ActionResult ErrorPage(int errorCode)
+        {
+            Response.StatusCode = errorCode;
+
+            return View("Error");
+        }
+        
         private async Task CreateNewTag(string tagName, int questionId)
         {
             var tagId = await _context.TagsInfo.MaxAsync(t => t.TagId) + 1;
             var tag = StorageUtils.CreateTag(tagId, tagName);
 
-            await SaveToDatabase(tag);
-            await SaveToDatabase(new TagsQuestions {TagId = tagId, QuestId = questionId});
+            await StorageUtils.SaveToDatabase(_context, tag);
+            await StorageUtils.SaveToDatabase(_context, new TagsQuestions {TagId = tagId, QuestId = questionId});
         }
 
         private async Task AddTagsToDatabase(StringValues tags, int questionId, QuestionsInfo question = null,
@@ -459,7 +483,7 @@ namespace QuestionStorage.Controllers
         {
             if (question != null && question.IsTemplate)
             {
-                await SaveToDatabase(new TagsQuestions {TagId = 1, QuestId = questionId});
+                await StorageUtils.SaveToDatabase(_context, new TagsQuestions {TagId = 1, QuestId = questionId});
             }
 
             // Adding tags info to database.
@@ -478,7 +502,8 @@ namespace QuestionStorage.Controllers
                     else if (isCreating || !_context.TagsQuestions
                         .Any(tq => tq.TagId == tagId && tq.QuestId == questionId))
                     {
-                        await SaveToDatabase(new TagsQuestions {TagId = tagId, QuestId = questionId});
+                        await StorageUtils.SaveToDatabase(_context, 
+                            new TagsQuestions {TagId = tagId, QuestId = questionId});
                     }
                 }
                 else
@@ -558,7 +583,7 @@ namespace QuestionStorage.Controllers
 
             return changed;
         }
-        
+
 
         private const string QuestionText = "Question.QuestionText";
         private const string QuestionName = "Question.QuestionName";

@@ -3,9 +3,9 @@ using Fare;
 
 namespace QuestionStorage.Utils
 {
-    internal class QRandom : Random
+    public class QRandom : Random
     {
-        internal string StringFromRegex(string pattern)
+        public string StringFromRegex(string pattern)
         {
             var xeger = new Xeger(pattern);
             

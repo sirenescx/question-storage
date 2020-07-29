@@ -12,12 +12,11 @@ namespace QuestionStorage.Models.QuizzesQuestionsModels
         [Key]
         [Column("QuestID")]
         public int QuestId { get; set; }
-
         [ForeignKey(nameof(QuestId))]
         [InverseProperty(nameof(QuestionsInfo.TagsQuestions))]
-        public virtual QuestionsInfo Quest { get; set; }
+        public QuestionsInfo Quest { get; set; }
         [ForeignKey(nameof(TagId))]
         [InverseProperty(nameof(TagsInfo.TagsQuestions))]
-        public virtual TagsInfo Tag { get; set; }
+        public TagsInfo Tag { get; set; }
     }
 }

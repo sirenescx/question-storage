@@ -1,0 +1,78 @@
+@model QuestionStorage.Models.ViewModels.TestViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html lang="en">
+<head>
+    <title>Create</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <script src="/js/add-to-table.js"></script>
+    <script src="/js/display-answer-variants.js"></script>
+</head>
+<body>
+@using (Html.BeginForm("Create", "Quizzes", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("Please provide the details below and then click submit.",
+        new {@class = "text-danger"})
+    
+    <h1 class="page-header">Create test</h1>
+    <p class="less-bottom-space">Test title*</p>
+    @Html.TextAreaFor(model => model.Name, 1, 100,
+        new {@class = "textarea short", id = "testName"})
+    <p class="less-bottom-space">Date*</p>
+    <input type="date" class="textarea" name="date" id="Date" value="" />
+    <br/>
+    <hr/>
+    
+    <p 
+        class="less-bottom-space">Questions IDs*
+        <button class="button" id="addQuestionId" type="button" onclick="function addNewIdRow() {
+            const tableRef = document.getElementById('questionsTable');
+            const newRow = tableRef.insertRow(-1);
+            let cell = newRow.insertCell(0);
+            let textarea = document.getElementsByName('QuestionId')[0].cloneNode(false);
+            textarea.value = '';
+            cell.appendChild(textarea);
+        }
+        addNewIdRow()">
+            +
+        </button>
+    </p>
+    <table id="questionsTable">
+        <thead>
+        <tr>
+        <th>
+        <tbody>
+        @for (var i = 0; i < 5; ++i)
+        {
+            <tr>
+                <td>
+                @Html.TextAreaFor(model => model.QuestionId, 1, 100,
+                    new {@class = "textarea id", id = "questionId", type="number", 
+                        name="questionId", onkeyup="checkInput(this)"})
+            </tr>
+        }
+    </table>
+
+    <br/>
+    <input type="submit" class="submit-button" value="Create">
+}
+</body>
+</html>
+
+@section Scripts {
+    <script>
+        function checkInput(ob) {
+          let invalidChars = /[^0-9]/gi;
+          if(invalidChars.test(ob.value)) {
+                    ob.value = ob.value.replace(invalidChars,"");
+              }
+        }
+    </script>
+}
+

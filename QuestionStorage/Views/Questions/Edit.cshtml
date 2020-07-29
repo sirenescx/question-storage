@@ -27,7 +27,7 @@
     @Html.TextAreaFor(model => model.QuestionName, 1, 100,
         new
         {
-            @class = "textarea",
+            @class = "textarea long",
             Value = Html.DisplayFor(model => model.QuestionName)
         })
 
@@ -35,7 +35,7 @@
     @Html.TextAreaFor(model => model.QuestionText, 15, 100,
         new
         {
-            @class = "textarea",
+            @class = "textarea long",
             Value = Html.DisplayFor(model => model.QuestionText)
         })
     <hr/>
@@ -79,7 +79,7 @@
         if (Model.TypeId == 3)
         {
             <label id="correctAnswerLabel">Correct answer*</label>
-            <textarea class="textarea input-validation-error" cols="60" id="answerOption" data-val="true" 
+            <textarea class="textarea long input-validation-error" cols="60" id="answerOption" data-val="true" 
                           data-val-length="The field Answer must be a string with a maximum length of 256."
                           data-val-length-max="256" data-val-minlength="The field Answer must be a string or array type with a minimum length of \'1\'." 
                           data-val-minlength-min="1" data-val-required="Response option text is required."
@@ -103,7 +103,7 @@
                         ++answerOptionsCount;
                         <tr>
                             <td>
-                                <textarea class="textarea input-validation-error" cols="60" data-val="true" 
+                                <textarea class="textarea long input-validation-error" cols="60" data-val="true" 
                                               data-val-length="The field Answer must be a string with a maximum length of 256."
                                               data-val-length-max="256" data-val-minlength="The field Answer must be a string or array type with a minimum length of \'1\'." 
                                               data-val-minlength-min="1" data-val-required="Response option text is required."

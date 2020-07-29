@@ -22,10 +22,10 @@ namespace QuestionStorage.Models.QuizzesQuestionsModels
 
         [ForeignKey(nameof(ParentId))]
         [InverseProperty(nameof(InverseParent))]
-        public virtual TagsInfo Parent { get; set; }
+        public TagsInfo Parent { get; set; }
         [InverseProperty(nameof(Parent))]
-        public virtual ICollection<TagsInfo> InverseParent { get; set; }
+        public ICollection<TagsInfo> InverseParent { get; set; }
         [InverseProperty("Tag")]
-        public virtual ICollection<TagsQuestions> TagsQuestions { get; set; }
+        public ICollection<TagsQuestions> TagsQuestions { get; set; }
     }
 }
