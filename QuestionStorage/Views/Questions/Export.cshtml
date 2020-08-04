@@ -15,6 +15,7 @@
     <title>Export to XML</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
     <link rel="contents" href="/lib/resources/answer-open.xml">
+    <script src="/js/number-input-check.js"></script>
 </head>
 
 <body>
@@ -25,6 +26,16 @@
     <label>Select tags</label>
     @Html.DropDownList("Tags", tagList, 
         new {id = "test", multiple = "multiple"})
+    <br/>
+    
+    <label>Number of questions</label>
+    <br/>
+    <textarea 
+        class="textarea amount" id="questionsAmount" 
+        type="number" name="QuestionsAmount" onkeyup="checkInput(this)"
+        rows="1">
+    </textarea>
+
     <br/>
     <br/>
     <input type="submit" class="search-button" value="Export"/>

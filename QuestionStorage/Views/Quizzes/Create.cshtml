@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
     <script src="/js/add-to-table.js"></script>
     <script src="/js/display-answer-variants.js"></script>
+    <script src="/js/number-input-check.js"></script>
 </head>
 <body>
 @using (Html.BeginForm("Create", "Quizzes", FormMethod.Post))
@@ -30,7 +31,7 @@
     <hr/>
     
     <p 
-        class="less-bottom-space">Questions IDs*
+        class="less-bottom-space">Question ID*
         <button class="button" id="addQuestionId" type="button" onclick="function addNewIdRow() {
             const tableRef = document.getElementById('questionsTable');
             const newRow = tableRef.insertRow(-1);
@@ -65,14 +66,4 @@
 </body>
 </html>
 
-@section Scripts {
-    <script>
-        function checkInput(ob) {
-          let invalidChars = /[^0-9]/gi;
-          if(invalidChars.test(ob.value)) {
-                    ob.value = ob.value.replace(invalidChars,"");
-              }
-        }
-    </script>
-}
 

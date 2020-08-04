@@ -98,13 +98,7 @@ namespace QuestionStorage.Controllers
 
             return View(tests);
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> ListTests(IFormCollection collection)
-        {
-            return View();
-        }
-        
+
         public IActionResult AboutTest(int id) => RedirectToAction("Details", "Quizzes", new { id });
     }
 }

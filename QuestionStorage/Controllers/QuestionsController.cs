@@ -25,6 +25,7 @@ namespace QuestionStorage.Controllers
     public class QuestionsController : Controller
     {
         private readonly HSE_QuestContext _context;
+        private static Random _random = new Random();
 
         public QuestionsController(HSE_QuestContext context)
         {
@@ -223,17 +224,36 @@ namespace QuestionStorage.Controllers
             var tagsIds = collection["Tags"].Select(int.Parse).ToHashSet();
             var tagsQuestions = await _context.TagsQuestions
                 .Where(qt => tagsIds.Contains(qt.TagId)).ToListAsync();
-            var questionsIds = tagsQuestions.Select(tq => tq.QuestId).ToHashSet();
+            var allQuestionIds = tagsQuestions.Select(tq => tq.QuestId).ToHashSet();
+            var amount = collection["QuestionsAmount"][0];
+            var questionIds = new HashSet<int>();
+            if (!amount.Equals(string.Empty))
+            {
+                var questionsAmount = int.Parse(amount);
+                var count = 0;
+                while (questionsAmount > 0)
+                {
+                    questionIds.Add(allQuestionIds.ElementAt(_random.Next(allQuestionIds.Count)));
+                    if (questionIds.Count > count)
+                    {
+                        --questionsAmount;
+                    }
+                }
+            }
+
+            allQuestionIds = questionIds;
+
             var questions = await _context.QuestionsInfo
-                .Where(q => questionsIds.Contains(q.QuestId)).ToListAsync();
+                .Where(q => allQuestionIds.Contains(q.QuestId)).ToListAsync();
             var responseOptions = new List<List<QuestionAnswerVariants>>();
-            foreach (var questionId in questionsIds)
+            foreach (var questionId in allQuestionIds)
             {
                 responseOptions.Add(await _context.QuestionAnswerVariants
                     .Where(qav => qav.QuestId == questionId).ToListAsync());
             }
 
             var document = XmlGenerator.ExportQuestionsToXml(questions, responseOptions);
+
 
             return File(Encoding.UTF8.GetBytes(document.OuterXml),
                 "application/xml", "questions.xml");
@@ -390,31 +410,31 @@ namespace QuestionStorage.Controllers
 
                         ";
 
-                var sourceCode2 = @"    text[i] = ChangeTemplateFields(text[i], ref answers[i], d);
+            var sourceCode2 = @"    text[i] = ChangeTemplateFields(text[i], ref answers[i], d);
                         }
                     }
                 }";
-                var assembly = StorageUtils.CompileSourceRoslyn(sourceCode1 + variables + sourceCode2);
-                var type = assembly.GetType("QuestionGenerator");
-                var instance = Activator.CreateInstance(type);
+            var assembly = StorageUtils.CompileSourceRoslyn(sourceCode1 + variables + sourceCode2);
+            var type = assembly.GetType("QuestionGenerator");
+            var instance = Activator.CreateInstance(type);
 
-                type.InvokeMember("Generate",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, instance, new object[] {questionTexts, questionAnswers, amountOfQuestions});
+            type.InvokeMember("Generate",
+                BindingFlags.Default | BindingFlags.InvokeMethod,
+                null, instance, new object[] {questionTexts, questionAnswers, amountOfQuestions});
 
-                for (var i = 0; i < amountOfQuestions; ++i)
-                {
-                    var question = StorageUtils.CreateQuestion(
-                        questionTexts[i], questionIds[i], template.TypeId, $"{template.QuestionName}#{i + 1}",
-                        new StringValues("off"));
+            for (var i = 0; i < amountOfQuestions; ++i)
+            {
+                var question = StorageUtils.CreateQuestion(
+                    questionTexts[i], questionIds[i], template.TypeId, $"{template.QuestionName}#{i + 1}",
+                    new StringValues("off"));
 
-                    await StorageUtils.SaveToDatabase(_context, question);
+                await StorageUtils.SaveToDatabase(_context, question);
 
-                    await AddResponseOptions(
-                        template.TypeId, questionIds[i], new List<string>(questionAnswers[i]), correct);
-                }
+                await AddResponseOptions(
+                    template.TypeId, questionIds[i], new List<string>(questionAnswers[i]), correct);
+            }
 
-                return RedirectToAction("Display", new {id = 11});
+            return RedirectToAction("Display", new {id = 11});
         }
 
         private async Task AddResponseOption(int questionId, string text, bool isCorrect = true)
@@ -468,7 +488,7 @@ namespace QuestionStorage.Controllers
 
             return View("Error");
         }
-        
+
         private async Task CreateNewTag(string tagName, int questionId)
         {
             var tagId = await _context.TagsInfo.MaxAsync(t => t.TagId) + 1;
@@ -502,7 +522,7 @@ namespace QuestionStorage.Controllers
                     else if (isCreating || !_context.TagsQuestions
                         .Any(tq => tq.TagId == tagId && tq.QuestId == questionId))
                     {
-                        await StorageUtils.SaveToDatabase(_context, 
+                        await StorageUtils.SaveToDatabase(_context,
                             new TagsQuestions {TagId = tagId, QuestId = questionId});
                     }
                 }
