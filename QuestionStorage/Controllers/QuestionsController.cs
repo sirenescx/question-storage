@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using iText.Html2pdf;
-using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
-using QuestionStorage.Models.QuizzesQuestionsModels;
+using QuestionStorage.Models;
+using QuestionStorage.Models.Questions;
+using QuestionStorage.Models.Tags;
+using QuestionStorage.Models.Types;
 using QuestionStorage.Models.ViewModels;
 using QuestionStorage.Utils;
+
+// ReSharper disable VariableHidesOuterVariable
 
 namespace QuestionStorage.Controllers
 {
@@ -25,11 +27,13 @@ namespace QuestionStorage.Controllers
     public class QuestionsController : Controller
     {
         private readonly HSE_QuestContext _context;
-        private static Random _random = new Random();
+        private readonly IWebHostEnvironment _environment;
+        private static readonly Random Random = new Random();
 
-        public QuestionsController(HSE_QuestContext context)
+        public QuestionsController(HSE_QuestContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         // GET: Questions
@@ -43,24 +47,40 @@ namespace QuestionStorage.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Details(int id)
         {
-            var question = await _context.QuestionsInfo
-                .FirstOrDefaultAsync(m => m.QuestId == id);
+            var question = await DataStorage.GetByPredicateAsync(
+                _context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == id);
 
             if (question == null)
             {
                 return ErrorPage(404);
             }
 
-            await _context.QuestionAnswerVariants
-                .Where(a => a.QuestId == question.QuestId).ToListAsync();
-            await _context.TypesInfo.FirstOrDefaultAsync(t => t.TypeId == question.TypeId);
-            var tagsQuestions = await _context.TagsQuestions
-                .Where(tq => tq.QuestId == question.QuestId).ToListAsync();
+            await DataStorage.GetListByPredicateAsync(_context.QuestionAnswerVariants,
+                questionAnswerVariants => questionAnswerVariants.QuestId == question.QuestId);
+
+            await DataStorage.GetByPredicateAsync(_context.TypesInfo,
+                typesInfo => typesInfo.TypeId == question.TypeId);
+
+            var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions,
+                tagsQuestions => tagsQuestions.QuestId == question.QuestId);
+
             foreach (var tagQuestion in tagsQuestions)
             {
-                await _context.TagsInfo
-                    .Where(t => t.TagId == tagQuestion.TagId).ToListAsync();
+                await DataStorage.GetListByPredicateAsync(_context.TagsInfo,
+                    tagsInfo => tagsInfo.TagId == tagQuestion.TagId);
             }
+
+            var metaTags = new HashSet<int>();
+
+            foreach (var tagQuestion in tagsQuestions)
+            {
+                metaTags.UnionWith(
+                    await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(_context.TagsInfo,
+                        tagsInfo => tagsInfo.TagId == tagQuestion.TagId && tagsInfo.IsMetaTag == true,
+                        tagsInfo => tagsInfo.TagId));
+            }
+
+            ViewData["MetaTags"] = metaTags;
 
             return View(question);
         }
@@ -69,7 +89,7 @@ namespace QuestionStorage.Controllers
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            ViewData["Tags"] = new HashSet<TagsInfo>(await _context.TagsInfo.ToListAsync());
+            ViewData["Tags"] = await DataStorage.GetHashSetAsync(_context.TagsInfo);
 
             return View();
         }
@@ -82,21 +102,18 @@ namespace QuestionStorage.Controllers
         {
             try
             {
-                // Adding question info to database.
-                var questionId = await _context.QuestionsInfo.MaxAsync(q => q.QuestId) + 1;
-                var question = StorageUtils.CreateQuestion(
-                    collection[QuestionText], questionId, StorageUtils.GetTypeId(collection[TypeInfo]),
+                var question = await QuestionExtensions.CreateQuestion(_context,
+                    collection[QuestionText], collection[TypeInfo],
                     collection[QuestionName], collection["IsTemplate"]);
 
                 await StorageUtils.SaveToDatabase(_context, question);
 
-                await AddResponseOptions(collection[TypeInfo], questionId, collection[AnswerText],
-                    collection["Correct"]);
+                await AddResponseOptions(collection[TypeInfo][0], question.QuestId,
+                    collection[AnswerText].ToArray(), collection["Correct"].ToArray());
 
-                await AddTagsToDatabase(collection["Tags"], questionId, question);
+                await AddTagsToDatabase(collection["Tags"], question.QuestId, question);
 
-
-                return RedirectToAction("Details", new {id = questionId});
+                return RedirectToAction("Details", new {id = question.QuestId});
             }
             catch
             {
@@ -108,28 +125,16 @@ namespace QuestionStorage.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
-            var question = await _context.QuestionsInfo
-                .FirstOrDefaultAsync(m => m.QuestId == id);
+            var question = await DataStorage.GetByPredicateAsync(
+                _context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == id);
 
             if (question == null)
             {
                 return ErrorPage(404);
             }
 
-            await _context.QuestionAnswerVariants.Where(
-                a => a.QuestId == question.QuestId).ToListAsync();
-            var tagsQuestions = await _context.TagsQuestions.Where(
-                qt => qt.QuestId == question.QuestId).ToListAsync();
-            var currentTags = new HashSet<TagsInfo>();
-            foreach (var tagQuestion in tagsQuestions)
-            {
-                var tagInfo = await _context.TagsInfo.FirstOrDefaultAsync(
-                    t => t.TagId == tagQuestion.TagId);
-                currentTags.Add(tagInfo);
-            }
-
-            ViewData["CurrentTags"] = currentTags;
-            ViewData["AllTags"] = _context.TagsInfo.ToHashSet();
+            ViewData["CurrentTags"] = await GetTags(question);
+            ViewData["AllTags"] = await DataStorage.GetHashSetAsync(_context.TagsInfo);
 
             return View(question);
         }
@@ -141,23 +146,25 @@ namespace QuestionStorage.Controllers
         {
             try
             {
-                var tags = collection["Tags"];
-                var responseOptions = collection[AnswerText];
-                var typeName = collection["Type.Name"];
-                var changed = await DeleteAllExistingResponseOptions(id, responseOptions);
+                var typeName = collection["Type.Name"][0];
 
-                await EditQuestion(id, collection["QuestionName"],
-                    collection["QuestionText"], typeName);
-                await DeleteUnusedTags(id, tags);
-                await AddTagsToDatabase(tags, id, isCreating: false);
+                var question = await DataStorage.GetByPredicateAsync(
+                    _context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == id);
 
-                // if (changed)
-                // {
-                await AddResponseOptions(typeName, id, collection[AnswerText],
-                    collection["Correct"]);
-                // }
+                var sourceQuestionId = await QuestionExtensions.GetSourceVersionId(_context, question);
 
-                return RedirectToAction("Details", new {id});
+                var newQuestion = await QuestionExtensions.CreateQuestion(_context,
+                    collection["QuestionName"], collection["QuestionText"],
+                    typeName, await GetVersion(sourceQuestionId), sourceQuestionId);
+
+                await StorageUtils.SaveToDatabase(_context, newQuestion);
+
+                await AddTagsToDatabase(collection["Tags"], newQuestion.QuestId);
+
+                await AddResponseOptions(typeName, newQuestion.QuestId, collection[AnswerText].ToArray(),
+                    collection["Correct"].ToArray());
+
+                return RedirectToAction("Details", new {id = newQuestion.QuestId});
             }
             catch
             {
@@ -165,26 +172,10 @@ namespace QuestionStorage.Controllers
             }
         }
 
-        public IActionResult ExportToPdf(int id)
-        {
-            MemoryStream ms;
-            using (ms = new MemoryStream())
-            {
-                using var client = new WebClient();
-                var url = $"https://localhost:5001/Questions/Details/{id}";
-                var htmlString = client.DownloadString(url);
-                using var pdfWriter = new PdfWriter(ms);
-                pdfWriter.SetCloseStream(false);
-                using var document = HtmlConverter.ConvertToDocument(htmlString, pdfWriter);
-            }
-
-            return File(ms.ToArray(), "application/pdf", $"question{id}.pdf");
-        }
-
         public async Task<IActionResult> ExportToXml(int id)
         {
-            var question = await _context.QuestionsInfo
-                .FirstOrDefaultAsync(q => q.QuestId == id);
+            var question = await DataStorage.GetByPredicateAsync(
+                _context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == id);
 
             if (question.QuestionXml != null)
             {
@@ -192,68 +183,54 @@ namespace QuestionStorage.Controllers
                     "application/xml", $"question{id}.xml");
             }
 
-            var responseOptions = await _context.QuestionAnswerVariants
-                .Where(qav => qav.QuestId == id).ToListAsync();
-            var document = XmlGenerator.ExportToXml(question, responseOptions);
+            var responseOptions = await DataStorage.GetListByPredicateAsync(_context.QuestionAnswerVariants,
+                questionAnswerVariants => questionAnswerVariants.QuestId == id);
+
+            var document = XmlGenerator.ExportToXml(question, responseOptions, _environment);
 
             return File(Encoding.UTF8.GetBytes(document.OuterXml),
                 "application/xml", $"question{id}.xml");
         }
 
-        public IActionResult Display(int id)
-        {
-            return RedirectToAction("ListByTag", "Display", new {id});
-        }
+        public IActionResult Display(int id) =>
+            RedirectToAction("ListByTag", "Display", new {id});
 
         [HttpGet]
         public async Task<IActionResult> Export()
         {
-            ViewData["Tags"] = new HashSet<TagsInfo>(await _context.TagsInfo.ToListAsync());
+            ViewData["Tags"] = await DataStorage.GetHashSetAsync(_context.TagsInfo);
 
             return View();
         }
 
         public async Task<IActionResult> Export(IFormCollection collection)
         {
-            ViewData["Tags"] = new HashSet<TagsInfo>(await _context.TagsInfo.ToListAsync());
-            if (collection["Tags"].Count == 0)
+            ViewData["Tags"] = await DataStorage.GetHashSetAsync(_context.TagsInfo);
+
+            if (!collection["Tags"].Any())
             {
                 return View();
             }
 
-            var tagsIds = collection["Tags"].Select(int.Parse).ToHashSet();
-            var tagsQuestions = await _context.TagsQuestions
-                .Where(qt => tagsIds.Contains(qt.TagId)).ToListAsync();
-            var allQuestionIds = tagsQuestions.Select(tq => tq.QuestId).ToHashSet();
-            var amount = collection["QuestionsAmount"][0];
-            var questionIds = new HashSet<int>();
-            if (!amount.Equals(string.Empty))
-            {
-                var questionsAmount = int.Parse(amount);
-                var count = 0;
-                while (questionsAmount > 0)
-                {
-                    questionIds.Add(allQuestionIds.ElementAt(_random.Next(allQuestionIds.Count)));
-                    if (questionIds.Count > count)
-                    {
-                        --questionsAmount;
-                    }
-                }
-            }
+            var tagIdentifiers = collection["Tags"].Select(int.Parse).ToHashSet();
 
-            allQuestionIds = questionIds;
+            var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions,
+                tagsQuestions => tagIdentifiers.Contains(tagsQuestions.TagId));
 
-            var questions = await _context.QuestionsInfo
-                .Where(q => allQuestionIds.Contains(q.QuestId)).ToListAsync();
+            var questionIdentifiers = GetQuestionIdentifiers(tagsQuestions, collection["QuestionsAmount"]);
+
+            var questions = await DataStorage.GetListByPredicateAsync(_context.QuestionsInfo,
+                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId));
+
             var responseOptions = new List<List<QuestionAnswerVariants>>();
-            foreach (var questionId in allQuestionIds)
+
+            foreach (var questionId in questionIdentifiers)
             {
-                responseOptions.Add(await _context.QuestionAnswerVariants
-                    .Where(qav => qav.QuestId == questionId).ToListAsync());
+                responseOptions.Add(await DataStorage.GetListByPredicateAsync(_context.QuestionAnswerVariants,
+                    questionAnswerVariants => questionAnswerVariants.QuestId == questionId));
             }
 
-            var document = XmlGenerator.ExportQuestionsToXml(questions, responseOptions);
-
+            var document = XmlGenerator.ExportQuestionsToXml(questions, responseOptions, _environment);
 
             return File(Encoding.UTF8.GetBytes(document.OuterXml),
                 "application/xml", "questions.xml");
@@ -279,11 +256,10 @@ namespace QuestionStorage.Controllers
                 var document = new XmlDocument();
                 document.LoadXml(xmlData);
 
-                var type = StorageUtils.GetTypeIdFromFullName(XmlGenerator.FindQuestionType(document));
-                var questionId = await _context.QuestionsInfo.MaxAsync(q => q.QuestId) + 1;
-                var question = StorageUtils.CreateQuestion(
-                    XmlGenerator.GetElementTextFromXml(document, "questiontext"), questionId,
-                    StorageUtils.GetTypeId(type),
+                var type = TypesExtensions.GetTypeIdFromFullName(XmlGenerator.FindQuestionType(document));
+
+                var question = await QuestionExtensions.CreateQuestion(_context,
+                    XmlGenerator.GetElementTextFromXml(document, "questiontext"), type, 
                     XmlGenerator.GetElementTextFromXml(document, "name"), xmlData);
 
                 await StorageUtils.SaveToDatabase(_context, question);
@@ -291,43 +267,42 @@ namespace QuestionStorage.Controllers
                 if (question.TypeId != 4)
                 {
                     var (responseOptions, correct) = XmlGenerator.GetResponseInfo(document);
-                    await AddResponseOptions(StorageUtils.GetTypeId(type), questionId, responseOptions, correct);
+                    await AddResponseOptions(TypesExtensions.GetTypeId(type), question.QuestId, responseOptions, correct);
                 }
 
-                return RedirectToAction("Details", new {id = questionId});
+                return RedirectToAction("Details", new {id = question.QuestId});
             }
             catch (XmlException ex)
             {
                 ModelState.AddModelError("File", ex.Message);
                 return View("Import");
             }
-
-            // catch
-            // {
-            //     return ErrorPage(400);
-            // }
         }
 
         [HttpGet]
         public async Task<IActionResult> Generate(int id)
         {
-            var question = await _context.QuestionsInfo
-                .FirstOrDefaultAsync(m => m.QuestId == id);
+            var question = await DataStorage.GetByPredicateAsync(
+                _context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == id);
 
             if (question == null)
             {
                 return ErrorPage(404);
             }
 
-            await _context.QuestionAnswerVariants
-                .Where(a => a.QuestId == question.QuestId).ToListAsync();
-            await _context.TypesInfo.FirstOrDefaultAsync(t => t.TypeId == question.TypeId);
-            var tagsQuestions = await _context.TagsQuestions
-                .Where(tq => tq.QuestId == question.QuestId).ToListAsync();
+            await DataStorage.GetByPredicateAsync(_context.QuestionAnswerVariants, 
+                questionAnswerVariants => questionAnswerVariants.QuestId == question.QuestId);
+
+            await DataStorage.GetByPredicateAsync(_context.TypesInfo, 
+                typesInfo => typesInfo.TypeId == question.TypeId);
+            
+            var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions, 
+                tagsQuestions => tagsQuestions.QuestId == question.QuestId);
+            
             foreach (var tagQuestion in tagsQuestions)
             {
-                await _context.TagsInfo
-                    .Where(t => t.TagId == tagQuestion.TagId).ToListAsync();
+                await DataStorage.GetListByPredicateAsync(_context.TagsInfo, 
+                    tagsInfo => tagsInfo.TagId == tagQuestion.TagId);
             }
 
             var model = new TemplateQuestionViewModel {Question = question};
@@ -337,147 +312,94 @@ namespace QuestionStorage.Controllers
 
         public async Task<IActionResult> Generate(IFormCollection collection, int id)
         {
-            var template = await _context.QuestionsInfo
-                .FirstOrDefaultAsync(m => m.QuestId == id);
+            var template = await DataStorage.GetByPredicateAsync(
+                _context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == id);
 
             if (template == null)
             {
                 return ErrorPage(404);
             }
 
-            var answers = await _context.QuestionAnswerVariants
-                .Where(a => a.QuestId == template.QuestId).ToListAsync();
-            await _context.TypesInfo.FirstOrDefaultAsync(t => t.TypeId == template.TypeId);
-            var tagsQuestions = await _context.TagsQuestions
-                .Where(tq => tq.QuestId == template.QuestId).ToListAsync();
+            var answers = await DataStorage.GetListByPredicateAsync(_context.QuestionAnswerVariants,
+                questionAnswerVariants => questionAnswerVariants.QuestId == template.QuestId);
+
+            await DataStorage.GetByPredicateAsync(_context.TypesInfo,
+                typesInfo => typesInfo.TypeId == template.TypeId);
+
+            var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions,
+                tagsQuestions => tagsQuestions.QuestId == template.QuestId);
+
             foreach (var tagQuestion in tagsQuestions)
             {
-                await _context.TagsInfo
-                    .Where(t => t.TagId == tagQuestion.TagId).ToListAsync();
+                await DataStorage.GetListByPredicateAsync(_context.TagsInfo,
+                    tagsInfo => tagsInfo.TagId == tagQuestion.TagId);
             }
 
-            var amountOfQuestions = int.Parse(collection["Amount"]);
-            var variables = (string) collection["Code"];
+            var amount = int.Parse(collection["Amount"]);
+            var questionTexts = Enumerable.Repeat(template.QuestionText, amount).ToList();
+            var questionAnswers = new string[amount][];
 
-            var questionTexts = new string[amountOfQuestions];
-            var questionIds = new int[amountOfQuestions];
-            var questionAnswers = new string[amountOfQuestions][];
-            var correct = new bool[answers.Count];
-
-            for (var i = 0; i < amountOfQuestions; ++i)
+            for (var i = 0; i < amount; ++i)
             {
-                questionIds[i] = await _context.QuestionsInfo.MaxAsync(q => q.QuestId) + 1;
-                questionTexts[i] = template.QuestionText;
-                // questionTexts[i] = $"$@\"{StorageUtils.GetInterpolatedString(template.QuestionText)}\"";
                 questionAnswers[i] = new string[answers.Count];
                 for (var j = 0; j < answers.Count; ++j)
                 {
                     questionAnswers[i][j] = answers[j].Answer;
                 }
-
-                correct = StorageUtils.GetResponseOptionsCorrectness(answers);
             }
 
-            var sourceCode1 = @"
-                using System;
-                using System.Collections.Generic;
-                using QuestionStorage.Utils;
+            var variables = (string) collection["Code"];
 
-                class QuestionGenerator
-                {
-                    private static QRandom rnd = new QRandom();
-
-	                private static string ChangeTemplateFields(string text, ref string[] answers, Dictionary<string, object> list)
-	                {	var newText = text;
-		                foreach (var variable in list) {
-                            newText = newText.Replace($" + '\u0022' + "${variable.Key}$" +
-                              '\u0022' + ", $" + '\u0022' + "{variable.Value}" + '\u0022' + @");
-                        }
-                        for (int i = 0; i < answers.Length; ++i) {
-                            foreach (var variable in list) {
-                                answers[i] = answers[i].Replace($" + '\u0022' + "${variable.Key}$" +
-                              '\u0022' + ", $" + '\u0022' + "{variable.Value}" + '\u0022' + @");
-                            }
-                        }
-
-                        return newText;
-                    }  
-                    
-                    public static void Generate(ref string[] text, ref string[][] answers, int amount)
-                    {
-                        for (var i = 0; i < amount; ++i) {
-                            var d = new Dictionary<string, object>();
-
-                        ";
-
-            var sourceCode2 = @"    text[i] = ChangeTemplateFields(text[i], ref answers[i], d);
-                        }
-                    }
-                }";
-            var assembly = StorageUtils.CompileSourceRoslyn(sourceCode1 + variables + sourceCode2);
+            var assembly = StorageUtils.CompileSourceRoslyn($"{_sourceCodePartOne}{variables}{_sourceCodePartTwo}");
             var type = assembly.GetType("QuestionGenerator");
             var instance = Activator.CreateInstance(type);
 
             type.InvokeMember("Generate",
                 BindingFlags.Default | BindingFlags.InvokeMethod,
-                null, instance, new object[] {questionTexts, questionAnswers, amountOfQuestions});
+                null, instance, new object[] {questionTexts, questionAnswers, amount});
 
-            for (var i = 0; i < amountOfQuestions; ++i)
+            for (var i = 0; i < amount; ++i)
             {
-                var question = StorageUtils.CreateQuestion(
-                    questionTexts[i], questionIds[i], template.TypeId, $"{template.QuestionName}#{i + 1}",
+                //TODO: Change i + 1 to template questions count + 1
+                var question = await QuestionExtensions.CreateQuestion(_context,
+                    questionTexts[i], TypesExtensions.GetShortTypeName(template.TypeId),
+                    $"{template.QuestionName}#{i + 1}",
                     new StringValues("off"));
 
                 await StorageUtils.SaveToDatabase(_context, question);
 
-                await AddResponseOptions(
-                    template.TypeId, questionIds[i], new List<string>(questionAnswers[i]), correct);
+                await AddResponseOptions(template.TypeId, question.QuestId,
+                    questionAnswers[i], StorageUtils.GetResponseOptionsCorrectness(answers));
             }
 
-            return RedirectToAction("Display", new {id = 11});
+            return RedirectToAction("Display", new {id});
         }
 
-        private async Task AddResponseOption(int questionId, string text, bool isCorrect = true)
-        {
-            var variantId = await _context.QuestionAnswerVariants
-                .MaxAsync(v => v.VariantId) + 1;
-            var answerVariant = StorageUtils.CreateAnswerVariant(variantId, questionId, text, isCorrect);
+        private async Task AddResponseOption(int questionId, string text, bool isCorrect = true) =>
+            await StorageUtils.SaveToDatabase(_context, await QuestionExtensions.CreateQuestionAnswerVariant(_context,
+                questionId, text, isCorrect));
 
-            await StorageUtils.SaveToDatabase(_context, answerVariant);
-        }
-
-        private async Task AddResponseOptions(
-            string questionTypeName, int questionId, StringValues responseOptions, StringValues correct)
+        private async Task AddResponseOptions<T, TV>(T typeInfo, int questionId, string[] responseOptions,
+            TV[] correctnessInfo) where T : IConvertible
         {
-            var questionTypeId = StorageUtils.GetTypeId(questionTypeName);
+            var questionTypeId = typeof(T) == typeof(string)
+                ? TypesExtensions.GetTypeId(typeInfo)
+                : Convert.ToInt32(typeInfo);
+
+            var isCorrect = typeof(TV) == typeof(bool)
+                ? Array.ConvertAll(correctnessInfo, value => Convert.ToBoolean(value))
+                : StorageUtils.PreprocessCheckboxValues(
+                    new StringValues(Array.ConvertAll(correctnessInfo, value => Convert.ToString(value))));
 
             if (questionTypeId == 3)
             {
-                await AddResponseOption(questionId, responseOptions);
+                await AddResponseOption(questionId, responseOptions.First());
             }
             else
             {
-                var checkboxValues = StorageUtils.PreprocessCheckboxValues(correct);
-
-                for (var i = 0; i < responseOptions.Count; ++i)
+                for (var i = 0; i < responseOptions.Length; ++i)
                 {
-                    await AddResponseOption(questionId, responseOptions[i], checkboxValues[i]);
-                }
-            }
-        }
-
-        private async Task AddResponseOptions(
-            int questionTypeId, int questionId, List<string> responseOptions, bool[] checkboxValues)
-        {
-            if (questionTypeId == 3)
-            {
-                await AddResponseOption(questionId, responseOptions[0]);
-            }
-            else
-            {
-                for (var i = 0; i < responseOptions.Count; ++i)
-                {
-                    await AddResponseOption(questionId, responseOptions[i], checkboxValues[i]);
+                    await AddResponseOption(questionId, responseOptions[i], isCorrect[i]);
                 }
             }
         }
@@ -485,17 +407,80 @@ namespace QuestionStorage.Controllers
         private ActionResult ErrorPage(int errorCode)
         {
             Response.StatusCode = errorCode;
+            ViewData["StatusCode"] = errorCode;
 
             return View("Error");
         }
 
+        private async Task<HashSet<TagsInfo>> GetTags(QuestionsInfo question)
+        {
+            await DataStorage.GetListByPredicateAsync(_context.QuestionAnswerVariants,
+                questionAnswerVariants => questionAnswerVariants.QuestId == question.QuestId);
+
+            var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions,
+                tagsQuestions => tagsQuestions.QuestId == question.QuestId);
+
+            var currentTags = new HashSet<TagsInfo>();
+            
+            foreach (var tagQuestion in tagsQuestions)
+            {
+                currentTags.Add(await DataStorage.GetByPredicateAsync(_context.TagsInfo,
+                    tagsInfo => tagsInfo.TagId == tagQuestion.TagId));
+            }
+
+            return currentTags;
+        }
+
+        private async Task<int> GetVersion(int id)
+        {
+            var questions = await DataStorage.GetListByPredicateAsync(_context.QuestionsInfo,
+                questionsInfo => questionsInfo.SourceQuestId == id);
+
+            var versionId = 0;
+            foreach (var q in questions.Where(q => q.VersionId > versionId))
+            {
+                versionId = q.VersionId;
+            }
+
+            return versionId + 1;
+        }
+
+        private HashSet<int> GetQuestionIdentifiers(List<TagsQuestions> tagsQuestions, StringValues amountValue)
+        {
+            var allQuestionIdentifiers = tagsQuestions
+                .Select(tagsQuestions => tagsQuestions.QuestId)
+                .ToHashSet();
+
+            var amount = amountValue[0];
+
+            var questionIdentifiers = new HashSet<int>();
+
+            if (!string.IsNullOrWhiteSpace(amount))
+            {
+                var questionsAmount = int.Parse(amount);
+                var count = 0;
+                while (questionsAmount > 0)
+                {
+                    questionIdentifiers.Add(
+                        allQuestionIdentifiers.ElementAt(Random.Next(allQuestionIdentifiers.Count)));
+                    if (questionIdentifiers.Count > count)
+                    {
+                        --questionsAmount;
+                    }
+                }
+
+                allQuestionIdentifiers = questionIdentifiers;
+            }
+
+            return allQuestionIdentifiers;
+        }
+
         private async Task CreateNewTag(string tagName, int questionId)
         {
-            var tagId = await _context.TagsInfo.MaxAsync(t => t.TagId) + 1;
-            var tag = StorageUtils.CreateTag(tagId, tagName);
+            var tag = await TagsExtensions.CreateTag(_context, tagName);
 
             await StorageUtils.SaveToDatabase(_context, tag);
-            await StorageUtils.SaveToDatabase(_context, new TagsQuestions {TagId = tagId, QuestId = questionId});
+            await StorageUtils.SaveToDatabase(_context, new TagsQuestions {TagId = tag.TagId, QuestId = questionId});
         }
 
         private async Task AddTagsToDatabase(StringValues tags, int questionId, QuestionsInfo question = null,
@@ -509,7 +494,7 @@ namespace QuestionStorage.Controllers
             // Adding tags info to database.
             foreach (var tagInfo in tags)
             {
-                if (StorageUtils.IsValidTagId(tagInfo))
+                if (TagsExtensions.IsValidTagId(tagInfo))
                 {
                     // if it is valid tag id
                     var exists = int.TryParse(tagInfo.TrimStart('ŧ'), out var tagId);
@@ -533,81 +518,46 @@ namespace QuestionStorage.Controllers
             }
         }
 
-        private async Task EditQuestion(int questionId, string questionName, string questionText, string typeName)
-        {
-            var question = await _context.QuestionsInfo
-                .FirstOrDefaultAsync(q => q.QuestId == questionId);
-            StorageUtils.EditQuestion(question, questionName, questionText, typeName);
-
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task DeleteUnusedTags(int questionId, StringValues tags)
-        {
-            // Getting tags-questions relation for question before editing
-            var tagsQuestions = await _context.TagsQuestions
-                .Where(tq => tq.QuestId == questionId).ToListAsync();
-
-            // Getting ids of tags related to question
-            var questionTagsIds = new HashSet<int>();
-            foreach (var relation in tagsQuestions)
-            {
-                questionTagsIds.Add(relation.TagId);
-            }
-
-            // Getting ids of tags after editing
-            var editedTagsIds = new HashSet<int>();
-            foreach (var tagInfo in tags.Where(StorageUtils.IsValidTagId))
-            {
-                var exists = int.TryParse(tagInfo.TrimStart('ŧ'), out var tagId);
-                exists &= await _context.TagsInfo.AnyAsync(t => t.TagId == tagId);
-                if (exists)
-                {
-                    editedTagsIds.Add(tagId);
-                }
-            }
-
-            // Getting no longer used tags ids
-            questionTagsIds.ExceptWith(editedTagsIds);
-
-            foreach (var currentId in questionTagsIds)
-            {
-                var relation = await _context.TagsQuestions
-                    .FirstAsync(tq => tq.TagId == currentId && tq.QuestId == questionId);
-                _context.TagsQuestions.Remove(relation);
-
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        private async Task<bool> DeleteAllExistingResponseOptions(int id, StringValues responseOptions)
-        {
-            var responseOptionsCount = responseOptions.Count;
-            var oldResponseOptions = await _context.QuestionAnswerVariants
-                .Where(qav => qav.QuestId == id).ToListAsync();
-            var changed = oldResponseOptions.Count != responseOptionsCount;
-
-            if (!changed)
-            {
-                for (var i = 0; i < responseOptionsCount; ++i)
-                {
-                    if (!oldResponseOptions[i].Answer.Equals(responseOptions[i].Trim()))
-                    {
-                        changed = true;
-                        break;
-                    }
-                }
-            }
-
-            _context.QuestionAnswerVariants.RemoveRange(oldResponseOptions);
-
-            return changed;
-        }
-
-
         private const string QuestionText = "Question.QuestionText";
         private const string QuestionName = "Question.QuestionName";
         private const string TypeInfo = "Question.Type.Name";
         private const string AnswerText = "AnswerOption.Answer";
+
+        private readonly string _sourceCodePartOne = @"
+                using System;
+                using System.Collections.Generic;
+                using QuestionStorage.Utils;
+
+                class QuestionGenerator
+                {
+                    private static QRandom rnd = new QRandom();
+
+	                private static string ChangeTemplateFields(string text, ref string[] answers, Dictionary<string, object> list)
+	                {	var newText = text;
+		                foreach (var variable in list) {
+                            newText = newText.Replace($" + '\u0022' + "${variable.Key}$" +
+                                                     '\u0022' + ", $" + '\u0022' + "{variable.Value}" + '\u0022' + @");
+                        }
+                        for (int i = 0; i < answers.Length; ++i) {
+                            foreach (var variable in list) {
+                                answers[i] = answers[i].Replace($" + '\u0022' + "${variable.Key}$" +
+                                                     '\u0022' + ", $" + '\u0022' + "{variable.Value}" + '\u0022' + @");
+                            }
+                        }
+
+                        return newText;
+                    }  
+                    
+                    public static void Generate(ref string[] text, ref string[][] answers, int amount)
+                    {
+                        for (var i = 0; i < amount; ++i) {
+                            var d = new Dictionary<string, object>();
+
+                        ";
+
+        private readonly string _sourceCodePartTwo = @"    text[i] = ChangeTemplateFields(text[i], ref answers[i], d);
+                        }
+                    }
+                }";
     }
 }

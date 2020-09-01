@@ -1,7 +1,9 @@
-﻿@model QuestionStorage.Models.QuizzesQuestionsModels.QuestionsInfo
+﻿@model QuestionStorage.Models.Questions.QuestionsInfo
 
 @{
-    ViewData["Title"] = "Edit";
+    var title = ViewBag.Title;
+    ViewData["Title"] = title.Equals("Edit") ? "Edit" : "Copy";
+    var mvcForm = Html.BeginForm(title.Equals("Edit") ? "Edit" : "Copy", "Questions", FormMethod.Post);
 }
 
 <!DOCTYPE html>
@@ -14,7 +16,8 @@
     <script src="~/js/display-answer-variants.js"></script>
 </head>
 
-@using (Html.BeginForm("Edit", "Questions", FormMethod.Post))
+
+@using (mvcForm)
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary("Please provide the details below and then click submit.",
@@ -139,7 +142,7 @@
                             @if (answerOptionsCount > 2)
                             {
                                 <td style="text-align: center; vertical-align: top">
-                                    <button class="remove-button" onclick="removeRow(this, 'answerTable')">✕</button>
+                                    <button class="button remove" onclick="removeRow(this, 'answerTable')">✕</button>
                                 </td>
                             }
                             else
@@ -152,7 +155,7 @@
                 }
             </table>
             <p>
-                <button class="button" id="addResponseOptions" type="button" onclick="addNewRow('answerTable')">
+                <button class="button add" id="addResponseOptions" type="button" onclick="addNewRow('answerTable')">
                     Add new response option
                 </button>
             </p>
@@ -182,7 +185,7 @@
     <br/>
 
     <br/>
-    <input type="submit" class="submit-button" value="Submit"/>
+    <input type="submit" class="submit" value="Submit"/>
     </body>
 }
 </html>

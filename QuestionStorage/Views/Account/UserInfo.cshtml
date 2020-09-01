@@ -1,0 +1,58 @@
+@model QuestionStorage.Models.Users.User
+
+@{
+    ViewData["Title"] = "User Info";
+}
+
+<!DOCTYPE html>
+<head>
+    <title>Edit</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+
+<body>
+<div>
+    <h1 class="page-header">Profile</h1>
+    <p class="ok">@ViewBag.Message</p>
+    <br/>
+
+    <table class="user-info-table">
+        <tbody>
+        <tr>
+            <td class="td-user-info">ID
+            <td>@Model.Id
+        </tr>
+        <tr>
+            <td class="td-user-info">Email
+            <td>@Model.Email
+        </tr>
+        <tr>
+            <td class="td-user-info">Role
+            <td>
+            @if (Model.RoleId == 1)
+            {
+                <text>Administrator</text>
+            }
+            else
+            {<text>User</text>
+            }
+        </tr>
+    </table>
+
+    <br/>
+
+    <div>
+        <input
+                type="button" class="submit" value="Change role"
+                onclick="location.href='@Url.Action("ChangeRole", "Account", new {Model.Id})'"/>
+            <br/>
+        <br/>
+        <input
+            type="button" class="submit" value="Reset password"
+            onclick="location.href='@Url.Action("ResetPassword", "Account", new {Model.Id})'"/>
+        <br/>
+        <a style="margin-top: 75px" asp-action="Manage">← Back to manage</a>
+    </div>
+
+</div>
+</body>

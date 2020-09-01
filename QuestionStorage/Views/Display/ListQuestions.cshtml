@@ -1,12 +1,12 @@
-﻿@using QuestionStorage.Models.QuizzesQuestionsModels
-@model IEnumerable<QuestionStorage.Models.QuizzesQuestionsModels.QuestionsInfo>
+﻿@using QuestionStorage.Models.Tags
+@model IEnumerable<QuestionStorage.Models.Questions.QuestionsInfo>
 
 @{
     ViewData["Title"] = "Questions";
     HashSet<TagsInfo> tags = ViewBag.Tags;
     var tagList = new SelectList(tags.Select(t => new {Value = t.TagId, Text = t.Name}),
         "Value", "Text");
-    HashSet<QuestionsInfo> questions = ViewBag.Question;
+    HashSet<int> metaTags = ViewBag.MetaTags;
 }
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@
         <div class="t">
             @Html.DropDownList("Tags", tagList, new {id = "test", multiple = "multiple"})
         </div>
-        <button type="submit" style="margin-left: -5px;" class="search-button t">Search</button>
+        <button type="submit" style="margin-left: -5px;" class="submit search t">Search</button>
     </div>
 
     <br/>
@@ -47,10 +47,21 @@
                 </div>
                 @foreach (var tag in item.TagsQuestions)
                 {
-                    <a class="tag-button"
-                       href='@Url.Action("ListByTag", "Display", new {id = tag.Tag.TagId})'>
-                        <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
-                    </a>
+                    if (metaTags.Contains(tag.TagId))
+                    {
+                        <a class="meta-tag-button"
+                           href='@Url.Action("ListByTag", "Display", new {id = tag.Tag.TagId})'>
+                            <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="tag-button"
+                           href='@Url.Action("ListByTag", "Display", new {id = tag.Tag.TagId})'>
+                            <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
+                        </a>
+                    }
+
                 }
             </div>
             <br/>

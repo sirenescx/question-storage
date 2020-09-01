@@ -931,7 +931,7 @@
           "lib/netcoreapp3.1/Microsoft.Extensions.DependencyInjection.dll": {}
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/3.1.2": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions/3.1.4": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
@@ -1557,6 +1557,28 @@
             "assetType": "native",
             "rid": "win-x86"
           }
+        }
+      },
+      "SendGrid/9.20.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1",
+          "starkbank-ecdsa": "[1.2.0, 2.0.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/SendGrid.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SendGrid.dll": {}
+        }
+      },
+      "starkbank-ecdsa/1.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/StarkbankEcdsa.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/StarkbankEcdsa.dll": {}
         }
       },
       "System.AppContext/4.3.0": {
@@ -3196,6 +3218,18 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "TextCopy/4.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.4"
+        },
+        "compile": {
+          "lib/netstandard2.1/TextCopy.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/TextCopy.dll": {}
+        }
       }
     }
   },
@@ -4453,17 +4487,17 @@
         "microsoft.extensions.dependencyinjection.nuspec"
       ]
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/3.1.2": {
-      "sha512": "/CZzCSCIm/3FFoXHfUpsfov/Elo268dcvlz/MMINT0vPgphqg2pAgdEn/EjCDyoAT3NAmsRmjfGwBumC1uYJtA==",
+    "Microsoft.Extensions.DependencyInjection.Abstractions/3.1.4": {
+      "sha512": "AceHamXNKDMDwIoZqEoApLp8s3935wSC3VXrPaRWa0wWOaEcYdDlo1nWQ1zLiezoDmpJzV7FqDm53E0Ty/hEMg==",
       "type": "package",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/3.1.2",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/3.1.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
-        "microsoft.extensions.dependencyinjection.abstractions.3.1.2.nupkg.sha512",
+        "microsoft.extensions.dependencyinjection.abstractions.3.1.4.nupkg.sha512",
         "microsoft.extensions.dependencyinjection.abstractions.nuspec"
       ]
     },
@@ -5575,6 +5609,45 @@
         "runtimes/win-x86/native/sni.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "SendGrid/9.20.0": {
+      "sha512": "WIcSq0G8bxHUtCblB3RAUO5sYz9ZyWrEhObcGdvDr9a9U9BXHWqnGdwHn8Yh+12ovGMdZUvjknG0aalSSt8RuA==",
+      "type": "package",
+      "path": "sendgrid/9.20.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/SendGrid.dll",
+        "lib/net40/SendGrid.pdb",
+        "lib/net40/SendGrid.xml",
+        "lib/net452/SendGrid.dll",
+        "lib/net452/SendGrid.pdb",
+        "lib/net452/SendGrid.xml",
+        "lib/netstandard1.3/SendGrid.dll",
+        "lib/netstandard1.3/SendGrid.pdb",
+        "lib/netstandard1.3/SendGrid.xml",
+        "lib/netstandard2.0/SendGrid.dll",
+        "lib/netstandard2.0/SendGrid.pdb",
+        "lib/netstandard2.0/SendGrid.xml",
+        "sendgrid.9.20.0.nupkg.sha512",
+        "sendgrid.nuspec"
+      ]
+    },
+    "starkbank-ecdsa/1.2.0": {
+      "sha512": "hP53QPYOOEIR44EK9phz+DYliM6DEieDZxpb8GZzE+++qyrWqUscKcyHCC6L9yu/ehllYtqxtT4qrjWDsuQlUQ==",
+      "type": "package",
+      "path": "starkbank-ecdsa/1.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/StarkbankEcdsa.dll",
+        "lib/net452/StarkbankEcdsa.dll",
+        "lib/netstandard1.3/StarkbankEcdsa.dll",
+        "lib/netstandard2.0/StarkbankEcdsa.dll",
+        "lib/netstandard2.1/StarkbankEcdsa.dll",
+        "starkbank-ecdsa.1.2.0.nupkg.sha512",
+        "starkbank-ecdsa.nuspec"
       ]
     },
     "System.AppContext/4.3.0": {
@@ -10060,6 +10133,31 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
+    },
+    "TextCopy/4.2.0": {
+      "sha512": "NY2UAFIjBJj+3aABP5tyO6ooEdkJxIGtwRNqvMQKLmyIeZiyGvM4XYbkKNntyQlhyFhhfBww05C3D/0DdimfaQ==",
+      "type": "package",
+      "path": "textcopy/4.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/monoandroid90/TextCopy.dll",
+        "lib/monoandroid90/TextCopy.xml",
+        "lib/net461/TextCopy.dll",
+        "lib/net461/TextCopy.xml",
+        "lib/netstandard2.0/TextCopy.dll",
+        "lib/netstandard2.0/TextCopy.xml",
+        "lib/netstandard2.1/TextCopy.dll",
+        "lib/netstandard2.1/TextCopy.xml",
+        "lib/uap10.0/TextCopy.dll",
+        "lib/uap10.0/TextCopy.pri",
+        "lib/uap10.0/TextCopy.xml",
+        "lib/xamarinios10/TextCopy.dll",
+        "lib/xamarinios10/TextCopy.xml",
+        "textcopy.4.2.0.nupkg.sha512",
+        "textcopy.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -10073,6 +10171,8 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.2",
       "Microsoft.EntityFrameworkCore.Tools >= 3.1.2",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.1",
+      "SendGrid >= 9.20.0",
+      "TextCopy >= 4.2.0",
       "itext7 >= 7.1.11",
       "itext7.pdfhtml >= 3.0.0"
     ]
@@ -10149,6 +10249,14 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[3.1.1, )"
+          },
+          "SendGrid": {
+            "target": "Package",
+            "version": "[9.20.0, )"
+          },
+          "TextCopy": {
+            "target": "Package",
+            "version": "[4.2.0, )"
           },
           "itext7": {
             "target": "Package",

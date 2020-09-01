@@ -17,11 +17,17 @@
     <br/>
     <p class="ok">@ViewBag.Success</p>
     <h5 class="content-header">Change Password</h5>
-    <p class="smaller-text less-bottom-space">Password</p>
-    @Html.ValidationMessageFor(model => model.Password, string.Empty,
+    <p class="smaller-text less-bottom-space">Old password</p>
+    @Html.ValidationMessageFor(model => model.OldPassword, string.Empty,
         new {@class = "text-danger smaller-text"})
     <p>
-        @Html.EditorFor(model => model.Password,
+        @Html.EditorFor(model => model.OldPassword,
+            new {htmlAttributes = new {@class = "password-textarea"}})</p>
+    <p class="smaller-text less-bottom-space less-top-space">New password</p>
+    @Html.ValidationMessageFor(model => model.NewPassword, string.Empty,
+        new {@class = "text-danger smaller-text"})
+    <p>
+        @Html.EditorFor(model => model.NewPassword,
             new {htmlAttributes = new {@class = "password-textarea"}})</p>
     <p class="smaller-text less-bottom-space less-top-space">Confirmation Password</p>
     @Html.ValidationMessageFor(model => model.ConfirmPassword, string.Empty,
@@ -30,7 +36,7 @@
         @Html.EditorFor(model => model.ConfirmPassword,
             new {htmlAttributes = new {@class = "password-textarea"}})</p>
                                                                       
-    <input type="submit" class="edit-submit-button" value="Change"/>
+    <input type="submit" class="submit account" value="Change"/>
 }
 </body>
 

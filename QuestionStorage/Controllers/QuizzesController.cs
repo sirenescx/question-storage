@@ -1,13 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Utilities.Collections;
-using QuestionStorage.Models.QuizzesQuestionsModels;
+using QuestionStorage.Models;
+using QuestionStorage.Models.Questions;
+using QuestionStorage.Models.Quizzes;
 using QuestionStorage.Utils;
 
 namespace QuestionStorage.Controllers
@@ -16,10 +17,12 @@ namespace QuestionStorage.Controllers
     public class QuizzesController : Controller
     {
         private readonly HSE_QuestContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public QuizzesController(HSE_QuestContext context)
+        public QuizzesController(HSE_QuestContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -29,76 +32,115 @@ namespace QuestionStorage.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormCollection collection)
         {
-            var testId = await _context.QuizzesInfo.MaxAsync(q => q.QuizId) + 1;
-            var test = new QuizzesInfo
+            try
             {
-                QuizId = testId,
-                Name = collection["Name"],
-                Date = DateTime.Parse(collection["Date"])
-            };
+                Validator.ValidateTestCreation(collection, ModelState);
 
-            await StorageUtils.SaveToDatabase(_context, test);
-
-            var ids = (
-                from questionId in collection["QuestionId"]
-                where questionId != string.Empty
-                select int.Parse(questionId)).ToHashSet();
-
-            foreach (var id in ids)
-            {
-                if (await StorageUtils.QuestionExists(_context, id))
+                if (!ModelState.IsValid)
                 {
-                    await StorageUtils.SaveToDatabase(_context, new QuizzesInfoQuestionsInfo
-                    {
-                        QuestId = id, QuizId = test.QuizId
-                    });
+                    return View();
                 }
-            }
 
-            return View();
+                var quiz = await QuizExtensions.CreateQuiz(
+                    _context, collection["Name"], collection["Date"]);
+                
+                await StorageUtils.SaveToDatabase(_context, quiz);
+
+                var identifiers = collection["QuestionId"]
+                    .Where(questionId => questionId != string.Empty)
+                    .Select(int.Parse)
+                    .ToHashSet();
+
+                foreach (var id in identifiers)
+                {
+                    if (await QuestionExtensions.QuestionExists(_context, id))
+                    {
+                        await StorageUtils.SaveToDatabase(_context, new QuizzesInfoQuestionsInfo
+                        {
+                            QuestId = id, QuizId = quiz.QuizId
+                        });
+                    }
+                }
+
+                return View();
+            }
+            catch
+            {
+                return ErrorPage(404);
+            }
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var test = await _context.QuizzesInfo
-                .FirstOrDefaultAsync(m => m.QuizId == id);
+            var quiz = await DataStorage.GetByPredicateAsync(_context.QuizzesInfo, 
+                quizzesInfo => quizzesInfo.QuizId == id);
 
-            if (test == null)
+            if (quiz == null)
             {
                 return ErrorPage(404);
             }
-
-            var questionsIds = new HashSet<int>(await _context.QuizzesInfoQuestionsInfo
-                .Where(q => q.QuizId == id)
-                .Select(x => x.QuestId).ToListAsync());
+            
+            var questionIdentifiers = await GetQuestionIdentifiers(id);
 
             var questions = new HashSet<QuestionsInfo>();
-            foreach (var questionId in questionsIds)
+            
+            foreach (var questionId in questionIdentifiers)
             {
-                var question = await _context.QuestionsInfo
-                    .Where(q => q.QuestId == questionId).FirstAsync();
-                
+                var question =
+                    await DataStorage.GetByPredicateAsync(_context.QuestionsInfo, 
+                        questionsInfo => questionsInfo.QuestId == questionId);
+
                 questions.Add(question);
+
+                await DataStorage.GetListByPredicateAsync(_context.QuestionAnswerVariants,
+                    questionAnswerVariants => questionAnswerVariants.QuestId == questionId);
                 
-                await _context.QuestionAnswerVariants
-                    .Where(a => a.QuestId == questionId).ToListAsync();
-                await _context.TypesInfo.FirstOrDefaultAsync(t => t.TypeId == question.TypeId);
+                await DataStorage.GetByPredicateAsync(_context.TypesInfo, 
+                    type => type.TypeId == question.TypeId);
             }
 
-        
-            
             ViewData["Questions"] = questions;
-   
-            return View(test);
+
+            return View(quiz);
         }
-        
+
+        //TODO: Move ErrorPage for common access of Quizzes and Questions controller
         private ActionResult ErrorPage(int errorCode)
         {
             Response.StatusCode = errorCode;
+            ViewData["StatusCode"] = errorCode;
 
             return View("Error");
         }
+
+        public async Task<IActionResult> ExportToXml(int id)
+        {
+            var questionIdentifiers = await GetQuestionIdentifiers(id);
+
+            var questions = await DataStorage.GetListByPredicateAsync(_context.QuestionsInfo,
+                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId));
+
+            var responseOptions = new List<List<QuestionAnswerVariants>>();
+            
+            foreach (var questionId in questionIdentifiers)
+            {
+                responseOptions.Add(await DataStorage.GetListByPredicateAsync(_context.QuestionAnswerVariants,
+                    questionAnswerVariants => questionAnswerVariants.QuestId == questionId));
+            }
+
+            var document = XmlGenerator.ExportQuestionsToXml(questions, responseOptions, _environment);
+
+            return File(Encoding.UTF8.GetBytes(document.OuterXml),
+                "application/xml", "questions.xml");
+        }
+
+        private async Task<HashSet<int>> GetQuestionIdentifiers(int id) =>
+            await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(
+                _context.QuizzesInfoQuestionsInfo, 
+                quizzesInfoQuestionsInfo => quizzesInfoQuestionsInfo.QuizId == id,
+                quizzesInfoQuestionsInfo => quizzesInfoQuestionsInfo.QuestId);
     }
 }

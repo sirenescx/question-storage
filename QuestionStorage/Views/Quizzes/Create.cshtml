@@ -26,44 +26,46 @@
     @Html.TextAreaFor(model => model.Name, 1, 100,
         new {@class = "textarea short", id = "testName"})
     <p class="less-bottom-space">Date*</p>
-    <input type="date" class="textarea" name="date" id="Date" value="" />
+    <input type="date" class="date-textarea" name="date" id="Date"/>
     <br/>
     <hr/>
     
-    <p 
-        class="less-bottom-space">Question ID*
-        <button class="button" id="addQuestionId" type="button" onclick="function addNewIdRow() {
-            const tableRef = document.getElementById('questionsTable');
-            const newRow = tableRef.insertRow(-1);
-            let cell = newRow.insertCell(0);
-            let textarea = document.getElementsByName('QuestionId')[0].cloneNode(false);
-            textarea.value = '';
-            cell.appendChild(textarea);
-        }
-        addNewIdRow()">
-            +
-        </button>
-    </p>
-    <table id="questionsTable">
-        <thead>
-        <tr>
-        <th>
-        <tbody>
-        @for (var i = 0; i < 5; ++i)
-        {
-            <tr>
-                <td>
-                @Html.TextAreaFor(model => model.QuestionId, 1, 100,
-                    new {@class = "textarea id", id = "questionId", type="number", 
-                        name="questionId", onkeyup="checkInput(this)"})
-            </tr>
-        }
-    </table>
+     <p
+         class="less-bottom-space">Question ID*
+         <button class="plus" id="addQuestionId" type="button" onclick="function addNewIdRow() {
+             const tableRef = document.getElementById('questionsTable');
+             const newRow = tableRef.insertRow(-1);
+             let cell = newRow.insertCell(0);
+             let textarea = document.getElementsByName('QuestionId')[0].cloneNode(false);
+             textarea.value = '';
+             cell.appendChild(textarea);
+         }
+         addNewIdRow()">
+         </button>
+     </p>
+     <table id="questionsTable">
+         <thead>
+         <tr>
+         <th>
+         <tbody>
+         @for (var i = 0; i < 5; ++i)
+         {
+             <tr>
+                 <td>
+                 @Html.TextAreaFor(model => model.QuestionId, 1, 100,
+                     new {@class = "textarea id", id = "questionId", type="number",
+                         name="questionId", onkeyup="checkInput(this)"})
+             </tr>
+         }
+     </table>
 
     <br/>
-    <input type="submit" class="submit-button" value="Create">
+    <input type="submit" class="submit" value="Create">
 }
 </body>
 </html>
 
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
 

@@ -1,7 +1,9 @@
-@model QuestionStorage.Models.ViewModels.LoginViewModel
+@using QuestionStorage.Models.Users
+@model QuestionStorage.Models.Users.User
 
 @{
-    ViewData["Title"] = "Manage";
+    ViewData["Title"] = "Create user";
+    List<User> users = ViewBag.Users;
 }
 
 <!DOCTYPE html>
@@ -13,5 +15,45 @@
 @using (Html.BeginForm("Manage", "Account", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+    @Html.ValidationSummary("Please provide the details below and then click submit.",
+        new {@class = "text-danger"})
+    
+    <h1 class="page-header">Create new user</h1>
+                                   
+    <p class="less-bottom-space">Email*</p>
+    @Html.TextAreaFor(model => model.Email, 1, 100,
+        new {@class = "textarea email", id = "userEmail"})
+    <br/>
+    <p>Administrator
+        <input type="hidden" value="off" name="Admin"> 
+        <input name="Admin" type="checkbox" value="on">
+    </p>   
+                            
+    <input type="submit" class="submit" value="Create user" onclick="myFunction()"/>
+
+    <hr/>
+    
+    <h1 class="page-header">Users</h1>
+    <br/>
+    
+    @foreach (var user in users)
+    {
+        <p>
+            <a asp-action="UserInfo" asp-route-id="@user.Id">@user.Email</a>
+            @if (user.RoleId == 1)
+            {
+                <b class="role-label">A</b>
+            }
+        </p>
+    }
+    
 }
 </body>
+
+@section Scripts {
+    <script>
+         function myFunction() {
+             alert("User data was copied to a clipboard.");
+         }
+    </script>
+}

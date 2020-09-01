@@ -8,8 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using QuestionStorage.Models.QuizzesQuestionsModels;
-using QuestionStorage.Models.UserDataModels;
+using QuestionStorage.Models;
 
 namespace QuestionStorage
 {
@@ -30,9 +29,6 @@ namespace QuestionStorage
             services.AddDbContext<HSE_QuestContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("QuestionsStorageContextConnection")));
-            services.AddDbContext<UserDataContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("UserDataContextConnection")));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => 
                 {

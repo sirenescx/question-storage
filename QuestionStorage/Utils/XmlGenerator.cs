@@ -5,18 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
-using QuestionStorage.Models.QuizzesQuestionsModels;
+using Microsoft.AspNetCore.Hosting;
+using QuestionStorage.Models.Questions;
 
 namespace QuestionStorage.Utils
 {
     public static class XmlGenerator
     {
-        private const string PathToCorrectAnswerXml = "../QuestionStorage/wwwroot/resources/correct-answer.xml";
-        private const string PathToIncorrectAnswerXml = "../QuestionStorage/wwwroot/resources/incorrect-answer.xml";
-        private const string PathToAnswerXml = "../QuestionStorage/wwwroot/resources/answer-open.xml";
+        private const string PathToCorrectAnswerXml = "/resources/correct-answer.xml";
+        private const string PathToIncorrectAnswerXml = "/resources/incorrect-answer.xml";
+        private const string PathToAnswerXml = "/resources/answer-open.xml";
 
         private static string GetPath(string filename) =>
-            $"../QuestionStorage/wwwroot/resources/{filename}";
+            $"/resources/{filename}";
+        
+        private static string GetDirectPath(string filename, string webRootPath) =>
+            $"{webRootPath}/{filename}";
         
         private static string GetTemplatePath(int typeId)
         {
@@ -42,7 +46,7 @@ namespace QuestionStorage.Utils
         }
 
         private static MemoryStream ExpandTemplate(string templatePath, 
-            List<QuestionAnswerVariants> responseOptions, int typeId)
+            List<QuestionAnswerVariants> responseOptions, int typeId, string webRootPath)
         {
             var (correctOptions, incorrectOptions) = 
                 GetCorrectAndIncorrectOptions(responseOptions);
@@ -52,23 +56,23 @@ namespace QuestionStorage.Utils
             {
                 return new MemoryStream(Encoding.UTF8.GetBytes(
                     File.ReadAllText(templatePath).Replace(
-                        "$ANSWER", File.ReadAllText(PathToAnswerXml))));
+                        "$ANSWER", File.ReadAllText(GetDirectPath(PathToAnswerXml, webRootPath)))));
             }
             
-            AddAnswersToXmlDocument(File.ReadAllText(PathToCorrectAnswerXml), correctOptions.Count, 
-                xmlOptions, "$CORRECT");
-            AddAnswersToXmlDocument(File.ReadAllText(PathToIncorrectAnswerXml), incorrectOptions.Count,
-                xmlOptions, "$INCORRECT");
+            AddAnswersToXmlDocument(File.ReadAllText(GetDirectPath(PathToCorrectAnswerXml, webRootPath)), 
+                correctOptions.Count, xmlOptions, "$CORRECT");
+            AddAnswersToXmlDocument(File.ReadAllText(GetDirectPath(PathToIncorrectAnswerXml, webRootPath)), 
+                incorrectOptions.Count, xmlOptions, "$INCORRECT");
 
             return new MemoryStream(Encoding.UTF8.GetBytes(
                 File.ReadAllText(templatePath).Replace("$ANSWER", xmlOptions.ToString())));
         }
 
         private static void GetTemplate(string templatePath, out XmlDocument template, 
-            out XmlNode questionNode, List<QuestionAnswerVariants> responseOptions, int typeId)
+            out XmlNode questionNode, List<QuestionAnswerVariants> responseOptions, int typeId, string webRootPath)
         {
             template = new XmlDocument();
-            template.Load(ExpandTemplate(templatePath, responseOptions, typeId));
+            template.Load(ExpandTemplate(templatePath, responseOptions, typeId, webRootPath));
             questionNode = template.SelectNodes("//question")[0];
         }
 
@@ -145,10 +149,14 @@ namespace QuestionStorage.Utils
             resultQuiz.AppendChild(node);
         }
 
-        public static XmlDocument ExportToXml(QuestionsInfo question, List<QuestionAnswerVariants> responseOptions)
+        public static XmlDocument ExportToXml(QuestionsInfo question, List<QuestionAnswerVariants> responseOptions, 
+            IWebHostEnvironment environment)
         {
-            GetTemplate(GetTemplatePath(question.TypeId), out var template, out var questionNode, 
-                        responseOptions, question.TypeId);
+            var path = environment.WebRootPath + GetTemplatePath(question.TypeId);
+            
+            GetTemplate(path, out var template, out var questionNode, 
+                        responseOptions, question.TypeId, environment.WebRootPath);
+            
             GetResult(template, out var result, out var resultQuiz);
             FillXml(question, result, resultQuiz, questionNode, responseOptions);
             
@@ -156,10 +164,10 @@ namespace QuestionStorage.Utils
         }
         
         public static XmlDocument ExportQuestionsToXml(List<QuestionsInfo> questions, 
-            List<List<QuestionAnswerVariants>> responseOptions)
+            List<List<QuestionAnswerVariants>> responseOptions, IWebHostEnvironment environment)
         {
             var xmlDocuments = questions
-                .Select((question, i) => ExportToXml(question, responseOptions[i])).ToList();
+                .Select((question, i) => ExportToXml(question, responseOptions[i], environment)).ToList();
             var template = xmlDocuments.First().OuterXml;
             var questionsXml = new StringBuilder();
             for (var i = 1; i < xmlDocuments.Count; ++i)
@@ -214,12 +222,12 @@ namespace QuestionStorage.Utils
             return (from XmlNode node in elements select node.InnerXml).ToList();
         }
 
-        private static List<string> GetResponseOptionsFromXml(List<string> strings)
+        private static string[] GetResponseOptionsFromXml(List<string> strings)
         {
             var regex = new Regex("<p>.*?</p>");
             
             return strings.Select
-                    (s => regex.Matches(s).Count != 0 ? TrimParagraph(regex.Matches(s)[0].Value) : s).ToList();
+                    (s => regex.Matches(s).Count != 0 ? TrimParagraph(regex.Matches(s)[0].Value) : s).ToArray();
         }
         
         private static bool[] GetResponseOptionsCorrectness(XmlDocument document, string tagName)
@@ -247,7 +255,7 @@ namespace QuestionStorage.Utils
             return values.ToArray();
         }
 
-        public static (List<string> responseOptions, bool[] correct) GetResponseInfo(XmlDocument document)
+        public static (string[] responseOptions, bool[] correct) GetResponseInfo(XmlDocument document)
         {
             return (GetResponseOptionsFromXml(GetElementsFromXml(document, "answer")), 
                     GetResponseOptionsCorrectness(document, "answer"));

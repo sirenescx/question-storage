@@ -74,6 +74,14 @@
               "target": "Package",
               "version": "[3.1.1, )"
             },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.20.0, )"
+            },
+            "TextCopy": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "itext7": {
               "target": "Package",
               "version": "[7.1.11, )"

@@ -1,4 +1,4 @@
-@model QuestionStorage.Models.QuizzesQuestionsModels.QuizzesInfo
+@model QuestionStorage.Models.Quizzes.QuizzesInfo
 
 @{
     ViewData["Title"] = "Details";
@@ -39,7 +39,7 @@
     
         var correctAnswerText = question.TypeId == 2 ? "Correct answers" : "Correct answer";
 
-         <p><b class="content-header">Type: </b>@question.Type.Name.ToLower()</p>
+        <p><b class="content-header">Type: </b>@question.Type.Name.ToLower()</p>
 
         @if (question.TypeId != 4)
         {
@@ -60,6 +60,12 @@
         }
         <hr/>
     }
+</div>
+
+<br/>
+
+<div>
+    <a asp-action="ExportToXml" asp-controller="Quizzes" asp-route-id="@Model.QuizId">Export to XML</a>
 </div>
 </body>
 </html>

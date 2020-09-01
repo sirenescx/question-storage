@@ -1,7 +1,8 @@
-﻿@model QuestionStorage.Models.QuizzesQuestionsModels.QuestionsInfo
+@model QuestionStorage.Models.Questions.QuestionsInfo
 
 @{
     ViewData["Title"] = "Details";
+    HashSet<int> metaTags = ViewBag.MetaTags;
 }
 
 <!DOCTYPE html>
@@ -15,6 +16,10 @@
 <body>
 <div>
     <h3 class="page-header">#@Html.DisplayFor(model => model.QuestId)</h3>
+    @if (Model.VersionId != Model.QuestId)
+    {
+        <h5><a asp-action="Details" asp-route-id="@Model.SourceQuestId">@Model.SourceQuestId</a> v.@Model.VersionId</h5>
+    }
     <p>
         <b>@Model.QuestionName</b>
     </p>
@@ -64,8 +69,16 @@
     </p>
     @foreach (var tag in Model.TagsQuestions)
     {
-        @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
-            new {id = tag.Tag.TagId}, new {@class = "tag-button"})
+         if (ViewBag.MetaTags.Contains(tag.TagId))
+         {
+             @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
+                 new {id = tag.Tag.TagId}, new {@class = "meta-tag-button"})
+         }
+         else
+         {
+            @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
+                new {id = tag.Tag.TagId}, new {@class = "tag-button"})
+        }
     }
 </div>
 
@@ -74,7 +87,7 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.QuestId">Edit</a> |
     <a asp-action="Index">Back to List</a> |
-    <a asp-action="ExportToPdf" asp-route-id="@Model.QuestId">Export to PDF</a> |
+    @* <a asp-action="ExportToPdf" asp-route-id="@Model.QuestId">Export to PDF</a> | *@
     <a asp-action="ExportToXml" asp-route-id="@Model.QuestId">Export to XML</a> |
     @if (Model.IsTemplate)
     {

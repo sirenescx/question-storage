@@ -1,17 +1,137 @@
 .button {
-    background-color: #ff7700;
-    color: white;
-    border-radius: 5px;
+    border-radius: 7px;
     border: none;
-    outline: none
-}
-
-.button:hover {
-    color: white
+    outline: none;
+    color: white;
+    height: calc(1.5em + 0.75rem + 1px);
 }
 
 .button:focus {
     outline: none
+}
+
+button.add {
+    background-color: #ff7700;
+}
+
+button.add:hover {
+    background-color: #fd6111;
+}
+
+.plus {
+    padding-bottom: 7px;
+    font-size: 25px;
+    border: none;
+    border-radius: 50%;
+    background: #ff7700;
+    color: white;
+    width: 26px;
+    height: 26px;
+    transition: transform 2s;
+    position: relative;
+}
+
+.plus:after,
+.plus:before {
+    background: white;
+    position: absolute;
+    content: "";
+    display: block;
+    z-index: 1;
+}
+
+.plus:after {
+    top: 12px;
+    bottom: 12px;
+    left: 8px;
+    right: 8px;
+}
+
+.plus:before {
+    top: 8px;
+    bottom: 8px;
+    left: 12px;
+    right: 12px;
+}
+
+.plus:hover {
+    transform: rotate(360deg);
+    outline: none;
+}
+
+.plus:focus {
+    outline: none;
+}
+
+.meta-tag-button {
+    background: rgba(104, 57, 207, 0.9);
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 5px 5px 5px 5px;
+    margin-left: 5px;
+    color: white;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.submit {
+    background: #6839cf;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    height: calc(1.5em + 0.75rem + 1px);
+}
+
+.submit:hover {
+    background: #6236ae;
+}
+
+button.remove {
+    display: block;
+    background: #f44336;
+    border: none;
+    height: 30px;
+    width: 30px;
+    margin: auto
+}
+
+button.remove:hover {
+    background: #e9191b;
+}
+
+.submit.account {
+    border: none;
+    outline: none;
+    width: 20%;
+    height: 2em
+}
+
+.submit.search {
+    width: 100px;
+    padding: 2px 5px 5px 5px;
+    height: calc(1.5em + 0.75rem + 1px);
+}
+
+.tag-button {
+    background: rgba(255, 123, 66, 0.9);
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 5px 5px 5px 5px;
+    margin-left: 5px;
+    color: white;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.user-submit {
+    background: white;
+    color: #b07caa;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    width: 14em;
+    height: 2.5em
 }
 
 .textarea {
@@ -20,6 +140,7 @@
     resize: none;
     white-space: nowrap;
     height: 50%;
+    width: 100%;
     border: thin solid #A9A9A9;
     -webkit-border-radius: 5px
 }
@@ -46,15 +167,12 @@ textarea.amount {
     width: 10%;
 }
 
-.password-textarea {
-    overflow-x: auto;
-    resize: none;
-    white-space: nowrap;
-    height: 1.7em;
+textarea.email {
     width: 20%;
-    border: thin solid #A9A9A9;
-    -webkit-border-radius: 5px;
-    font-size: larger;
+    line-height: 1;
+    height: auto !important;
+    white-space: normal;
+    padding: 5px 0;
 }
 
 .select {
@@ -83,17 +201,6 @@ textarea.amount {
 
 }
 
-.remove-button {
-    display: block;
-    border-radius: 5px;
-    background: #f44336;
-    border: thin none #f44336;
-    color: white;
-    height: 30px;
-    width: 30px;
-    margin: auto
-}
-
 a {
     color: #6839cf;
     display: inline-block;
@@ -102,26 +209,6 @@ a {
 a:hover {
     color: #27194e;
     text-decoration: none;
-}
-
-.tag-button {
-    background: rgba(255, 123, 66, 0.9);
-    font-size: 14px;
-    border-radius: 5px;
-    padding: 5px 5px 5px 5px;
-    margin-left: 5px;
-    color: white;
-    margin-bottom: 5px;
-    text-align: center;
-}
-
-.submit-button {
-    background: #6839cf;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    height: calc(1.5em + 0.75rem + 1px);
 }
 
 .page-header {
@@ -147,16 +234,6 @@ a:hover {
     background: transparent;
     font-weight: normal;
     color: white;
-}
-
-.user-data-submit-button {
-    background: white;
-    color: #b07caa;
-    border-radius: 25px;
-    border: none;
-    outline: none;
-    width: 14em;
-    height: 2.5em
 }
 
 input:-webkit-autofill::first-line {
@@ -227,14 +304,34 @@ td {
     font-weight: lighter
 }
 
-.edit-submit-button {
-    background: #6839cf;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    outline: none;
+.user-info-table {
+    border-spacing: 75px 0;
+    border-collapse: separate;
+    margin-left: -75px
+}
+
+.td-user-info {
+    color: #ff7700;
+    font-size: large;
+}
+
+.lower-left {
+    margin-bottom: 100px;
+    margin-left: 75px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.password-textarea {
+    overflow-x: auto;
+    resize: none;
+    white-space: nowrap;
+    height: 1.7em;
     width: 20%;
-    height: 2em
+    border: thin solid #A9A9A9;
+    -webkit-border-radius: 5px;
+    font-size: larger;
 }
 
 .smaller-text {
@@ -243,6 +340,17 @@ td {
 
 .lighter-text {
     font-weight: lighter;
+}
+
+.role-label {
+    background: #ff7700;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    height: calc(1.5em + 0.75rem + 1px);
+    width: calc(1.5em + 0.75rem + 1px);
+    text-align: center;
 }
 
 .gradient {
@@ -294,41 +402,14 @@ td {
     -webkit-border-radius: 5px
 }
 
-.quit-button {
-    display: block;
-    background: #f44336;
-    border: thin none #f44336;
-    color: white;
-    height: 15px;
-    width: 15px;
-    text-align: center;
-    float: right;
-    vertical-align: top;
-    font-size: x-small;
-    padding: 0;
-    -webkit-border-radius: 100px;
-}
-
 .vertical {
-    height: 30px; 
+    height: 30px;
     vertical-align: top
 }
 
 .ul-circle {
-    list-style-type: disc; 
+    list-style-type: disc;
     line-height: 1.2em;
-}
-
-.search-button {
-    background: #6839cf;
-    /*background: #ff7700;*/
-    color: white;
-    border-radius: 5px 5px 5px 5px;
-    border: none;
-    outline: none;
-    width: 100px;
-    padding: 2px 5px 5px 5px;
-    height: calc(1.5em + 0.75rem + 1px);
 }
 
 .normal-text {
@@ -336,12 +417,12 @@ td {
 }
 
 .no-spacing {
-    border-spacing:0; 
+    border-spacing:0;
     border-collapse: collapse;
 }
 
-div { 
-    display: table; 
+div {
+    display: table;
 }
 
 div.t {

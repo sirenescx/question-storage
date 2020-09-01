@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using QuestionStorage.Models.QuizzesQuestionsModels;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using QuestionStorage.Models;
+using QuestionStorage.Utils;
+
+// ReSharper disable VariableHidesOuterVariable
 
 namespace QuestionStorage.Controllers
 {
@@ -22,65 +25,68 @@ namespace QuestionStorage.Controllers
         [HttpGet]
         public async Task<ActionResult> ListQuestions()
         {
-            ViewData["Tags"] = new HashSet<TagsInfo>(await _context.TagsInfo.ToListAsync());
+            await FillListQuestionsViewData(ViewData);
 
             return View();
         }
-
-        private HashSet<int> FindQuestionsWithoutTagsIds()
-        {
-            var questionIds = _context.QuestionsInfo.Select(q => q.QuestId).ToHashSet();
-            var questionsWithTagsIds = _context.TagsQuestions.Select(tq => tq.QuestId).ToHashSet();
-            questionIds.ExceptWith(questionsWithTagsIds);
-
-            return questionIds;
-        }
         
+        [HttpPost]
         public async Task<IActionResult> ListQuestions(IFormCollection collection)
         {
-            ViewData["Tags"] = new HashSet<TagsInfo>(await _context.TagsInfo.ToListAsync());
+            await FillListQuestionsViewData(ViewData);
 
-            var tagsIds = collection["Tags"].Select(int.Parse).ToHashSet();
-            var tagsQuestions = await _context.TagsQuestions
-                .Where(qt => tagsIds.Contains(qt.TagId)).ToListAsync();
-            var questionsIds = tagsQuestions.Select(tq => tq.QuestId).ToHashSet();
-            
-            List<QuestionsInfo> questions;
-            
-            if (collection["Tags"].Count == 0)
+            var tagIdentifiers = collection["Tags"]
+                .Select(int.Parse)
+                .ToHashSet();
+
+            var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions, 
+                tagsQuestions => tagIdentifiers.Contains(tagsQuestions.TagId));
+
+            var questionIdentifiers = !tagIdentifiers.Any()
+                ? GetQuestionIdsWithoutTags()
+                : tagsQuestions.Select(tq => tq.QuestId).ToHashSet();
+
+            var questions = await DataStorage.GetListByPredicateAsync(_context.QuestionsInfo, 
+                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId));
+
+            var lastVersions =
+                questions
+                    .GroupBy(question => question.SourceQuestId)
+                    .Select(versions => versions.OrderBy(version => version.VersionId)
+                        .Last());
+
+            if (tagIdentifiers.Any())
             {
-                var ids = FindQuestionsWithoutTagsIds();
-                questions = await _context.QuestionsInfo.Where(q => ids.Contains(q.QuestId)).ToListAsync();
-            }
-            else
-            {
-                questions = await _context.QuestionsInfo
-                    .Where(q => questionsIds.Contains(q.QuestId)).ToListAsync();
-                foreach (var question in questions)
+                foreach (var question in lastVersions)
                 {
-                    tagsQuestions = 
-                        await _context.TagsQuestions.Where(tq => tq.QuestId == question.QuestId).ToListAsync();
+                    await DataStorage.GetListByPredicateAsync(_context.TagsQuestions, 
+                        tagsQuestions => tagsQuestions.QuestId == question.QuestId);
                 }
             }
-            
-            return View(questions);
+
+            return View(lastVersions);
         }
 
         public async Task<IActionResult> ListByTag(int id)
         {
-            var tagsQuestionsInfo = await _context.TagsQuestions.Where(
-                tq => tq.TagId == id).ToListAsync();
-            var questionsId = tagsQuestionsInfo.Select(tq => tq.QuestId).ToList();
-            var questions = await _context.QuestionsInfo.Where(
-                q => questionsId.Contains(q.QuestId)).ToListAsync();
+            var tagsQuestionsInfo = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions,
+                tagsQuestions => tagsQuestions.TagId == id);
+
+            var questionIdentifiers = tagsQuestionsInfo
+                .Select(tagsQuestions => tagsQuestions.QuestId).ToList();
+
+            var questions = await DataStorage.GetListByPredicateAsync(_context.QuestionsInfo, 
+                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId));
+
             foreach (var question in questions)
             {
-                var tagsQuestions =
-                    await _context.TagsQuestions.Where(qt => qt.QuestId == question.QuestId).ToListAsync();
+                var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions,
+                    tagsQuestions => tagsQuestions.QuestId == question.QuestId);
 
                 foreach (var tagQuestion in tagsQuestions)
                 {
-                    await _context.TagsInfo.Where(t => t.TagId == tagQuestion.TagId).ToListAsync();
+                    await DataStorage.GetListByPredicateAsync(_context.TagsInfo, 
+                        tagsInfo => tagsInfo.TagId == tagQuestion.TagId);
                 }
             }
 
@@ -89,16 +95,38 @@ namespace QuestionStorage.Controllers
             return View(questions);
         }
 
-        public IActionResult AboutQuestion(int id) => RedirectToAction("Details", "Questions", new { id });
+        public IActionResult AboutQuestion(int id) =>
+            RedirectToAction("Details", "Questions", new {id});
 
         [HttpGet]
         public async Task<IActionResult> ListTests()
         {
-            var tests = await _context.QuizzesInfo.ToListAsync();
+            var tests = await DataStorage.GetListAsync(_context.QuizzesInfo);
 
             return View(tests);
         }
 
-        public IActionResult AboutTest(int id) => RedirectToAction("Details", "Quizzes", new { id });
+        public IActionResult AboutTest(int id) =>
+            RedirectToAction("Details", "Quizzes", new {id});
+
+        private async Task FillListQuestionsViewData(ViewDataDictionary viewData)
+        {
+            viewData["Tags"] = await DataStorage.GetHashSetAsync(_context.TagsInfo);
+            viewData["MetaTags"] = await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(
+                _context.TagsInfo,
+                tagsInfo => tagsInfo.IsMetaTag == true,
+                tagsInfo => tagsInfo.TagId);
+        }
+
+        private HashSet<int> GetQuestionIdsWithoutTags()
+        {
+            var questionIdentifiers = DataStorage.GetTypedHashSetBySelector(
+                _context.QuestionsInfo, questionsInfo => questionsInfo.QuestId);
+
+            questionIdentifiers.ExceptWith(DataStorage.GetTypedHashSetBySelector(
+                _context.TagsQuestions, tagsQuestions => tagsQuestions.QuestId));
+
+            return questionIdentifiers;
+        }
     }
 }

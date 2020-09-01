@@ -1,4 +1,4 @@
-using QuestionStorage.Models.QuizzesQuestionsModels;
+using QuestionStorage.Models.Questions;
 
 namespace QuestionStorage.Models.ViewModels
 {

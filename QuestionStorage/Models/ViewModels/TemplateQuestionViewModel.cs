@@ -1,5 +1,3 @@
-using QuestionStorage.Models.QuizzesQuestionsModels;
-
 namespace QuestionStorage.Models.ViewModels
 {
     public class TemplateQuestionViewModel : QuestionViewModel

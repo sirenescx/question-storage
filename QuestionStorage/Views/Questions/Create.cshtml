@@ -1,4 +1,4 @@
-﻿@using QuestionStorage.Models.QuizzesQuestionsModels
+﻿@using QuestionStorage.Models.Tags
 @model QuestionStorage.Models.ViewModels.QuestionViewModel
 
 @{
@@ -87,7 +87,7 @@
     </table>
 
     <p>
-        <button class="button" id="addResponseOptions" type="button" onclick="addNewRow('answerTable')">
+        <button class="button add" id="addResponseOptions" type="button" onclick="addNewRow('answerTable')">
             Add new response option
         </button>
     </p>
@@ -99,7 +99,7 @@
     <br/>
 
     <br/>
-    <input type="submit" class="submit-button" value="Create question"/>
+    <input type="submit" class="submit" value="Create question"/>
 }
 </body>
 </html>

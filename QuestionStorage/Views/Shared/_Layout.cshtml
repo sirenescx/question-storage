@@ -53,6 +53,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-action="Import" asp-controller="Questions">Import</a>
                         </li>
+                        @if (User.IsInRole("administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Manage" asp-controller="Account">Manage</a>
+                            </li>
+                        }
                     </ul>
                 }
                 else

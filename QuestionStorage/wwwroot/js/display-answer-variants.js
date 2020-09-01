@@ -83,13 +83,13 @@ function generateTableCode(choiceCode, element, isNull) {
     if (isNull) {
         element.innerHTML += 
             '<p>' +
-                '<button class="button" id="addResponseOptions" type="button" onclick="addNewRow(\'answerTable\')"> Add new response option </button>' +
+                '<button class="button add" id="addResponseOptions" type="button" onclick="addNewRow(\'answerTable\')"> Add new response option </button>' +
             '</p>';
     }
 }
 
 function getTextAreaCode(rowsCount, id) {
-    return '<textarea class="textarea input-validation-error" cols="60" id="answerOption" data-val="true" ' +
+    return '<textarea class="textarea long input-validation-error" cols="60" id="answerOption" data-val="true" ' +
                      'data-val-length="The field Answer must be a string with a maximum length of 256." ' +
                      'data-val-length-max="256" data-val-minlength="The field Answer must be a string or array type with a minimum length of \'1\'." ' +
                      'data-val-minlength-min="1" data-val-required="Response option text is required." ' +

@@ -1,6 +1,5 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-using QuestionStorage.Models.QuizzesQuestionsModels;
+using QuestionStorage.Models.Quizzes;
 
 namespace QuestionStorage.Models.ViewModels
 {
@@ -10,3 +9,4 @@ namespace QuestionStorage.Models.ViewModels
         public string QuestionId { get; set; }
     }
 }
+

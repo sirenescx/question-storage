@@ -1,4 +1,4 @@
-@model System.Collections.Generic.List<QuestionStorage.Models.QuizzesQuestionsModels.QuizzesInfo>
+@model System.Collections.Generic.List<QuestionStorage.Models.Quizzes.QuizzesInfo>
 
 @{
     ViewData["Title"] = "Tests";
@@ -16,7 +16,7 @@
 @using (Html.BeginForm("ListTests", "Display", FormMethod.Post))
 {
 
-    <p> </p>
+    <h1 class="page-header">Tests</h1>
     <br/>
 
     @if (Model != null)
@@ -29,6 +29,8 @@
             <br/>
         }
     }
+    
+    <br/>
 }
 </body>
 </html>
