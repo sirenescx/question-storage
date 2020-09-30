@@ -1,0 +1,62 @@
+@model QuestionStorage.Models.Questions.QuestionsInfo
+
+@{
+    ViewData["Title"] = "Copy";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <script src="~/js/add-to-table.js"></script>
+    <script src="~/js/display-answer-variants.js"></script>
+</head>
+<style>
+    .select2-container--default .select2-selection--multiple {
+        height: calc(1.5em + 0.75rem + 1px)
+    }
+</style>
+
+@using (Html.BeginForm("Copy", "Questions", 
+    new {courseId = Model.CourseId, questionId = Model.QuestId}, FormMethod.Post))
+{
+    <body>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("Please provide the details below and then click submit.",
+        new {@class = "text-danger"})
+    @Html.Partial("_Edit")
+    <br/>
+    <input type="submit" class="submit" value="Submit"/>
+    </body>
+}
+</html>
+
+@section Scripts {
+    <script>
+    $(function() {
+        $('#tagView').select2({
+        width : "100%",
+        tags: true,
+        });
+    });
+    </script>
+
+    <script>
+    let textareas = document.getElementsByTagName('textarea');
+    let count = textareas.length;
+    for (let i = 0; i < count; ++i) {
+        textareas[i].onkeydown = function(e) {
+            if(e.keyCode === 9 || e.which === 9){
+                e.preventDefault();
+                let s = this.selectionStart;
+                this.value = this.value.substring(
+                    0, this.selectionStart) + "    " + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s + 1;
+            }
+        }
+    }
+    </script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

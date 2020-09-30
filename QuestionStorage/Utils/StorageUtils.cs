@@ -8,14 +8,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using QuestionStorage.Models;
 using QuestionStorage.Models.Questions;
-using QuestionStorage.Models.Tags;
-using QuestionStorage.Models.Types;
+using SendGrid;
 using TextCopy;
 
 namespace QuestionStorage.Utils
@@ -44,11 +44,12 @@ namespace QuestionStorage.Utils
             return compressedValues.ToArray();
         }
         
-        internal static async Task SaveToDatabase<T>(HSE_QuestContext context, T item)
+        internal static async Task SaveToDatabase<T>(StorageContext context, T item)
         {
             await context.AddAsync(item);
             await context.SaveChangesAsync();
         }
+        
         private static string GetHashStringFromByteArray(byte[] hash)
         {
             var hashString = new StringBuilder();
@@ -105,7 +106,7 @@ namespace QuestionStorage.Utils
             int.Parse(Random.StringFromRegex(
                 "([1-8][0-9]{6}|9[0-8][0-9]{5}|99[0-8][0-9]{4}|999[0-8][0-9]{3}|9999[0-8][0-9]{2}|99999[0-8][0-9]|999999[0-9]|10000000)"));
 
-        internal static string CreateStringArrayFromResponseOptions(List<QuestionAnswerVariants> responseOptions) =>
+        internal static string CreateStringArrayFromResponseOptions(IEnumerable<QuestionAnswerVariants> responseOptions) =>
             responseOptions.Aggregate(
                 "new [] {",
                 (current, ro) => current + $"$\"{{{ro.Answer.Trim('$')}}}\", ") + "}";
@@ -180,6 +181,22 @@ namespace QuestionStorage.Utils
         {
             var clipboard = new Clipboard();
             clipboard.SetText($"{email}\n{password}");
+        }
+        
+        internal static async Task<int> GetUserId(StorageContext context, string email) => 
+            (await DataStorage.GetByPredicateAsync(context.Users,
+            user => user.Email.Equals(email))).Id;
+
+        internal static async Task<bool> CheckAccess(StorageContext context, int courseId, string userName)
+        {
+            var userId = await GetUserId(context, userName);
+
+            var userCoursesIdentifiers = await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(
+                context.UsersCourses,
+                usersCourses => usersCourses.UserId == userId,
+                usersCourses => usersCourses.CourseId);
+
+            return userCoursesIdentifiers.Contains(courseId);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
@@ -21,17 +22,22 @@ namespace QuestionStorage.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly HSE_QuestContext _context;
+        private readonly StorageContext context;
 
-        public AccountController(HSE_QuestContext context)
+        public AccountController(StorageContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("ListCourses", "Display");
+            }
+            
             return View();
         }
 
@@ -44,7 +50,7 @@ namespace QuestionStorage.Controllers
                 return View(model);
             }
 
-            var user = await DataStorage.GetByPredicateAsync(_context.Users, 
+            var user = await DataStorage.GetByPredicateAsync(context.Users,
                 user => user.Email.Equals(model.Email) &&
                         (user.Password.Equals(StorageUtils.GetPasswordHash(model.Password, Encoding.ASCII)) ||
                          user.Password.Equals(StorageUtils.GetPasswordHash(model.Password, Encoding.Unicode))));
@@ -52,8 +58,8 @@ namespace QuestionStorage.Controllers
             if (user != null)
             {
                 await Authenticate(user);
-                
-                return RedirectToAction("ListQuestions", "Display");
+
+                return RedirectToAction("ListCourses", "Display");
             }
 
             ModelState.AddModelError("Email", "Invalid e-mail or password.");
@@ -63,18 +69,20 @@ namespace QuestionStorage.Controllers
 
         private async Task Authenticate(User user)
         {
-            await DataStorage.GetByPredicateAsync(_context.Roles, role => role.Id == user.RoleId);
+            await DataStorage.GetByPredicateAsync(context.Roles, role => role.Id == user.RoleId);
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
-            var id = new ClaimsIdentity(claims, "ApplicationCookie",
+            var identity = new ClaimsIdentity(claims, "ApplicationCookie",
                 ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identity));
         }
 
         public async Task<IActionResult> Logout()
@@ -100,7 +108,7 @@ namespace QuestionStorage.Controllers
         {
             var email = collection["Email"];
 
-            var currentUsers = await DataStorage.GetTypedHashSetBySelectorAsync(_context.Users, 
+            var currentUsers = await DataStorage.GetTypedHashSetBySelectorAsync(context.Users,
                 user => user.Email);
 
             Validator.ValidateUserCreation(collection, currentUsers, ModelState);
@@ -108,15 +116,15 @@ namespace QuestionStorage.Controllers
             if (!ModelState.IsValid)
             {
                 await FillViewData(ViewData);
-                
+
                 return View();
             }
 
             //TODO: Normal password generation
             var password = "qstorage@#_pass";
 
-            await _context.AddAsync(await UserExtensions.CreateUser(_context, email, password, collection["Admin"]));
-            await _context.SaveChangesAsync();
+            await context.AddAsync(await UserExtensions.CreateUser(context, email, password, collection["Admin"]));
+            await context.SaveChangesAsync();
 
             await FillViewData(ViewData);
 
@@ -133,7 +141,7 @@ namespace QuestionStorage.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditViewModel model)
         {
-            var user = await DataStorage.GetByPredicateAsync(_context.Users, 
+            var user = await DataStorage.GetByPredicateAsync(context.Users,
                 user => user.Email.Equals(User.Identity.Name));
 
             Validator.ValidatePasswordChange(model.OldPassword, user.Password, ModelState);
@@ -144,8 +152,8 @@ namespace QuestionStorage.Controllers
             }
 
             UserExtensions.UpdatePassword(model, user);
-            await _context.SaveChangesAsync();
-            
+            await context.SaveChangesAsync();
+
             ViewData["Success"] = "Password successfully changed";
 
             return View(model);
@@ -154,9 +162,10 @@ namespace QuestionStorage.Controllers
         private static string _successMessage;
 
         [HttpGet]
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> UserInfo(int id)
         {
-            var user = await DataStorage.GetByPredicateAsync(_context.Users, user => user.Id == id);
+            var user = await DataStorage.GetByPredicateAsync(context.Users, user => user.Id == id);
 
             if (_successMessage == null)
             {
@@ -169,31 +178,33 @@ namespace QuestionStorage.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> ResetPassword(int id)
         {
-            var user = await DataStorage.GetByPredicateAsync(_context.Users, user => user.Id == id);
-            
+            var user = await DataStorage.GetByPredicateAsync(context.Users, user => user.Id == id);
+
             //TODO: Normal password generation
             UserExtensions.SetPassword(user);
-            await _context.SaveChangesAsync();
-            
+            await context.SaveChangesAsync();
+
             StorageUtils.CopyToClipboard(user.Email, user.Password);
 
             _successMessage = "Password was successfully reset. User data was copied to a clipboard.";
-            
+
             return RedirectToAction("UserInfo", new {id});
         }
 
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> ChangeRole(int id)
         {
             UserExtensions.ChangeRole(
-                await DataStorage.GetByPredicateAsync(_context.Users, user => user.Id == id));
-            await _context.SaveChangesAsync();
-            
+                await DataStorage.GetByPredicateAsync(context.Users, user => user.Id == id));
+            await context.SaveChangesAsync();
+
             return RedirectToAction("UserInfo", new {id});
         }
-        
+
         private async Task FillViewData(ViewDataDictionary viewData) =>
-            viewData["Users"] = await DataStorage.GetListAsync(_context.Users);
+            viewData["Users"] = await DataStorage.GetListAsync(context.Users);
     }
 }

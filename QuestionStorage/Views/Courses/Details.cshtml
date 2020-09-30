@@ -1,0 +1,87 @@
+@model QuestionStorage.Models.Courses.CoursesInfo
+
+@{
+    ViewData["Title"] = "Actions";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Courses</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <link rel="contents" href="/lib/resources/answer-open.xml">
+</head>
+<body>
+<h1 class="page-header">@Model.CourseName</h1>
+<br/>
+<div style="margin: auto;">
+    <table style="border-collapse: separate; border-spacing: 0.7rem 0.7rem">
+        <tr>
+            <th>
+                <div>
+                    <a class="section-button" style="color: #f19a74; padding: 75px 25px 75px 25px;"
+                       asp-action="Create"
+                       asp-controller="Questions"
+                       asp-route-courseId="@Model.CourseId">
+                        Create question
+                    </a>
+                </div>
+            </th>
+            <th>
+                <div>
+                    <a class="section-button" style="color: #dc9188; padding: 75px 25px 75px 25px;"
+                       asp-action="ListQuestions"
+                       asp-controller="Display"
+                       asp-route-courseId="@Model.CourseId">
+                        All questions
+                    </a>
+                </div>
+            </th>
+            <th>
+                <div>
+                    <a class="section-button" style="color: #c1849c; padding: 55px 25px 75px 25px;"
+                       asp-action="Export"
+                       asp-controller="Questions"
+                       asp-route-courseId="@Model.CourseId">
+                        Export questions to Moodle XML
+                    </a>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <div>
+                    <a class="section-button" style="color: #b17da9; padding: 55px 25px 75px 25px;"
+                       asp-action="Import"
+                       asp-controller="Questions"
+                       asp-route-courseId="@Model.CourseId">
+                        Import questions from Moodle XML
+                    </a>
+                </div>
+            </th>
+            <th>
+                <div>
+                    <a class="section-button" style="color: #9f75b9; padding: 75px 25px 75px 25px;"
+                       asp-action="Create"
+                       asp-controller="Quizzes"
+                       asp-route-courseId="@Model.CourseId">
+                        Create quiz
+                    </a>
+                </div>
+            </th>
+            <th>
+                <div>
+                    <a class="section-button" style="color: #8d6dc9; padding: 75px 25px 75px 25px;"
+                       asp-action="ListTests"
+                       asp-controller="Display"
+                       asp-route-courseId="@Model.CourseId">
+                        All quizzes
+                    </a>
+                </div>
+            </th>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

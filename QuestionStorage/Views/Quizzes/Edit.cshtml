@@ -1,0 +1,83 @@
+@model QuestionStorage.Models.Quizzes.QuizzesInfo
+
+@{
+    ViewData["Title"] = "Edit";
+    var questionIdentifiers = ViewBag.QuestionIdentifiers;
+}
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html lang="en">
+<head>
+    <title>Edit</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <script src="/js/add-to-table.js"></script>
+    <script src="/js/display-answer-variants.js"></script>
+    <script src="/js/number-input-check.js"></script>
+</head>
+<body>
+@using (Html.BeginForm("Edit", "Quizzes", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("Please provide the details below and then click submit.",
+        new {@class = "text-danger"})
+
+    <h1 class="page-header">Edit test</h1>
+    <p class="less-bottom-space">Test title*</p>
+    @Html.TextAreaFor(model => model.Name, 1, 100,
+        new {@class = "textarea short", id = "testName"})
+
+    <p class="less-bottom-space">Date*</p>
+    <input type="date" class="date-textarea" name="date" id="Date">
+    <br/>
+    <hr/>
+
+    <p
+        class="less-bottom-space">
+        Question ID*
+        <button class="plus" id="addQuestionId" type="button" onclick="function addNewIdRow() {
+             const tableRef = document.getElementById('questionsTable');
+             const newRow = tableRef.insertRow(-1);
+             let cell = newRow.insertCell(0);
+             let textarea = document.getElementsByName('QuestionId')[0].cloneNode(false);
+             textarea.value = '';
+             cell.appendChild(textarea);
+         }
+         addNewIdRow()">
+        </button>
+    </p>
+    <table id="questionsTable">
+        <thead>
+        <tr>
+        <th>
+        <tbody>
+        @foreach (var questionId in questionIdentifiers)
+        {
+            <tr>
+                <td>
+                <textarea class="textarea id" id="questionId" type="number" rows="1" cols="100"
+                          name="QuestionId" onkeyup="checkInput(this)">@questionId</textarea>
+            </tr>
+        }
+    </table>
+
+    <br/>
+    <input type="submit" class="submit" value="Save">
+    <input type="hidden" id="date-value" value="@ViewBag.QuizDate">
+}
+</body>
+</html>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    
+    <script>
+    function getDate() {
+        document.getElementById('Date').value = document.getElementById('date-value').value; 
+    }
+               
+    window.onload = function() {
+      getDate();
+    }; 
+    </script>
+}

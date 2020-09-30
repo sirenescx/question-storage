@@ -28,6 +28,11 @@
     <script src="/js/add-to-table.js"></script>
     <script src="/js/display-answer-variants.js"></script>
 </head>
+<style>
+    .select2-container--default .select2-selection--multiple {
+        height: calc(1.5em + 0.75rem + 1px)
+    }
+</style>
 
 <body>
 @using (Html.BeginForm("Create", "Questions", FormMethod.Post))
@@ -38,13 +43,7 @@
 
     <h1 class="page-header">Create question</h1>
 
-    <p class="less-bottom-space">Question title*</p>
-    @Html.TextAreaFor(model => model.Question.QuestionName, 1, 100,
-        new {@class = "textarea long", id = "questionName"})
-
-    <p class="less-bottom-space">Question content*</p>
-    @Html.TextAreaFor(model => model.Question.QuestionText, 15, 100,
-        new {@class = "textarea long", id = "questionText"})
+    @Html.Partial("_TextTitle")
     
     <p class="less-bottom-space">Template
         <input type="hidden" value="off" name="IsTemplate"> 

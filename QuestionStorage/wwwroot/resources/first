@@ -1,0 +1,26 @@
+using System;
+using System.Collections.Generic;
+using QuestionStorage.Utils;
+
+class QuestionGenerator
+{
+    private static QRandom rnd = new QRandom();
+
+    private static string ChangeTemplateFields(string text, ref string[] answers, Dictionary<string, object> list)
+    {	var newText = text;
+        foreach (var variable in list) {
+            newText = newText.Replace($"${variable.Key}$", $"{variable.Value}");
+        }
+        for (int i = 0; i < answers.Length; ++i) {
+            foreach (var variable in list) {
+                answers[i] = answers[i].Replace($"${variable.Key}$", $"{variable.Value}");
+            }
+        }
+
+        return newText;
+    }  
+    
+    public static void Generate(ref string[] text, ref string[][] answers, int amount)
+    {
+        for (var i = 0; i < amount; ++i) {
+            var d = new Dictionary<string, object>();

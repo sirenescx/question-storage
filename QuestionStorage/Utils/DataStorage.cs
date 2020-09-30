@@ -14,6 +14,19 @@ namespace QuestionStorage.Utils
 
         internal static async Task<HashSet<T>> GetHashSetAsync<T>(DbSet<T> dbSet) where T : class =>
             new HashSet<T>(await GetListAsync(dbSet));
+        
+        internal static List<TU> GetTypedListByPredicateAndSelector<T, TU>(DbSet<T> dbSet,
+            Expression<Func<T, bool>> predicate,
+            Expression<Func<T, TU>> selector) where T : class =>
+            dbSet
+                .Where(predicate)
+                .Select(selector)
+                .ToList();
+        
+        internal static HashSet<TU> GetTypedHashSetByPredicateAndSelector<T, TU>(DbSet<T> dbSet,
+            Expression<Func<T, bool>> predicate,
+            Expression<Func<T, TU>> selector) where T : class =>
+            new HashSet<TU>(GetTypedListByPredicateAndSelector(dbSet, predicate, selector));
 
         internal static async Task<List<TU>> GetTypedListByPredicateAndSelectorAsync<T, TU>(DbSet<T> dbSet,
             Expression<Func<T, bool>> predicate,

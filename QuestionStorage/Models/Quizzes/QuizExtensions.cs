@@ -6,12 +6,13 @@ namespace QuestionStorage.Models.Quizzes
 {
     public static class QuizExtensions
     {
-        internal static async Task<QuizzesInfo> CreateQuiz(HSE_QuestContext context, string name, string date) =>
+        internal static async Task<QuizzesInfo> CreateQuiz(StorageContext context, string name, string date, int courseId) =>
             new QuizzesInfo
             {
                 QuizId = await DataStorage.GetIdAsync(context.QuizzesInfo, quizInfo => quizInfo.QuizId),
                 Name = name,
-                Date = DateTime.Parse(date)
+                Date = DateTime.Parse(date),
+                CourseId = courseId
             };
     }
 }

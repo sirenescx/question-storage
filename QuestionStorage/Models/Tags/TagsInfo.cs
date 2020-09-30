@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuestionStorage.Models.Tags
@@ -12,21 +11,16 @@ namespace QuestionStorage.Models.Tags
             TagsQuestions = new HashSet<TagsQuestions>();
         }
 
-        [Key]
-        [Column("TagID")]
         public int TagId { get; set; }
-        [Column("ParentID")]
         public int? ParentId { get; set; }
-        [StringLength(64)]
         public string Name { get; set; }
-        [Column("IsMetaTag")]
-        public bool? IsMetaTag { get; set; }
+        public int CourseId { get; set; }
         [ForeignKey(nameof(ParentId))]
         [InverseProperty(nameof(InverseParent))]
-        public TagsInfo Parent { get; set; }
+        public virtual TagsInfo Parent { get; set; }
         [InverseProperty(nameof(Parent))]
-        public ICollection<TagsInfo> InverseParent { get; set; }
+        public virtual ICollection<TagsInfo> InverseParent { get; set; }
         [InverseProperty("Tag")]
-        public ICollection<TagsQuestions> TagsQuestions { get; set; }
+        public virtual ICollection<TagsQuestions> TagsQuestions { get; set; }
     }
 }

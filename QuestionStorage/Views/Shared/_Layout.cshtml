@@ -36,22 +36,7 @@
                     <a class="nav-link text-violet" asp-action="Edit" asp-controller="Account">@User.Identity.Name</a>
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Create" asp-controller="Questions">Create question</a>
-                        </li>                      
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Questions" asp-controller="Home">Questions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Create" asp-controller="Quizzes">Create test</a>
-                        </li>  
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Tests" asp-controller="Home">Tests</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Export" asp-controller="Questions">Export</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="Import" asp-controller="Questions">Import</a>
+                            <a class="nav-link text-dark" asp-action="Courses" asp-controller="Home">Courses</a>
                         </li>
                         @if (User.IsInRole("administrator"))
                         {

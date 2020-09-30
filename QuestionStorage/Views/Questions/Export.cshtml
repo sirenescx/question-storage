@@ -7,7 +7,7 @@
     var tagList = new SelectList(tags
         .Select(t => new {Value = t.TagId, Text = t.Name}),
         "Value", "Text");
-    HashSet<QuestionsInfo> questions = ViewBag.Question;
+    var errorMessage = ViewBag.Error is null || ViewBag.Error == string.Empty ? string.Empty : ViewBag.Error;
 }
 
 <!DOCTYPE html>
@@ -23,6 +23,10 @@
 <body>
 @using (Html.BeginForm("Export", "Questions", FormMethod.Post))
 {
+    @if (!errorMessage.Equals(string.Empty))
+    {
+        <p class="text-danger" id="validator">@errorMessage</p>
+    }
     <h1 class="page-header">Export questions to XML</h1>
     <br/>
     <label class="less-bottom-space">Select tags</label>
@@ -41,7 +45,7 @@
 
     <br/>
     <br/>
-    <input type="submit" class="submit search" value="Export"/>
+    <input type="submit" class="submit search" value="Export" onclick="document.getElementById('validator').value = ''"/>
 }
 </body>
 </html>

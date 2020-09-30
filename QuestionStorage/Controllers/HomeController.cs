@@ -8,18 +8,18 @@ namespace QuestionStorage.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
-            _logger = logger;
+            this.logger = logger;
         }
 
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("ListQuestions", "Display");
+                return RedirectToAction("ListCourses", "Display");
             }
 
             return View();
@@ -35,5 +35,7 @@ namespace QuestionStorage.Controllers
         public IActionResult Contact() => View();
 
         public IActionResult Tests() => RedirectToAction("ListTests", "Display");
+        
+        public IActionResult Courses() => RedirectToAction("ListCourses", "Display");
     }
 }

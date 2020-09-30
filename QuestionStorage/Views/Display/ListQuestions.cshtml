@@ -1,12 +1,16 @@
-﻿@using QuestionStorage.Models.Tags
-@model IEnumerable<QuestionStorage.Models.Questions.QuestionsInfo>
+﻿@model QuestionStorage.Models.ViewModels.ListQuestionsViewModel
 
 @{
     ViewData["Title"] = "Questions";
-    HashSet<TagsInfo> tags = ViewBag.Tags;
-    var tagList = new SelectList(tags.Select(t => new {Value = t.TagId, Text = t.Name}),
+    var tagList = new SelectList(Model.TagsInfo.Select(t => new {Value = t.TagId, Text = t.Name}),
         "Value", "Text");
-    HashSet<int> metaTags = ViewBag.MetaTags;
+    var htmlTags = new HashSet<string>
+    {
+        "<pre",
+        "<pre>",
+        "<span",
+        "<span>"
+    };
 }
 
 <!DOCTYPE html>
@@ -22,6 +26,7 @@
         border: 1px solid #aaa;
         border-radius: 5px 0 0 5px;
         cursor: text; 
+        height: calc(1.5em + 0.75rem + 1px)
     }
 </style>
 <br/>
@@ -36,32 +41,27 @@
 
     <br/>
 
-    @if (Model != null)
+    @if (Model.QuestionsInfo != null)
     {
-        @foreach (var item in Model)
+        @foreach (var item in Model.QuestionsInfo)
         {
             <div>
-                <a asp-action="AboutQuestion" asp-route-id="@item.QuestId">#@item.QuestId. @item.QuestionName</a>
+                <a asp-action="AboutQuestion" asp-route-questionId="@item.QuestId" asp-route-courseId="@item.CourseId">#@item.QuestId. @item.QuestionName</a>
                 <div class="less-bottom-space">
-                    <pre class="pre smaller-text">@Html.Raw(string.Join(' ', item.QuestionText.Split().Take(20)) + "</code>")...</pre>
+                    @{
+                        var previewData = item.QuestionText.Split().Take(20);
+                        
+                        var preview = string.Join(' ', previewData);
+                    }
+                    
+                    <pre class="pre smaller-text">@preview...</pre>
                 </div>
                 @foreach (var tag in item.TagsQuestions)
                 {
-                    if (metaTags.Contains(tag.TagId))
-                    {
-                        <a class="meta-tag-button"
-                           href='@Url.Action("ListByTag", "Display", new {id = tag.Tag.TagId})'>
-                            <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
-                        </a>
-                    }
-                    else
-                    {
-                        <a class="tag-button"
-                           href='@Url.Action("ListByTag", "Display", new {id = tag.Tag.TagId})'>
-                            <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
-                        </a>
-                    }
-
+                    <a class="tag-button"
+                       href='@Url.Action("ListQuestionsByTag", "Display", new {courseId = tag.Tag.CourseId, tagId = tag.Tag.TagId})'>
+                        <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
+                    </a>
                 }
             </div>
             <br/>

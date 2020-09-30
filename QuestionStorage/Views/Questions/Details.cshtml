@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Details";
-    HashSet<int> metaTags = ViewBag.MetaTags;
 }
 
 <!DOCTYPE html>
@@ -69,24 +68,17 @@
     </p>
     @foreach (var tag in Model.TagsQuestions)
     {
-         if (ViewBag.MetaTags.Contains(tag.TagId))
-         {
-             @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
-                 new {id = tag.Tag.TagId}, new {@class = "meta-tag-button"})
-         }
-         else
-         {
-            @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
-                new {id = tag.Tag.TagId}, new {@class = "tag-button"})
-        }
+        @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
+            new {id = tag.Tag.TagId}, new {@class = "tag-button"})
     }
 </div>
 
 <br/>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.QuestId">Edit</a> |
-    <a asp-action="Index">Back to List</a> |
+    <a asp-action="Edit" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Edit</a> |
+    <a asp-action="Copy" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Copy</a> |
+    <a asp-action="ListQuestions" asp-controller="Display" asp-route-courseId="@Model.CourseId">Back to List</a> |
     @* <a asp-action="ExportToPdf" asp-route-id="@Model.QuestId">Export to PDF</a> | *@
     <a asp-action="ExportToXml" asp-route-id="@Model.QuestId">Export to XML</a> |
     @if (Model.IsTemplate)

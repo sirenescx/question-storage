@@ -10,10 +10,10 @@ namespace QuestionStorage
         {
             var host = CreateHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-            }
+            // using (var scope = host.Services.CreateScope())
+            // {
+            //     var services = scope.ServiceProvider;
+            // }
 
             host.Run();
         }

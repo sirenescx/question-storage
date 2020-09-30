@@ -52,6 +52,10 @@
               "target": "Package",
               "version": "[2.2.5, )"
             },
+            "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
             "Microsoft.CodeDom.Providers.DotNetCompilerPlatform": {
               "target": "Package",
               "version": "[3.6.0, )"

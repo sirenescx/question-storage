@@ -12,18 +12,11 @@ namespace QuestionStorage.Models.Questions
         public QuestionsInfo()
         {
             QuestionAnswerVariants = new HashSet<QuestionAnswerVariants>();
-            TagsQuestions = new HashSet<TagsQuestions>();
             QuizzesInfoQuestionsInfo = new HashSet<QuizzesInfoQuestionsInfo>();
+            TagsQuestions = new HashSet<TagsQuestions>();
         }
 
-        [Key]
-        [Column("QuestID")]
         public int QuestId { get; set; }
-        [Column("SourceQuestID")]
-        public int SourceQuestId { get; set; }
-        [Column("VersionID")]
-        public int VersionId { get; set; }
-        [Column("TypeID")]
         public int TypeId { get; set; }
         [Required(ErrorMessage = "Question title is required.")]
         [StringLength(256)]
@@ -33,14 +26,19 @@ namespace QuestionStorage.Models.Questions
         [MinLength(1)]
         public string QuestionText { get; set; }
         public string QuestionXml { get; set; }
+        public bool IsTemplate { get; set; }
+        public int VersionId { get; set; }
+        public int SourceQuestId { get; set; }
+        public int AuthorId { get; set; }
+        public int CourseId { get; set; }
         [ForeignKey(nameof(TypeId))]
         [InverseProperty(nameof(TypesInfo.QuestionsInfo))]
-        public TypesInfo Type { get; set; }
-        public bool IsTemplate { get; set; }
+        public virtual TypesInfo Type { get; set; }
         [InverseProperty("Quest")]
-        public ICollection<QuestionAnswerVariants> QuestionAnswerVariants { get; set; }
+        public virtual ICollection<QuestionAnswerVariants> QuestionAnswerVariants { get; set; }
         [InverseProperty("Quest")]
-        public ICollection<TagsQuestions> TagsQuestions { get; set; }
-        public ICollection<QuizzesInfoQuestionsInfo> QuizzesInfoQuestionsInfo { get; set; }
+        public virtual ICollection<QuizzesInfoQuestionsInfo> QuizzesInfoQuestionsInfo { get; set; }
+        [InverseProperty("Quest")]
+        public virtual ICollection<TagsQuestions> TagsQuestions { get; set; }
     }
 }

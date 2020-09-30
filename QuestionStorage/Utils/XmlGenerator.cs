@@ -68,6 +68,13 @@ namespace QuestionStorage.Utils
                 File.ReadAllText(templatePath).Replace("$ANSWER", xmlOptions.ToString())));
         }
 
+        public static string GetCode(string variables, string webRootPath)
+        {
+            var firstPart = File.ReadAllText(GetDirectPath("/resources/first", webRootPath));
+            var secondPart = File.ReadAllText(GetDirectPath("/resources/second", webRootPath));
+            return $"{firstPart}{variables}{secondPart}";
+        }
+
         private static void GetTemplate(string templatePath, out XmlDocument template, 
             out XmlNode questionNode, List<QuestionAnswerVariants> responseOptions, int typeId, string webRootPath)
         {
@@ -90,6 +97,7 @@ namespace QuestionStorage.Utils
         private static (List<QuestionAnswerVariants>, List<QuestionAnswerVariants>) 
             GetCorrectAndIncorrectOptions(List<QuestionAnswerVariants> responseOptions)
         {
+            PreprocessResponseOptions(responseOptions);
             var correct = new List<QuestionAnswerVariants>();
             var incorrect = new List<QuestionAnswerVariants>();
 
@@ -106,6 +114,20 @@ namespace QuestionStorage.Utils
             }
 
             return (correct, incorrect);
+        }
+
+        private static void PreprocessResponseOptions(List<QuestionAnswerVariants> responseOptions)
+        {
+            foreach (var responseOption in responseOptions)
+            {
+                responseOption.Answer = responseOption.Answer.Trim();
+                while (responseOption.Answer.EndsWith("&nbsp;"))
+                {
+                    responseOption.Answer = responseOption.Answer
+                        .Substring(0, responseOption.Answer.LastIndexOf("&nbsp;", StringComparison.Ordinal));
+                    responseOption.Answer = responseOption.Answer.Trim();
+                }
+            }
         }
 
         private static void FillXml(QuestionsInfo question, XmlDocument result, XmlNode resultQuiz,

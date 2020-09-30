@@ -8,7 +8,7 @@ namespace QuestionStorage.Models.Users
 {
     public static class UserExtensions
     {
-        internal static async Task<User> CreateUser(HSE_QuestContext context, string email, string password,
+        internal static async Task<User> CreateUser(StorageContext context, string email, string password,
             StringValues roleInfo) =>
             new User
             {

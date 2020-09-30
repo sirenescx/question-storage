@@ -11,10 +11,8 @@ namespace QuestionStorage.Models.Questions
         {
             QuizzesInfoQuestionsInfoQuestionAnswerVariants = new HashSet<QuizzesInfoQuestionsInfoQuestionAnswerVariants>();
         }
-        [Key]
-        [Column("VariantID")]
+
         public int VariantId { get; set; }
-        [Column("QuestID")]
         public int QuestId { get; set; }
         public int SortCode { get; set; }
         [StringLength(256)]
@@ -25,6 +23,6 @@ namespace QuestionStorage.Models.Questions
         [ForeignKey(nameof(QuestId))]
         [InverseProperty(nameof(QuestionsInfo.QuestionAnswerVariants))]
         public virtual QuestionsInfo Quest { get; set; }
-        public ICollection<QuizzesInfoQuestionsInfoQuestionAnswerVariants> QuizzesInfoQuestionsInfoQuestionAnswerVariants { get; set; }
+        public virtual ICollection<QuizzesInfoQuestionsInfoQuestionAnswerVariants> QuizzesInfoQuestionsInfoQuestionAnswerVariants { get; set; }
     }
 }

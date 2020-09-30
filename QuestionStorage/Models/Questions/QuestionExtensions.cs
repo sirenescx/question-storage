@@ -1,59 +1,69 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using QuestionStorage.Models.Types;
+using QuestionStorage.Models.Users;
 using QuestionStorage.Utils;
 
 namespace QuestionStorage.Models.Questions
 {
     public static class QuestionExtensions
     {
-        internal static async Task<QuestionsInfo> CreateQuestion(HSE_QuestContext context, string questionText,
-            StringValues typeInfo, string questionName, StringValues checkTemplate, string xml = null)
+        internal static async Task<QuestionsInfo> CreateQuestion(StorageContext context, string questionText,
+            StringValues typeInfo, string questionName, int authorId, StringValues checkTemplate, int courseId, string xml = null)
         {
             var questionId = await DataStorage.GetIdAsync(context.QuestionsInfo,
                 questionsInfo => questionsInfo.QuestId);
 
-            var question = new QuestionsInfo
+            return new QuestionsInfo
             {
                 QuestId = questionId,
                 QuestionName = questionName.Trim(),
                 QuestionText = questionText.Trim(),
                 TypeId = TypesExtensions.GetTypeId(typeInfo),
-                IsTemplate = StorageUtils.PreprocessCheckboxValues(checkTemplate).First(),
+                IsTemplate = checkTemplate.Any() && StorageUtils.PreprocessCheckboxValues(checkTemplate).First(),
                 VersionId = 1,
-                SourceQuestId = questionId
+                SourceQuestId = questionId,
+                AuthorId = authorId,
+                CourseId = courseId
             };
-
-            return question;
         }
 
-        internal static async Task<QuestionsInfo> CreateQuestion(HSE_QuestContext context, StringValues questionName,
-            StringValues questionText, StringValues typeInfo, int versionId, int sourceQuestionId) =>
-            new QuestionsInfo
+        internal static async Task<QuestionsInfo> CreateQuestion(StorageContext context, StringValues questionName,
+            StringValues questionText, StringValues typeInfo, int authorId, int courseId, int versionId = 1, int sourceQuestionId = -1)
+        {
+            var questionId = await DataStorage.GetIdAsync(context.QuestionsInfo,
+                questionsInfo => questionsInfo.QuestId);
+            
+            return new QuestionsInfo
             {
-                QuestId = await DataStorage.GetIdAsync(context.QuestionsInfo, questionsInfo => questionsInfo.QuestId),
+                QuestId = questionId,
                 QuestionName = questionName,
                 QuestionText = questionText,
                 TypeId = TypesExtensions.GetTypeId(typeInfo),
                 VersionId = versionId,
-                SourceQuestId = sourceQuestionId
+                SourceQuestId = sourceQuestionId == -1 ? questionId : sourceQuestionId,
+                AuthorId = authorId,
+                CourseId = courseId
             };
+        }
 
-        internal static async Task<int> GetSourceVersionId(HSE_QuestContext context, QuestionsInfo editableQuestion)
+        internal static async Task<int> GetSourceVersionId(StorageContext context, QuestionsInfo editableQuestion)
         {
             while (editableQuestion.SourceQuestId != editableQuestion.QuestId)
             {
+                var question = editableQuestion;
                 editableQuestion =
                     await context.QuestionsInfo.Where(
-                        q => q.QuestId == editableQuestion.SourceQuestId).FirstOrDefaultAsync();
+                        q => q.QuestId == question.SourceQuestId).FirstOrDefaultAsync();
             }
 
             return editableQuestion.QuestId;
         }
 
-        internal static async Task<QuestionAnswerVariants> CreateQuestionAnswerVariant(HSE_QuestContext context,
+        internal static async Task<QuestionAnswerVariants> CreateQuestionAnswerVariant(StorageContext context,
             int questionId, string text, bool isCorrect = true, int sortCode = 0) =>
             new QuestionAnswerVariants
             {
@@ -65,7 +75,7 @@ namespace QuestionStorage.Models.Questions
                 SortCode = sortCode
             };
         
-        internal static async Task<bool> QuestionExists(HSE_QuestContext context, int id) =>
+        internal static async Task<bool> QuestionExists(StorageContext context, int id) =>
             await context.QuestionsInfo.AnyAsync(q => q.QuestId == id);
     }
 }

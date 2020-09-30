@@ -18,7 +18,7 @@
             cell2.innerHTML = '<input type="hidden" value="off" name="Correct">' +
                               '<input name="Correct" type="checkbox" value="on">';
         }
-        cell3.innerHTML = '<button id="addResponseOptions" onclick="removeRow(this, \'answerTable\')">✕</button>';
+        cell3.innerHTML = '<button class="button remove" id="addResponseOptions" onclick="removeRow(this, \'answerTable\')">✕</button>';
     } 
 }
 

@@ -37,14 +37,11 @@
                     <a class="nav-link text-violet" asp-action="Edit" asp-controller="Account">@User.Identity.Name</a>
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-action="Create" asp-controller="Questions">Create</a>
+                            <a class="nav-link text-light" asp-action="ListCourses" asp-controller="Display">Courses</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-action="Questions" asp-controller="Home">Questions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-action="Export" asp-controller="Questions">Export</a>
-                        </li>
+                            <a class="nav-link text-light" asp-action="Manage" asp-controller="Account">Manage</a>
+                        </li>                          
                     </ul>
                 }
                 else

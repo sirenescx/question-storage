@@ -1,0 +1,4 @@
+text[i] = ChangeTemplateFields(text[i], ref answers[i], d);
+                        }
+                    }
+                }

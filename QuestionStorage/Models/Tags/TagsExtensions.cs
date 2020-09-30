@@ -6,12 +6,12 @@ namespace QuestionStorage.Models.Tags
 {
     public static class TagsExtensions
     {
-        internal static async Task<TagsInfo> CreateTag(HSE_QuestContext context, string name, int? parentId = null) =>
+        internal static async Task<TagsInfo> CreateTag(StorageContext context, string name, int courseId, int? parentId = null) =>
             new TagsInfo
             {
-                TagId = await DataStorage.GetIdAsync(context.QuestionAnswerVariants, 
-                    questionAnswerVariants => questionAnswerVariants.VariantId),
+                TagId = await DataStorage.GetIdAsync(context.TagsInfo,tagsInfo => tagsInfo.TagId),
                 Name = name.Trim(),
+                CourseId = courseId,
                 ParentId = parentId
             };
         

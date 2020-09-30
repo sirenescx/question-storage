@@ -1,0 +1,150 @@
+@model QuestionStorage.Models.Questions.QuestionsInfo
+
+<h1 class="page-header">Copy question</h1>
+
+@Html.Partial("_TextTitle")
+
+<hr/>
+
+@Html.Label("Question type")
+
+<br/>
+
+<select class="select" id="typeOfQuestionSelector" onchange="displayAnswerVariants()" name="Question.Type.Name">
+    @switch (Model.TypeId)
+    {
+        case 1:
+            <option selected value="sc">Single choice</option>
+            <option value="mc">Multiple choice</option>
+            <option value="oa">Open answer</option>
+            <option value="o">Other</option>
+            break;
+        case 2:
+            <option value="sc">Single choice</option>
+            <option selected value="mc">Multiple choice</option>
+            <option value="oa">Open answer</option>
+            <option value="o">Other</option>
+            break;
+        case 3:
+            <option value="sc">Single choice</option>
+            <option value="mc">Multiple choice</option>
+            <option selected value="oa">Open answer</option>
+            <option value="o">Other</option>
+            break;
+        case 4:
+            <option value="sc">Single choice</option>
+            <option value="mc">Multiple choice</option>
+            <option value="oa">Open answer</option>
+            <option selected value="o">Other</option>
+            break;
+    }
+</select>
+
+<hr/>
+
+<p id="answerInfo"></p>
+@{
+    if (Model.TypeId == 3)
+    {
+        <label id="correctAnswerLabel">Correct answer*</label>
+        <textarea class="textarea long input-validation-error" cols="60" id="answerOption" data-val="true" 
+                          data-val-length="The field Answer must be a string with a maximum length of 256."
+                          data-val-length-max="256" data-val-minlength="The field Answer must be a string or array type with a minimum length of \'1\'." 
+                          data-val-minlength-min="1" data-val-required="Response option text is required."
+                          maxlength="256" name="AnswerOption.Answer" rows="2" aria-describedby="answerOption-error AnswerOption.Answer-error" 
+                          aria-invalid="true" id="correctAnswer">@Model.QuestionAnswerVariants.First().Answer
+            </textarea>
+        <hr/>
+    }
+    else if (Model.TypeId == 1 || Model.TypeId == 2)
+    {
+        <table id="answerTable">
+            <tr>
+                <th style="font-weight: normal">Response options*</th>
+                <th style="font-weight: normal">Correct</th>
+                <th></th>
+            </tr>
+            @{
+                var answerOptionsCount = 0;
+                @foreach (var variant in Model.QuestionAnswerVariants)
+                {
+                    ++answerOptionsCount;
+                    <tr>
+                        <td>
+                            <textarea class="textarea long input-validation-error" cols="60" data-val="true" 
+                                              data-val-length="The field Answer must be a string with a maximum length of 256."
+                                              data-val-length-max="256" data-val-minlength="The field Answer must be a string or array type with a minimum length of \'1\'." 
+                                              data-val-minlength-min="1" data-val-required="Response option text is required."
+                                              maxlength="256" name="AnswerOption.Answer" rows="1" aria-describedby="answerOption-error AnswerOption.Answer-error" 
+                                              aria-invalid="true">@variant.Answer
+                                </textarea>
+                        </td>
+                        <td style="text-align: center; vertical-align: top">
+                            <input type="hidden" name="Correct" value="off">
+                            @if (variant.IsCorrect)
+                            {
+                                if (Model.TypeId == 1)
+                                {
+                                    <input type="radio" name="Correct" value="on" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="Correct" value="on" checked>
+                                }
+                            }
+                            else
+                            {
+                                if (Model.TypeId == 1)
+                                {
+                                    <input type="radio" name="Correct" value="on">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="Correct" value="on">
+                                }
+                            }
+                        </td>
+                        @if (answerOptionsCount > 2)
+                        {
+                            <td style="text-align: center; vertical-align: top">
+                                <button class="button remove" onclick="removeRow(this, 'answerTable')">✕</button>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </table>
+        <p>
+            <button class="button add" id="addResponseOptions" type="button" onclick="addNewRow('answerTable')">
+                Add new response option
+            </button>
+        </p>
+        <hr/>
+    }
+}
+
+@Html.Label("Tags")
+@{
+    var currentTags = ViewBag.CurrentTags;
+    <select name="Tags" id="tagView" multiple>
+        @foreach (var tag in ViewBag.AllTags)
+        {
+            var id = $"ŧ{tag.TagId}";
+            if (currentTags.Contains(tag))
+            {
+                <option selected value=@id>@tag.Name</option>
+            }
+            else
+            {
+                <option value=@id>@tag.Name</option>
+            }
+        }
+    </select>
+}
+
+<br/>

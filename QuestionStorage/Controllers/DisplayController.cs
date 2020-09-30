@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using QuestionStorage.Models;
+using QuestionStorage.Models.Tags;
+using QuestionStorage.Models.ViewModels;
 using QuestionStorage.Utils;
 
 // ReSharper disable VariableHidesOuterVariable
@@ -15,77 +17,88 @@ namespace QuestionStorage.Controllers
     [Authorize]
     public class DisplayController : Controller
     {
-        private readonly HSE_QuestContext _context;
+        private readonly StorageContext context;
 
-        public DisplayController(HSE_QuestContext context)
+        public DisplayController(StorageContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult> ListQuestions()
+        public async Task<ActionResult> ListQuestions(int courseId)
         {
-            await FillListQuestionsViewData(ViewData);
+            if (!await StorageUtils.CheckAccess(context, courseId, User.Identity.Name))
+            {
+                return RedirectToAction("ListCourses");
+            }
 
-            return View();
+            return View(new ListQuestionsViewModel {TagsInfo = await FillListQuestionsViewData(ViewData, courseId)});
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> ListQuestions(IFormCollection collection)
-        {
-            await FillListQuestionsViewData(ViewData);
 
+        [HttpPost]
+        public async Task<IActionResult> ListQuestions(int courseId, IFormCollection collection)
+        {
             var tagIdentifiers = collection["Tags"]
                 .Select(int.Parse)
                 .ToHashSet();
 
-            var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions, 
+            var tagsQuestions = await DataStorage.GetListByPredicateAsync(context.TagsQuestions,
                 tagsQuestions => tagIdentifiers.Contains(tagsQuestions.TagId));
 
             var questionIdentifiers = !tagIdentifiers.Any()
                 ? GetQuestionIdsWithoutTags()
                 : tagsQuestions.Select(tq => tq.QuestId).ToHashSet();
 
-            var questions = await DataStorage.GetListByPredicateAsync(_context.QuestionsInfo, 
-                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId));
+            var questions = await DataStorage.GetTypedListByPredicateAndSelectorAsync(context.QuestionsInfo,
+                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId),
+                questionsInfo => questionsInfo);
 
             var lastVersions =
                 questions
                     .GroupBy(question => question.SourceQuestId)
                     .Select(versions => versions.OrderBy(version => version.VersionId)
-                        .Last());
+                        .Last()).ToList();
 
             if (tagIdentifiers.Any())
             {
                 foreach (var question in lastVersions)
                 {
-                    await DataStorage.GetListByPredicateAsync(_context.TagsQuestions, 
+                    await DataStorage.GetListByPredicateAsync(context.TagsQuestions,
                         tagsQuestions => tagsQuestions.QuestId == question.QuestId);
                 }
             }
 
-            return View(lastVersions);
+            return View(new ListQuestionsViewModel
+            {
+                QuestionsInfo = lastVersions, 
+                TagsInfo = await FillListQuestionsViewData(ViewData, courseId)
+            });
         }
-
-        public async Task<IActionResult> ListByTag(int id)
+        
+        public async Task<IActionResult> ListQuestionsByTag(int courseId, int tagId)
         {
-            var tagsQuestionsInfo = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions,
-                tagsQuestions => tagsQuestions.TagId == id);
+            if (!await StorageUtils.CheckAccess(context, courseId, User.Identity.Name))
+            {
+                return RedirectToAction("ListCourses");
+            }
+
+            var tagsQuestionsInfo = await DataStorage.GetListByPredicateAsync(context.TagsQuestions,
+                tagsQuestions => tagsQuestions.TagId == tagId);
 
             var questionIdentifiers = tagsQuestionsInfo
                 .Select(tagsQuestions => tagsQuestions.QuestId).ToList();
 
-            var questions = await DataStorage.GetListByPredicateAsync(_context.QuestionsInfo, 
+            var questions = await DataStorage.GetListByPredicateAsync(context.QuestionsInfo,
                 questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId));
 
             foreach (var question in questions)
             {
-                var tagsQuestions = await DataStorage.GetListByPredicateAsync(_context.TagsQuestions,
+                var tagsQuestions = await DataStorage.GetListByPredicateAsync(context.TagsQuestions,
                     tagsQuestions => tagsQuestions.QuestId == question.QuestId);
 
                 foreach (var tagQuestion in tagsQuestions)
                 {
-                    await DataStorage.GetListByPredicateAsync(_context.TagsInfo, 
+                    await DataStorage.GetListByPredicateAsync(context.TagsInfo,
                         tagsInfo => tagsInfo.TagId == tagQuestion.TagId);
                 }
             }
@@ -95,38 +108,92 @@ namespace QuestionStorage.Controllers
             return View(questions);
         }
 
-        public IActionResult AboutQuestion(int id) =>
-            RedirectToAction("Details", "Questions", new {id});
-
         [HttpGet]
-        public async Task<IActionResult> ListTests()
+        public async Task<IActionResult> ListTests(int courseId)
         {
-            var tests = await DataStorage.GetListAsync(_context.QuizzesInfo);
+            if (!await StorageUtils.CheckAccess(context, courseId, User.Identity.Name))
+            {
+                return RedirectToAction("ListCourses");
+            }
+
+            var tests = await DataStorage.GetTypedListByPredicateAndSelectorAsync(context.QuizzesInfo,
+                quizzesInfo => quizzesInfo.CourseId == courseId,
+                quizzesInfo => quizzesInfo);
 
             return View(tests);
         }
 
-        public IActionResult AboutTest(int id) =>
-            RedirectToAction("Details", "Quizzes", new {id});
-
-        private async Task FillListQuestionsViewData(ViewDataDictionary viewData)
+        [HttpGet]
+        public async Task<IActionResult> ListCourses()
         {
-            viewData["Tags"] = await DataStorage.GetHashSetAsync(_context.TagsInfo);
-            viewData["MetaTags"] = await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(
-                _context.TagsInfo,
-                tagsInfo => tagsInfo.IsMetaTag == true,
-                tagsInfo => tagsInfo.TagId);
+            var userId = await StorageUtils.GetUserId(context, User.Identity.Name);
+
+            var userCoursesIdentifiers = await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(
+                context.UsersCourses,
+                usersCourses => usersCourses.UserId == userId,
+                usersCourses => usersCourses.CourseId);
+
+            if (userCoursesIdentifiers.Count == 1)
+            {
+                return RedirectToAction("Details", "Courses", new {courseId = userCoursesIdentifiers.Max()});
+            }
+
+            var courses = await DataStorage.GetListByPredicateAsync(context.CoursesInfo,
+                coursesInfo => userCoursesIdentifiers.Contains(coursesInfo.CourseId));
+
+            return View(courses);
         }
+
+        public async Task<IActionResult> AboutQuestion(int courseId, int questionId)
+        {
+            if (!await StorageUtils.CheckAccess(context, courseId, User.Identity.Name))
+            {
+                return RedirectToAction("ListCourses");
+            }
+
+            return RedirectToAction("Details", "Questions", new {courseId, questionId});
+        }
+
+
+        public async Task<IActionResult> AboutTest(int id)
+        {
+            if (!await CheckAccessByQuiz(id))
+            {
+                return RedirectToAction("ListCourses");
+            }
+
+            return RedirectToAction("Details", "Quizzes", new {id});
+        }
+
+        private async Task<HashSet<TagsInfo>> FillListQuestionsViewData(ViewDataDictionary viewData, int id) =>
+            await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(context.TagsInfo,
+                tagsInfo => tagsInfo.CourseId == id,
+                tagsInfo => tagsInfo);
 
         private HashSet<int> GetQuestionIdsWithoutTags()
         {
             var questionIdentifiers = DataStorage.GetTypedHashSetBySelector(
-                _context.QuestionsInfo, questionsInfo => questionsInfo.QuestId);
+                context.QuestionsInfo, questionsInfo => questionsInfo.QuestId);
 
             questionIdentifiers.ExceptWith(DataStorage.GetTypedHashSetBySelector(
-                _context.TagsQuestions, tagsQuestions => tagsQuestions.QuestId));
+                context.TagsQuestions, tagsQuestions => tagsQuestions.QuestId));
 
             return questionIdentifiers;
+        }
+
+        private async Task<bool> CheckAccessByQuiz(int questionId)
+        {
+            var userId = await StorageUtils.GetUserId(context, User.Identity.Name);
+
+            var quiz = await DataStorage.GetByPredicateAsync(context.QuizzesInfo,
+                quizzesInfo => quizzesInfo.QuizId == questionId);
+
+            var userCoursesIdentifiers = await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(
+                context.UsersCourses,
+                usersCourses => usersCourses.UserId == userId,
+                usersCourses => usersCourses.CourseId);
+
+            return userCoursesIdentifiers.Contains(quiz.CourseId);
         }
     }
 }
