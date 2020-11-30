@@ -58,8 +58,9 @@ namespace QuestionStorage
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                app.UseDeveloperExceptionPage();
+                // app.UseExceptionHandler("/Home/Error");
+                // app.UseHsts();
             }
             
             app.UseHttpsRedirection();
@@ -76,6 +77,14 @@ namespace QuestionStorage
                 endpoints.MapControllerRoute(
                     name: "display",
                     pattern: "{controller=Display}/{action=ListQuestions}/{courseId?}");
+                
+                endpoints.MapControllerRoute(
+                    name: "displayWithTags",
+                    pattern: "{controller=Display}/{action=ListQuestions}/{courseId}/{tags?}");
+                
+                endpoints.MapControllerRoute(
+                    name: "displayGenerated",
+                    pattern: "{controller=Display}/{action=ListQuestions}/{courseId}/{questions?}");
                 
                 endpoints.MapControllerRoute(
                     name: "quiz",

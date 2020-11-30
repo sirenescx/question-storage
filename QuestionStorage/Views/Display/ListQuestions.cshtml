@@ -2,15 +2,9 @@
 
 @{
     ViewData["Title"] = "Questions";
-    var tagList = new SelectList(Model.TagsInfo.Select(t => new {Value = t.TagId, Text = t.Name}),
+    var tagSelectList = new SelectList(Model.TagsInfo.Select(
+        t => new {Value = t.TagId, Text = t.Name}).Append(new {Value = 1, Text = "Template"}),
         "Value", "Text");
-    var htmlTags = new HashSet<string>
-    {
-        "<pre",
-        "<pre>",
-        "<span",
-        "<span>"
-    };
 }
 
 <!DOCTYPE html>
@@ -34,9 +28,9 @@
 {
     <div>
         <div class="t">
-            @Html.DropDownList("Tags", tagList, new {id = "test", multiple = "multiple"})
+            @Html.DropDownList("Tags", tagSelectList, new {id = "tags", multiple = "multiple"})
         </div>
-        <button type="submit" style="margin-left: -5px;" class="submit search t">Search</button>
+        <button type="submit" style="margin-left: -5px; margin-top: -1px" class="submit search t">Search</button>
     </div>
 
     <br/>
@@ -74,7 +68,7 @@
 @section Scripts {
     <script>
     $(function() {
-        $('#test').select2({
+        $('#tags').select2({
         width : "100%"
         });
     });

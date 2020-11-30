@@ -36,7 +36,7 @@
 
 <body>
 @using (Html.BeginForm("Create", "Questions", FormMethod.Post))
-{
+{                                                                                     
     @Html.AntiForgeryToken()
     @Html.ValidationSummary("Please provide the details below and then click submit.",
         new {@class = "text-danger"})
@@ -111,6 +111,12 @@
         tags: true,
         });
     });
+    </script>
+    
+    <script>
+    function pasteFromClipboard(text) {
+        document.getElementById('QuestionText').textContent = text;
+    }
     </script>
 
     <script>

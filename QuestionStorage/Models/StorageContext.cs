@@ -25,6 +25,7 @@ namespace QuestionStorage.Models
         public virtual DbSet<QuestionsInfo> QuestionsInfo { get; set; }
         public virtual DbSet<QuizzesInfo> QuizzesInfo { get; set; }
         public virtual DbSet<QuizzesInfoQuestionsInfo> QuizzesInfoQuestionsInfo { get; set; }
+        
         public virtual DbSet<QuizzesInfoQuestionsInfoQuestionAnswerVariants> QuizzesInfoQuestionsInfoQuestionAnswerVariants { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<TagsInfo> TagsInfo { get; set; }
@@ -110,7 +111,8 @@ namespace QuestionStorage.Models
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Name).HasMaxLength(64);
+                entity.Property(e => e.Name)
+                    .HasMaxLength(64);
             });
 
             modelBuilder.Entity<QuizzesInfoQuestionsInfo>(entity =>

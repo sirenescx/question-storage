@@ -8,14 +8,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Primitives;
 using QuestionStorage.Models;
 using QuestionStorage.Models.Questions;
-using SendGrid;
+using SendGrid.Helpers.Mail;
 using TextCopy;
 
 namespace QuestionStorage.Utils
@@ -43,13 +41,13 @@ namespace QuestionStorage.Utils
 
             return compressedValues.ToArray();
         }
-        
+
         internal static async Task SaveToDatabase<T>(StorageContext context, T item)
         {
             await context.AddAsync(item);
             await context.SaveChangesAsync();
         }
-        
+
         private static string GetHashStringFromByteArray(byte[] hash)
         {
             var hashString = new StringBuilder();
@@ -106,7 +104,8 @@ namespace QuestionStorage.Utils
             int.Parse(Random.StringFromRegex(
                 "([1-8][0-9]{6}|9[0-8][0-9]{5}|99[0-8][0-9]{4}|999[0-8][0-9]{3}|9999[0-8][0-9]{2}|99999[0-8][0-9]|999999[0-9]|10000000)"));
 
-        internal static string CreateStringArrayFromResponseOptions(IEnumerable<QuestionAnswerVariants> responseOptions) =>
+        internal static string
+            CreateStringArrayFromResponseOptions(IEnumerable<QuestionAnswerVariants> responseOptions) =>
             responseOptions.Aggregate(
                 "new [] {",
                 (current, ro) => current + $"$\"{{{ro.Answer.Trim('$')}}}\", ") + "}";
@@ -182,10 +181,10 @@ namespace QuestionStorage.Utils
             var clipboard = new Clipboard();
             clipboard.SetText($"{email}\n{password}");
         }
-        
-        internal static async Task<int> GetUserId(StorageContext context, string email) => 
+
+        internal static async Task<int> GetUserId(StorageContext context, string email) =>
             (await DataStorage.GetByPredicateAsync(context.Users,
-            user => user.Email.Equals(email))).Id;
+                user => user.Email.Equals(email))).Id;
 
         internal static async Task<bool> CheckAccess(StorageContext context, int courseId, string userName)
         {
@@ -197,6 +196,49 @@ namespace QuestionStorage.Utils
                 usersCourses => usersCourses.CourseId);
 
             return userCoursesIdentifiers.Contains(courseId);
+        }
+        
+        internal static async Task<int> GetQuestionsCountForCourse(StorageContext context, int courseId)
+        {
+            var questions = await DataStorage.GetTypedListByPredicateAndSelectorAsync(context.QuestionsInfo,
+                questionsInfo => questionsInfo.CourseId == courseId,
+                questionsInfo => questionsInfo);
+
+            var lastVersions =
+                questions
+                    .GroupBy(question => question.SourceQuestId)
+                    .Select(versions => versions.OrderBy(version => version.VersionId)
+                        .Last()).ToList();
+
+            return lastVersions.Count;
+        }
+
+        private static readonly HashSet<char> Delimiters = new HashSet<char>
+        {
+            '}', '{'
+        };
+
+        private static string ReplaceDelimiters(string s)
+        {
+            return Delimiters.Aggregate(s, (current, delimiter) => current
+                .Replace(delimiter.ToString(), $@"\{delimiter}"));
+        }
+
+        private static int GetFirstNotWhitespaceIndex(string s)
+        {
+            var indexOfFirstNotWhitespace = 0;
+            for (var i = 0; i < s.Length; ++i)
+            {
+                if (s[i] == ' ')
+                {
+                    continue;
+                }
+
+                indexOfFirstNotWhitespace = i;
+                break;
+            }
+
+            return indexOfFirstNotWhitespace;
         }
     }
 }

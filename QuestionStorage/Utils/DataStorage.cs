@@ -70,6 +70,10 @@ namespace QuestionStorage.Utils
         internal static async Task<T> GetByPredicateAsync<T>(DbSet<T> dbSet,
             Expression<Func<T, bool>> predicate) where T : class =>
             await dbSet.FirstOrDefaultAsync(predicate);
+        
+        internal static async Task<bool> CheckByPredicateAsync<T>(DbSet<T> dbSet,
+            Expression<Func<T, bool>> predicate) where T : class =>
+            await dbSet.AnyAsync(predicate);
 
         internal static async Task<int> GetIdAsync<T>(DbSet<T> dbSet, Expression<Func<T, int>> selector)
             where T : class =>

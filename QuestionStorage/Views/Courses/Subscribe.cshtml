@@ -1,0 +1,45 @@
+@using QuestionStorage.Models.Users
+@model User
+
+@{
+    ViewBag.Title = "Subscribe";
+    HashSet<User> users = ViewBag.Users;
+    var userList = new SelectList(users.Select(u => new {Value = $"{u.Id}", Text = u.Email}),
+        "Value", "Text");
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Subscribe users</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <link rel="contents" href="/lib/resources/answer-open.xml">
+</head>
+<body>
+@using (Html.BeginForm("Subscribe", "Courses", FormMethod.Post))
+{
+    <h1>Subscribe users</h1>
+
+    <div>
+    @Html.DropDownListFor(model => model.Email, userList,
+        new {@class = "select", id = "userSelector"})
+    </div>
+    
+    <br/>
+    <input type="submit" class="submit" value="Subscribe"/>
+}
+</body>
+
+@section Scripts {
+    <script>
+    $(function() {
+        $('#userSelector').select2({
+        width : "100%",
+        tags: true,
+        });
+    });
+    </script>
+}
+
+

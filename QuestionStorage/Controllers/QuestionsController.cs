@@ -37,7 +37,7 @@ namespace QuestionStorage.Controllers
             this.context = context;
             this.environment = environment;
         }
-        
+
         [HttpGet]
         public ActionResult Index()
         {
@@ -54,10 +54,15 @@ namespace QuestionStorage.Controllers
 
             var question = await DataStorage.GetByPredicateAsync(
                 context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == questionId);
-
+            
             if (question == null)
             {
                 return ErrorPage(404);
+            }
+
+            if (question.CourseId != courseId)
+            {
+                return RedirectToAction("ListCourses", "Display");
             }
 
             await DataStorage.GetListByPredicateAsync(context.QuestionAnswerVariants,
@@ -75,9 +80,13 @@ namespace QuestionStorage.Controllers
                     tagsInfo => tagsInfo.TagId == tagQuestion.TagId);
             }
 
+            var (text, code) = SplitTextAndCode(question.QuestionText);
+            ViewData["Text"] = text;
+            ViewData["Code"] = $"<pre>{code}</pre>";
+
             return View(question);
         }
-        
+
         [HttpGet]
         public async Task<ActionResult> Create(int courseId)
         {
@@ -96,7 +105,7 @@ namespace QuestionStorage.Controllers
             try
             {
                 var question = await CreateQuestion(courseId, collection);
-                return RedirectToAction("Details", 
+                return RedirectToAction("Details",
                     new {courseId = question.CourseId, questionId = question.QuestId});
             }
             catch
@@ -131,7 +140,7 @@ namespace QuestionStorage.Controllers
 
                 var newQuestion = await QuestionExtensions.CreateQuestion(context,
                     collection["QuestionName"], collection["QuestionText"],
-                    typeName, await StorageUtils.GetUserId(context, User.Identity.Name), 
+                    typeName, await StorageUtils.GetUserId(context, User.Identity.Name),
                     question.CourseId, await GetVersion(sourceQuestionId), sourceQuestionId);
 
                 await StorageUtils.SaveToDatabase(context, newQuestion);
@@ -142,7 +151,7 @@ namespace QuestionStorage.Controllers
                     collection["AnswerOption.Answer"].ToArray(),
                     collection["Correct"].ToArray());
 
-                return RedirectToAction("Details", 
+                return RedirectToAction("Details",
                     new {questionId = newQuestion.QuestId, courseId = newQuestion.CourseId});
             }
             catch
@@ -167,7 +176,7 @@ namespace QuestionStorage.Controllers
         {
             try
             {
-                return RedirectToAction("Details", 
+                return RedirectToAction("Details",
                     new {questionId = (await CreateQuestion(courseId, collection)).QuestId, courseId});
             }
             catch
@@ -176,28 +185,28 @@ namespace QuestionStorage.Controllers
             }
         }
 
-        public async Task<IActionResult> ExportToXml(int id)
+        public async Task<IActionResult> ExportToXml(int questionId)
         {
             var question = await DataStorage.GetByPredicateAsync(
-                context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == id);
+                context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == questionId);
 
             if (question.QuestionXml != null)
             {
                 return File(Encoding.UTF8.GetBytes(question.QuestionXml),
-                    "application/xml", $"question{id}.xml");
+                    "application/xml", $"question{questionId}.xml");
             }
 
             var responseOptions = await DataStorage.GetListByPredicateAsync(context.QuestionAnswerVariants,
-                questionAnswerVariants => questionAnswerVariants.QuestId == id);
+                questionAnswerVariants => questionAnswerVariants.QuestId == questionId);
 
             var document = XmlGenerator.ExportToXml(question, responseOptions, environment);
 
             return File(Encoding.UTF8.GetBytes(document.OuterXml),
-                "application/xml", $"question{id}.xml");
+                "application/xml", $"question{questionId}.xml");
         }
 
-        public IActionResult Display(int id) =>
-            RedirectToAction("ListQuestionsByTag", "Display", new {id});
+        public IActionResult Display(int courseId, int tagId) =>
+            RedirectToAction("ListQuestionsByTag", "Display", new {courseId, tagId});
 
         [HttpGet]
         public async Task<IActionResult> Export(int courseId)
@@ -214,14 +223,15 @@ namespace QuestionStorage.Controllers
             return View();
         }
 
+        //TODO
         [HttpPost]
         public async Task<IActionResult> Export(int courseId, IFormCollection collection)
         {
             ModelState.Clear();
-            
+
             ViewData["Tags"] = await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(context.TagsInfo,
-            tagsInfo => tagsInfo.CourseId == courseId,
-            tagsInfo => tagsInfo);
+                tagsInfo => tagsInfo.CourseId == courseId,
+                tagsInfo => tagsInfo);
 
             if (!collection["Tags"].Any())
             {
@@ -258,6 +268,8 @@ namespace QuestionStorage.Controllers
                 "application/xml", "questions.xml");
         }
 
+
+        //TODO
         [HttpGet]
         public IActionResult Import(int courseId)
         {
@@ -272,29 +284,30 @@ namespace QuestionStorage.Controllers
                 ModelState.AddModelError("File", "XML file is required.");
                 return View("Import");
             }
-            
+
             try
             {
                 var xmlData = await file.ReadAsStringAsync();
                 var document = new XmlDocument();
                 document.LoadXml(xmlData);
-            
-                var type = new StringValues(TypesExtensions.GetTypeIdFromFullName(XmlGenerator.FindQuestionType(document)));
-            
+
+                var type = new StringValues(
+                    TypesExtensions.GetTypeIdFromFullName(XmlGenerator.FindQuestionType(document)));
+
                 var question = await QuestionExtensions.CreateQuestion(context,
                     XmlGenerator.GetElementTextFromXml(document, "questiontext"), type,
-                    XmlGenerator.GetElementTextFromXml(document, "name"), 
+                    XmlGenerator.GetElementTextFromXml(document, "name"),
                     await StorageUtils.GetUserId(context, User.Identity.Name), new StringValues(), courseId, xmlData);
-            
+
                 await StorageUtils.SaveToDatabase(context, question);
-            
+
                 if (question.TypeId != 4)
                 {
                     var (responseOptions, correct) = XmlGenerator.GetResponseInfo(document);
                     await AddResponseOptions(TypesExtensions.GetTypeId(type), question.QuestId, responseOptions,
                         correct);
                 }
-            
+
                 return RedirectToAction("Details", new {courseId, questionId = question.QuestId});
             }
             catch (XmlException ex)
@@ -305,7 +318,7 @@ namespace QuestionStorage.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Generate(int questionId)
+        public async Task<IActionResult> Generate(int questionId, int courseId)
         {
             var question = await DataStorage.GetByPredicateAsync(
                 context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == questionId);
@@ -388,10 +401,9 @@ namespace QuestionStorage.Controllers
 
             for (var i = 0; i < amount; ++i)
             {
-                //TODO: Change i + 1 to template questions count + 1
                 var question = await QuestionExtensions.CreateQuestion(context,
                     questionTexts[i], TypesExtensions.GetShortTypeName(template.TypeId),
-                    $"{template.QuestionName}#{i + 1}",
+                    $"{i + 1}",
                     await StorageUtils.GetUserId(context, User.Identity.Name),
                     new StringValues("off"), courseId);
 
@@ -403,7 +415,8 @@ namespace QuestionStorage.Controllers
                 questionIdentifiers.Add(question.QuestId);
             }
 
-            return RedirectToAction("Display", new { });
+            return RedirectToAction("List", "Display",
+                new {courseId, questions = string.Join('&', questionIdentifiers)});
         }
 
         private async Task AddResponseOption(int questionId, string text, bool isCorrect = true) =>
@@ -488,7 +501,7 @@ namespace QuestionStorage.Controllers
             {
                 return null;
             }
-            
+
             var questionIdentifiersHelper = new HashSet<int>();
 
             while (questionsAmount != questionIdentifiersHelper.Count)
@@ -550,10 +563,10 @@ namespace QuestionStorage.Controllers
             QuestionsInfo question = null,
             bool isCreating = true)
         {
-            if (question != null && question.IsTemplate)
-            {
-                await StorageUtils.SaveToDatabase(context, new TagsQuestions {TagId = 1, QuestId = questionId});
-            }
+            // if (question != null && question.IsTemplate)
+            // {
+            //     await StorageUtils.SaveToDatabase(context, new TagsQuestions {TagId = 1, QuestId = questionId});
+            // }
 
             foreach (var tagInfo in tags)
             {
@@ -577,6 +590,36 @@ namespace QuestionStorage.Controllers
                     await CreateNewTag(tagInfo, questionId, courseId);
                 }
             }
+        }
+
+        private static (List<string>, string) SplitTextAndCode(string questionText)
+        {
+            var codeStartIndex = questionText.IndexOf(CodeOpeningTag, StringComparison.Ordinal);
+            var codeEndIndex = questionText.IndexOf(CodeClosingTag, StringComparison.Ordinal);
+            
+            if (codeStartIndex == -1 || codeEndIndex == -1)
+            {
+                return (new List<string> {questionText}, null);
+            }
+            
+            var task = new List<string> {questionText.Substring(0, codeStartIndex)};
+            var code = questionText.Substring(codeStartIndex, codeEndIndex - codeStartIndex + CodeClosingTag.Length);
+            task.Add(questionText.Substring(codeEndIndex + CodeClosingTag.Length));
+
+            return (task, code);
+        }
+
+        private const string CodeOpeningTag = "<code>";
+        private const string CodeClosingTag = "</code>";
+
+        public async Task<IActionResult> AddComment(int courseId, int questionId, IFormCollection collection)
+        {
+            var question = await DataStorage.GetByPredicateAsync(
+                context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == questionId);
+            question.Comment = collection["Comment"];
+            await context.SaveChangesAsync();
+            
+            return RedirectToAction("Details", new {courseId, questionId});
         }
     }
 }

@@ -1,0 +1,42 @@
+@model QuestionStorage.Models.ViewModels.ListQuestionsViewModel
+
+@{
+    ViewData["Title"] = "Generated questions";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Generated questions</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+</head>
+
+<body>
+<h1>Generated questions</h1>
+<br/>
+
+@foreach (var item in Model.QuestionsInfo)
+{
+    <div>
+        <a asp-action="AboutQuestion" asp-route-questionId="@item.QuestId" asp-route-courseId="@item.CourseId">#@item.QuestId. @item.QuestionName</a>
+        <div class="less-bottom-space">
+            @{
+                var previewData = item.QuestionText.Split().Take(20);
+                        
+                var preview = string.Join(' ', previewData);
+            }
+                    
+            <pre class="pre smaller-text">@preview...</pre>
+        </div>
+        @foreach (var tag in item.TagsQuestions)
+        {
+            <a class="tag-button"
+               href='@Url.Action("ListQuestionsByTag", "Display", new {courseId = tag.Tag.CourseId, tagId = tag.Tag.TagId})'>
+                <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
+            </a>
+        }
+    </div>
+    <br/>
+}
+</body>
+</html>

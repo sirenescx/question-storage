@@ -15,7 +15,7 @@ namespace QuestionStorage.Models.Questions
             QuizzesInfoQuestionsInfo = new HashSet<QuizzesInfoQuestionsInfo>();
             TagsQuestions = new HashSet<TagsQuestions>();
         }
-
+        
         public int QuestId { get; set; }
         public int TypeId { get; set; }
         [Required(ErrorMessage = "Question title is required.")]
@@ -31,6 +31,7 @@ namespace QuestionStorage.Models.Questions
         public int SourceQuestId { get; set; }
         public int AuthorId { get; set; }
         public int CourseId { get; set; }
+        public string Comment { get; set; }
         [ForeignKey(nameof(TypeId))]
         [InverseProperty(nameof(TypesInfo.QuestionsInfo))]
         public virtual TypesInfo Type { get; set; }

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using QuestionStorage.Models;
+using QuestionStorage.Models.Questions;
 using QuestionStorage.Models.Tags;
 using QuestionStorage.Models.ViewModels;
 using QuestionStorage.Utils;
@@ -25,35 +26,97 @@ namespace QuestionStorage.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> ListQuestions(int courseId)
+        public async Task<IActionResult> List(int courseId, string questions)
         {
             if (!await StorageUtils.CheckAccess(context, courseId, User.Identity.Name))
             {
                 return RedirectToAction("ListCourses");
             }
 
-            return View(new ListQuestionsViewModel {TagsInfo = await FillListQuestionsViewData(ViewData, courseId)});
+            if (string.IsNullOrEmpty(questions))
+            {
+                return View();
+            }
+            
+            var questionIdentifiers = new HashSet<int>(Array.ConvertAll(questions.Split('&'), int.Parse));
+            
+            var tagsQuestions = await DataStorage.GetListByPredicateAsync(context.TagsQuestions,
+                tagsQuestions => questionIdentifiers.Contains(tagsQuestions.QuestId));
+            
+            var questionsList = await DataStorage.GetTypedListByPredicateAndSelectorAsync(context.QuestionsInfo,
+                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId) &&
+                                 questionsInfo.CourseId == courseId,
+                questionsInfo => questionsInfo);
+
+            var tagIdentifiers = tagsQuestions.Select(tagsQuestions => tagsQuestions.TagId).ToHashSet();
+            
+            if (tagIdentifiers.Any())
+            {
+                foreach (var question in questionsList)
+                {
+                    await DataStorage.GetListByPredicateAsync(context.TagsQuestions,
+                        tagsQuestions => tagsQuestions.QuestId == question.QuestId);
+                }
+            }
+            
+            return View(new ListQuestionsViewModel
+            {
+                QuestionsInfo = questionsList,
+                TagsInfo = await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(context.TagsInfo,
+                    tagsInfo => tagIdentifiers.Contains(tagsInfo.TagId),
+                    tagsInfo => tagsInfo)
+            });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ListQuestions(int courseId, IFormCollection collection)
+        [HttpGet]
+        public async Task<ActionResult> ListQuestions(int courseId, string tags)
         {
-            var tagIdentifiers = collection["Tags"]
-                .Select(int.Parse)
-                .ToHashSet();
+            if (!await StorageUtils.CheckAccess(context, courseId, User.Identity.Name))
+            {
+                return RedirectToAction("ListCourses");
+            }
+            
+            var lastVersions = new List<QuestionsInfo>();
+
+            if (tags is null)
+            {
+                lastVersions =
+                    (await DataStorage.GetTypedListByPredicateAndSelectorAsync(context.QuestionsInfo,
+                        questionsInfo => questionsInfo.CourseId == courseId,
+                        questionsInfo => questionsInfo))
+                        .GroupBy(question => question.SourceQuestId)
+                        .Select(versions => versions.OrderBy(version => version.VersionId)
+                            .LastOrDefault()).ToList();
+                
+                foreach (var question in lastVersions)
+                {
+                    await DataStorage.GetListByPredicateAsync(context.TagsQuestions,
+                        tagsQuestions => tagsQuestions.QuestId == question.QuestId);
+                }
+                
+                
+                return View(new ListQuestionsViewModel
+                {
+                    QuestionsInfo = lastVersions,
+                    TagsInfo = await GetAllTags(courseId)
+                });
+            }
+
+            var tagIdentifiers = new HashSet<int>(Array.ConvertAll(tags.Split('&'), int.Parse));
 
             var tagsQuestions = await DataStorage.GetListByPredicateAsync(context.TagsQuestions,
                 tagsQuestions => tagIdentifiers.Contains(tagsQuestions.TagId));
 
-            var questionIdentifiers = !tagIdentifiers.Any()
+            var questionIdentifiers = tagIdentifiers.Contains(0)
                 ? GetQuestionIdsWithoutTags()
                 : tagsQuestions.Select(tq => tq.QuestId).ToHashSet();
 
             var questions = await DataStorage.GetTypedListByPredicateAndSelectorAsync(context.QuestionsInfo,
-                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId),
+                questionsInfo => questionIdentifiers.Contains(questionsInfo.QuestId) &&
+                                 questionsInfo.CourseId == courseId,
                 questionsInfo => questionsInfo);
 
-            var lastVersions =
+            lastVersions =
                 questions
                     .GroupBy(question => question.SourceQuestId)
                     .Select(versions => versions.OrderBy(version => version.VersionId)
@@ -70,9 +133,20 @@ namespace QuestionStorage.Controllers
 
             return View(new ListQuestionsViewModel
             {
-                QuestionsInfo = lastVersions, 
-                TagsInfo = await FillListQuestionsViewData(ViewData, courseId)
+                QuestionsInfo = lastVersions,
+                TagsInfo = await GetAllTags(courseId)
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListQuestions(int courseId, IFormCollection collection)
+        {
+            var tagIdentifiers = collection["Tags"]
+                .Select(int.Parse)
+                .ToHashSet();
+
+            return RedirectToAction("ListQuestions", 
+                new {courseId, tags = tagIdentifiers.Any() ? string.Join('&', tagIdentifiers) : 0.ToString()});
         }
         
         public async Task<IActionResult> ListQuestionsByTag(int courseId, int tagId)
@@ -140,10 +214,20 @@ namespace QuestionStorage.Controllers
 
             var courses = await DataStorage.GetListByPredicateAsync(context.CoursesInfo,
                 coursesInfo => userCoursesIdentifiers.Contains(coursesInfo.CourseId));
+            
+            var questionsCount = new List<int>();
+
+            foreach (var course in courses)
+            {
+                questionsCount.Add(await StorageUtils.GetQuestionsCountForCourse(context, course.CourseId));
+            }
+            
+            ViewData["QuestionsCount"] = questionsCount;
 
             return View(courses);
         }
 
+        [HttpGet]
         public async Task<IActionResult> AboutQuestion(int courseId, int questionId)
         {
             if (!await StorageUtils.CheckAccess(context, courseId, User.Identity.Name))
@@ -154,7 +238,7 @@ namespace QuestionStorage.Controllers
             return RedirectToAction("Details", "Questions", new {courseId, questionId});
         }
 
-
+        [HttpGet]
         public async Task<IActionResult> AboutTest(int id)
         {
             if (!await CheckAccessByQuiz(id))
@@ -165,7 +249,7 @@ namespace QuestionStorage.Controllers
             return RedirectToAction("Details", "Quizzes", new {id});
         }
 
-        private async Task<HashSet<TagsInfo>> FillListQuestionsViewData(ViewDataDictionary viewData, int id) =>
+        private async Task<HashSet<TagsInfo>> GetAllTags(int id) =>
             await DataStorage.GetTypedHashSetByPredicateAndSelectorAsync(context.TagsInfo,
                 tagsInfo => tagsInfo.CourseId == id,
                 tagsInfo => tagsInfo);

@@ -2,17 +2,24 @@
 
 @{
     ViewData["Title"] = "Details";
+    List<string> task = ViewBag.Text;
+    string code = ViewBag.Code;
 }
 
+@* ReSharper disable Html.IdDuplication *@
 <!DOCTYPE html>
 <html lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
     <title>Details</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
 </head>
 
-<body>
+<body onload="replaceNewLineWithBr()">
 <div>
     <h3 class="page-header">#@Html.DisplayFor(model => model.QuestId)</h3>
     @if (Model.VersionId != Model.QuestId)
@@ -22,8 +29,23 @@
     <p>
         <b>@Model.QuestionName</b>
     </p>
-    <p><pre class="pre">@Html.Raw(Model.QuestionText)</pre>
-
+    
+    @if (task != null)
+    {
+        @if (!string.IsNullOrEmpty(task[0]))
+        {
+            <div id="questionText">@task[0]</div>
+        }
+        @if (!string.IsNullOrWhiteSpace(code))
+        {
+            @Html.Raw(code)
+        }
+        @if (task.Count > 1 && !string.IsNullOrWhiteSpace(task[1]))
+        {
+            <div id="questionText">@task[1]</div>
+        }
+    }
+    
     @if (Model.TypeId != 3)
     {
         @foreach (var answer in Model.QuestionAnswerVariants)
@@ -66,27 +88,61 @@
     <p>
         <b class="content-header">Tags</b>
     </p>
+
     @foreach (var tag in Model.TagsQuestions)
     {
         @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
-            new {id = tag.Tag.TagId}, new {@class = "tag-button"})
+            new {courseId = Model.CourseId, tagId = tag.Tag.TagId}, new {@class = "tag-button"})
     }
 </div>
+
+@if (!string.IsNullOrWhiteSpace(Model.Comment))
+{
+    <hr/>
+    <p>
+        <b class="content-header less-bottom-space">Comment</b>
+    </p>
+    @Html.DisplayFor(model => model.Comment)
+    <br/>
+}
 
 <br/>
 
 <div>
     <a asp-action="Edit" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Edit</a> |
     <a asp-action="Copy" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Copy</a> |
-    <a asp-action="ListQuestions" asp-controller="Display" asp-route-courseId="@Model.CourseId">Back to List</a> |
-    @* <a asp-action="ExportToPdf" asp-route-id="@Model.QuestId">Export to PDF</a> | *@
-    <a asp-action="ExportToXml" asp-route-id="@Model.QuestId">Export to XML</a> |
+    <a asp-action="ExportToXml" asp-route-questionId="@Model.QuestId">Export to XML</a> |
     @if (Model.IsTemplate)
     {
-        <a asp-action="Generate" asp-route-id="@Model.QuestId">Generate questions</a>
+        <text>|</text>
+        <a asp-action="Generate" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Generate questions</a>
     }
+    <a href="#" id="addComment">Add comment</a>
 </div>
+
+@using (Html.BeginForm("AddComment", "Questions", new {courseId = Model.CourseId, questionId = Model.QuestId}, FormMethod.Post))
+{
+    <hidden id="comment"></hidden>
+    <button id="addCommentButton" class="submit" hidden onclick="location.href='@Url.Action("AddComment", "Questions")'">Add</button>
+}
 </body>
 </html>
 
+@section Scripts {
+    <script>
+    function replaceNewLineWithBr() {
+        document.getElementById("questionText").innerHTML = document.getElementById("questionText").innerHTML.replace(/\n|\r\n|\r/g, '<br/>');
+    }
+    </script>
+    
+    <script>
+    $('#addComment').click(function(){ showCommentTextArea(); return false; });
+    function showCommentTextArea() {
+        document.getElementById("comment").innerHTML = '<br/><textarea class="textarea long" name="Comment"></textarea>';
+        document.getElementById("comment").innerHTML += "<br/>";
+        document.getElementById("addCommentButton").hidden = false;
+        
+    }
+    </script>
+}
 

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Actions";
+
 }
 
 <!DOCTYPE html>
@@ -13,7 +14,9 @@
     <link rel="contents" href="/lib/resources/answer-open.xml">
 </head>
 <body>
-<h1 class="page-header">@Model.CourseName</h1>
+<h1 class="page-header" style="display: inline">@Model.CourseName</h1>
+<h1 style="color:orange; display: inline">[@ViewBag.QuestionsCount]</h1>
+<br/>
 <br/>
 <div style="margin: auto;">
     <table style="border-collapse: separate; border-spacing: 0.7rem 0.7rem">
@@ -81,6 +84,25 @@
                 </div>
             </th>
         </tr>
+        @if (User.IsInRole("administrator")) 
+        {
+            <tr>
+                <th>
+                    <div>
+                        <a class="section-button" style="color: #8076b9;  padding: 75px 25px 75px 25px;"
+                           asp-action="Subscribe"
+                           asp-controller="Courses"
+                           asp-route-courseId="@Model.CourseId">
+                            Subscribe users
+                        </a>
+                    </div>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+            </tr>
+        }
     </table>
 </div>
 </body>
