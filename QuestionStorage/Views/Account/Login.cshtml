@@ -12,21 +12,21 @@
 <body class="gradient">
 @using (Html.BeginForm("Login", "Account", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
-    <div class="div-center">
-        <h2 class="lighter-text">🗝️</h2>
-        <h2 class="lighter-text">Sign In</h2>
-        @Html.ValidationMessageFor(model => model.Email, 
-            string.Empty,new {@class="input-error"})
-        <p>@Html.EditorFor(model => model.Email,
-               new {htmlAttributes = new {@class = "user-data-textarea", placeholder = "Username"}})</p>
-        @Html.ValidationMessageFor(model => model.Password, 
-            string.Empty,new {@class="input-error"})
-        <p>@Html.EditorFor(model => model.Password,
-               new {htmlAttributes = new {@class = "user-data-textarea", placeholder = "Password"}})</p>
-        <br/>
-        <input type="submit" class="user-submit" value="Login"/>
-    </div>
+      @Html.AntiForgeryToken()
+     <div class="div-center">
+         <h2 class="lighter-text">🗝️</h2>
+         <h2 class="lighter-text">Sign In</h2>
+         @Html.ValidationMessageFor(model => model.Email,
+             string.Empty,new {@class="input-error"})
+         <p>@Html.EditorFor(model => model.Email,
+                new {htmlAttributes = new {@class = "user-data-textarea", placeholder = "Username"}})</p>
+         @Html.ValidationMessageFor(model => model.Password,
+             string.Empty,new {@class="input-error"})
+         <p>@Html.EditorFor(model => model.Password,
+                new {htmlAttributes = new {@class = "user-data-textarea", placeholder = "Password"}})</p>
+         <br/>
+         <input type="submit" class="user-submit" value="Login"/>
+     </div>
 }
 </body>
 

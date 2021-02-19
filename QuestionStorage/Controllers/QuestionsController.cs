@@ -51,7 +51,7 @@ namespace QuestionStorage.Controllers
             {
                 return RedirectToAction("ListCourses", "Display");
             }
-
+            
             var question = await DataStorage.GetByPredicateAsync(
                 context.QuestionsInfo, questionsInfo => questionsInfo.QuestId == questionId);
             

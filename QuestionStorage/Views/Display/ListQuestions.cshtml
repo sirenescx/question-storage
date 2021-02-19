@@ -44,10 +44,10 @@
                 <div class="less-bottom-space">
                     @{
                         var previewData = item.QuestionText.Split().Take(20);
-                        
+
                         var preview = string.Join(' ', previewData);
                     }
-                    
+
                     <pre class="pre smaller-text">@preview...</pre>
                 </div>
                 @foreach (var tag in item.TagsQuestions)

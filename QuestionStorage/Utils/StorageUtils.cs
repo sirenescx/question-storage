@@ -13,7 +13,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Primitives;
 using QuestionStorage.Models;
 using QuestionStorage.Models.Questions;
-using SendGrid.Helpers.Mail;
 using TextCopy;
 
 namespace QuestionStorage.Utils

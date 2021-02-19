@@ -6,8 +6,8 @@
 
     var qTypes = new Dictionary<string, string>
     {
-        {"sc", "Single choice"},
         {"mc", "Multiple choice"},
+        {"sc", "Single choice"},
         {"oa", "Open answer"}
     };
 
@@ -67,16 +67,16 @@
         <th>
         <tbody>
         @{
-            for (var i = 0; i <= 1; ++i)
+            for (var i = 0; i <= 4; ++i)
             {
                 <tr>
                     <td>
                         @Html.TextAreaFor(model => model.AnswerOption.Answer, 1, 60,
-                            new {@class = "textarea long"})
+                            new {@class = "textarea long resizable"})
                     </td>
-                    <td style="text-align: center; vertical-align: top">
+                    <td style="text-align: center; vertical-align: center">
                         <input type="hidden" value="off" name="Correct">
-                        <input name="Correct" type="radio" value="on">
+                        <input name="Correct" type="checkbox" value="on">
                     </td>
                     <td>
                     </td>
@@ -87,7 +87,7 @@
 
     <p>
         <button class="button add" id="addResponseOptions" type="button" onclick="addNewRow('answerTable')">
-            Add new response option
+            Add option
         </button>
     </p>
 
@@ -120,10 +120,10 @@
     </script>
 
     <script>
-        let textareas = document.getElementsByTagName('textarea');
-        let count = textareas.length;
+        let textAreas = document.getElementsByTagName('textarea');
+        let count = textAreas.length;
         for (let i = 0; i < count; ++i) {
-            textareas[i].onkeydown = function(e) {
+            textAreas[i].onkeydown = function(e) {
                 if (e.key === 'Tab' || e.code === 'Tab' || e.keyCode === 9) {
                     e.preventDefault();
                     let s = this.selectionStart;

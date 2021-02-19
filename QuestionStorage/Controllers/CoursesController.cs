@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuestionStorage.Models;
 using QuestionStorage.Models.Courses;
 using QuestionStorage.Utils;
@@ -87,7 +88,7 @@ namespace QuestionStorage.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Create(IFormCollection collection)
@@ -101,6 +102,42 @@ namespace QuestionStorage.Controllers
             await context.SaveChangesAsync();
 
             return RedirectToAction("ListCourses", "Display");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "administrator")]
+        public async Task<IActionResult> Delete(int courseId)
+        {
+            var course = await context.CoursesInfo
+                .Where(course => course.CourseId == courseId).FirstOrDefaultAsync();
+
+            context.Remove(course);
+            await context.SaveChangesAsync();
+
+            return RedirectToAction("ListCourses", "Display");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int courseId)
+
+        {
+            var course = await context.CoursesInfo
+                .Where(course => course.CourseId == courseId).FirstOrDefaultAsync();
+            return View(course);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "administrator")]
+        public async Task<IActionResult> Edit(int courseId, IFormCollection collection)
+        {
+            var courseName = collection["CourseName"];
+            var course = await context.CoursesInfo
+                .Where(course => course.CourseId == courseId).FirstOrDefaultAsync();
+
+            course.CourseName = courseName;
+            await context.SaveChangesAsync();
+
+            return RedirectToAction("Edit");
         }
     }
 }

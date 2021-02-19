@@ -10157,7 +10157,7 @@
       "outputPath": "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/maria/.config/NuGet/NuGet.Config"
+        "/Users/maria/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 using QuestionStorage.Models;
 using QuestionStorage.Models.Users;
 using QuestionStorage.Models.ViewModels;
@@ -43,23 +43,25 @@ namespace QuestionStorage.Controllers
 
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            var user = await DataStorage.GetByPredicateAsync(context.Users,
-                user => user.Email.Equals(model.Email) &&
-                        (user.Password.Equals(StorageUtils.GetPasswordHash(model.Password, Encoding.ASCII)) ||
-                         user.Password.Equals(StorageUtils.GetPasswordHash(model.Password, Encoding.Unicode))));
+            
+            var user = await context.Users.FirstAsync(user => user.Email.Equals(model.Email));
 
             if (user != null)
             {
-                await Authenticate(user);
+                if (user.Password.Equals(StorageUtils.GetPasswordHash(model.Password, Encoding.ASCII)) ||
+                    user.Password.Equals(StorageUtils.GetPasswordHash(model.Password, Encoding.Unicode)))
+                {
+                    await Authenticate(user);
 
-                return RedirectToAction("ListCourses", "Display");
+                    return RedirectToAction("ListCourses", "Display");
+                }
             }
 
             ModelState.AddModelError("Email", "Invalid e-mail or password.");

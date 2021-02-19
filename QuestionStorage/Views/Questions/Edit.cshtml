@@ -43,10 +43,10 @@
     </script>
 
     <script>
-    let textareas = document.getElementsByTagName('textarea');
-    let count = textareas.length;
+    let textAreas = document.getElementsByTagName('textarea');
+    let count = textAreas.length;
     for (let i = 0; i < count; ++i) {
-        textareas[i].onkeydown = function(e) {
+        textAreas[i].onkeydown = function(e) {
             if(e.keyCode === 9 || e.which === 9){
                 e.preventDefault();
                 let s = this.selectionStart;

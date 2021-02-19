@@ -6,7 +6,6 @@
 
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <title>Courses</title>
@@ -14,7 +13,7 @@
     <link rel="contents" href="/lib/resources/answer-open.xml">
 </head>
 <body>
-@using (Html.BeginForm("Create", "Courses", FormMethod.Post))
+@using (Html.BeginForm("Create", "Courses", FormMethod.Post, new { SubmitButton = "submitButton", id = "formSubmit" }))
 {
     <h1 class="page-header">Create course</h1>
     <p class="less-bottom-space">Course name*</p>
@@ -22,6 +21,21 @@
         new {@class = "textarea short", id = "courseName"})
     <br/>
     
-    <input type="submit" class="submit" value="Create">
+    <input type="submit" class="submit" id="submitButton" value="Create">
 }
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#formSubmit").keypress(function (e) {
+                const keycode = e.keyCode || e.charCode || e.which; 
+                if (keycode === 13)    
+                {
+                    let submitButton = $(this).attr("SubmitButton");
+                    $("#" + submitButton).click();
+                    return false;
+                }
+            });
+        });
+    </script>
 </body>

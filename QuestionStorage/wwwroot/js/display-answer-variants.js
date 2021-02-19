@@ -43,6 +43,25 @@ function removeElement(elementId) {
     element.parentNode.removeChild(element);
 }
 
+function generateTextAreasCode(choiceCode) {
+    let code = '';
+    for (let i = 0; i < 5; ++i) {
+        code += 
+        '<tr>' +
+            '<td>' +
+                getTextAreaCode(1, '') +
+            '</td>' +
+            '<td style="text-align: center; vertical-align: center">' +
+                choiceCode +
+            '</td>' +
+            '<td>' +
+            '</td>' +
+        '</tr>'
+    }
+
+    return code;
+}
+
 function generateTableCode(choiceCode, element, isNull) {
     if (document.getElementById("correctAnswerLabel") != null) {
         removeElement("correctAnswerLabel");
@@ -56,34 +75,15 @@ function generateTableCode(choiceCode, element, isNull) {
             '<tr>' +
                 '<th style="font-weight: normal">Response options*</th>' +
                 '<th style="font-weight: normal">Correct</th>' +
-                '<th></th>' +
-            '</tr>' +
-            '<tr>' +
-                '<td>' +
-                    getTextAreaCode(1, '') +
-                '</td>' +
-                '<td style="text-align: center; vertical-align: top">' +
-                    choiceCode +
-                '</td>' +
-                '<td>' +
-                '</td>' +
-            '</tr>' +
-            '<tr>' +
-                '<td style="text-align: center; vertical-align: top">' +
-                    getTextAreaCode(1, '') + 
-                '</td>' +
-                '<td style="text-align: center; vertical-align: top">' +
-                    choiceCode +
-                '</td>' +
-                '<td>' +
-                '</td>' +
+                '<th></th>' + 
+                generateTextAreasCode(choiceCode) +
             '</tr>' +
         '</table>';
     
     if (isNull) {
         element.innerHTML += 
             '<p>' +
-                '<button class="button add" id="addResponseOptions" type="button" onclick="addNewRow(\'answerTable\')"> Add new response option </button>' +
+                '<button class="button add" id="addResponseOptions" type="button" onclick="addNewRow(\'answerTable\')">Add option</button>' +
             '</p>';
     }
 }
@@ -102,6 +102,6 @@ function generateCorrectAnswerCode() {
     document.getElementById("answerInfo").innerHTML =
         '<label id="correctAnswerLabel">Correct answer*</label>' +
         '<p>' +
-            getTextAreaCode(2, 'correctAnswer') +
+            getTextAreaCode(3, 'correctAnswer') +
         '</p>';
 }

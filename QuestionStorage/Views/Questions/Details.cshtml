@@ -117,7 +117,10 @@
         <text>|</text>
         <a asp-action="Generate" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Generate questions</a>
     }
-    <a href="#" id="addComment">Add comment</a>
+    @if (User.IsInRole("administrator"))
+    {
+        <a href="#" id="addComment">Add comment</a>
+    }
 </div>
 
 @using (Html.BeginForm("AddComment", "Questions", new {courseId = Model.CourseId, questionId = Model.QuestId}, FormMethod.Post))

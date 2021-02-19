@@ -19,7 +19,10 @@
 {
     <div style="display: flex; align-items: center">
         <h1 class="page-header">Courses</h1>
-        <button class="plus" id="addQuestionId" type="button" style="margin-left: 10px" onclick="location.href='@Url.Action("Create", "Courses")'"></button>
+        @if (User.IsInRole("administrator"))
+        {
+            <button class="plus" id="addQuestionId" type="button" style="margin-left: 10px" onclick="location.href='@Url.Action("Create", "Courses")'"></button>
+        }
     </div>
     
     <br/>

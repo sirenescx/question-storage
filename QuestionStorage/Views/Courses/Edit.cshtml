@@ -1,0 +1,31 @@
+@model QuestionStorage.Models.Courses.CoursesInfo
+
+@{
+    ViewBag.Title = "Settings";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Settings</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
+    <link rel="contents" href="/lib/resources/answer-open.xml">
+</head>
+<body>
+@using (Html.BeginForm("Edit", "Courses", FormMethod.Post, new { SubmitButton = "submitButton", id = "formSubmit" }))
+{
+    <h1 class="page-header">Change course name</h1>
+    @Html.TextAreaFor(model => model.CourseName, 1, 100,
+        new {@class = "textarea short", id = "courseName"})
+    <br/>
+    
+    <input type="submit" class="submit" id="submitButton" value="Save changes">
+    <br/>                                                                   
+    <a class="button remove"
+       asp-action="Delete"
+       asp-controller="Courses"
+       asp-route-courseId="@Model.CourseId">
+        Delete course
+    </a>
+}
+</body>
