@@ -103,13 +103,15 @@ namespace QuestionStorage.Controllers
 
             return RedirectToAction("ListCourses", "Display");
         }
-
-        [HttpGet]
+        
         [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Delete(int courseId)
         {
             var course = await context.CoursesInfo
+                .Include(course => course.UsersCourses)
                 .Where(course => course.CourseId == courseId).FirstOrDefaultAsync();
+            
+            // TODO: 
 
             context.Remove(course);
             await context.SaveChangesAsync();
@@ -118,8 +120,8 @@ namespace QuestionStorage.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Edit(int courseId)
-
         {
             var course = await context.CoursesInfo
                 .Where(course => course.CourseId == courseId).FirstOrDefaultAsync();

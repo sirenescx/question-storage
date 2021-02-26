@@ -25,14 +25,18 @@ namespace QuestionStorage.Models
         public virtual DbSet<QuestionsInfo> QuestionsInfo { get; set; }
         public virtual DbSet<QuizzesInfo> QuizzesInfo { get; set; }
         public virtual DbSet<QuizzesInfoQuestionsInfo> QuizzesInfoQuestionsInfo { get; set; }
-        
-        public virtual DbSet<QuizzesInfoQuestionsInfoQuestionAnswerVariants> QuizzesInfoQuestionsInfoQuestionAnswerVariants { get; set; }
+
+        public virtual DbSet<QuizzesInfoQuestionsInfoQuestionAnswerVariants>
+            QuizzesInfoQuestionsInfoQuestionAnswerVariants { get; set; }
+
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<TagsInfo> TagsInfo { get; set; }
         public virtual DbSet<TagsQuestions> TagsQuestions { get; set; }
         public virtual DbSet<TypesInfo> TypesInfo { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UsersCourses> UsersCourses { get; set; }
+        
+        public virtual DbSet<RestorationTokens> RestorationTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -117,7 +121,7 @@ namespace QuestionStorage.Models
 
             modelBuilder.Entity<QuizzesInfoQuestionsInfo>(entity =>
             {
-                entity.HasKey(e => new { e.QuizId, e.QuestId })
+                entity.HasKey(e => new {e.QuizId, e.QuestId})
                     .HasName("PK_QuizesInfo_QuestionsInfo");
 
                 entity.ToTable("QuizzesInfo_QuestionsInfo");
@@ -143,7 +147,7 @@ namespace QuestionStorage.Models
 
             modelBuilder.Entity<QuizzesInfoQuestionsInfoQuestionAnswerVariants>(entity =>
             {
-                entity.HasKey(e => new { e.QuizId, e.VariantId })
+                entity.HasKey(e => new {e.QuizId, e.VariantId})
                     .HasName("PK_QuizesInfo_QuestionsInfo_QuestionAnswerVariants");
 
                 entity.ToTable("QuizzesInfo_QuestionsInfo_QuestionAnswerVariants");
@@ -164,7 +168,7 @@ namespace QuestionStorage.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_QuizesInfo_QuestionsInfo_QuestionAnswerVariants_QuestionAnswerVariants");
             });
-            
+
             modelBuilder.Entity<TagsInfo>(entity =>
             {
                 entity.HasKey(e => e.TagId);
@@ -191,7 +195,7 @@ namespace QuestionStorage.Models
 
             modelBuilder.Entity<TagsQuestions>(entity =>
             {
-                entity.HasKey(e => new { e.TagId, e.QuestId });
+                entity.HasKey(e => new {e.TagId, e.QuestId});
 
                 entity.ToTable("Tags_Questions");
 
@@ -227,14 +231,11 @@ namespace QuestionStorage.Models
                     .HasMaxLength(64);
             });
 
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-            });
+            modelBuilder.Entity<User>(entity => { entity.Property(e => e.Id).ValueGeneratedNever(); });
 
             modelBuilder.Entity<UsersCourses>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.CourseId });
+                entity.HasKey(e => new {e.UserId, e.CourseId});
 
                 entity.ToTable("Users_Courses");
 
@@ -245,15 +246,30 @@ namespace QuestionStorage.Models
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.UsersCourses)
                     .HasForeignKey(d => d.CourseId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Courses_Courses");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UsersCourses)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Users_Users");
             });
+
+            modelBuilder.Entity<RestorationTokens>(entity =>
+                {
+                    entity.HasKey(e => e.Id).
+                        HasName("PK__Restorat__3214EC0784C0132D");
+
+                    entity.ToTable("RestorationTokens");
+
+                    entity.Property(e => e.Id)
+                        .ValueGeneratedOnAdd();
+                    
+                    entity.Property(e => e.Expired)
+                        .ValueGeneratedOnAdd();
+                }
+            );
         }
     }
 }

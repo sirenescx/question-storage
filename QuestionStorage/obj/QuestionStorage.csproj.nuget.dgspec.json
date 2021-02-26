@@ -1,29 +1,34 @@
 {
   "format": 1,
   "restore": {
-    "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj": {}
+    "/Users/mmanakhova/Desktop/UNI/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj": {}
   },
   "projects": {
-    "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj": {
+    "/Users/mmanakhova/Desktop/UNI/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj",
+        "projectUniqueName": "/Users/mmanakhova/Desktop/UNI/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj",
         "projectName": "QuestionStorage",
-        "projectPath": "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj",
-        "packagesPath": "/Users/maria/.nuget/packages/",
-        "outputPath": "/Users/maria/Documents/University/coursework/QuestionStorage/QuestionStorage/obj/",
+        "projectPath": "/Users/mmanakhova/Desktop/UNI/coursework/QuestionStorage/QuestionStorage/QuestionStorage.csproj",
+        "packagesPath": "/Users/mmanakhova/.nuget/packages/",
+        "outputPath": "/Users/mmanakhova/Desktop/UNI/coursework/QuestionStorage/QuestionStorage/obj/",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "/Users/maria/.nuget/NuGet/NuGet.Config"
+          "/Users/mmanakhova/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.ozon.ru/nuget": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -35,6 +40,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Fare": {
               "target": "Package",
@@ -105,6 +111,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.8, 3.1.8]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -113,7 +125,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.302/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
         }
       }
     }

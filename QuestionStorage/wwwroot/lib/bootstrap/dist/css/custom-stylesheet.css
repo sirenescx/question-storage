@@ -14,6 +14,24 @@ button.add {
     background-color: #ff7700;
 }
 
+a.btn {
+    background-color: #ff7700;
+    height: calc(1.5em + 0.75rem + 1px);
+    border-radius: 7px;
+    border: none;
+    outline: none;
+    color: white;
+}
+
+a.btn:hover {
+    background-color: #fd6111;
+    color: white;
+}
+
+a.btn:focus {
+    outline: none;
+}
+
 button.add:hover {
     background-color: #fd6111;
 }
@@ -93,7 +111,7 @@ button.remove {
     border: none;
     height: 30px;
     width: 30px;
-    margin: auto
+    margin: -5px auto auto;
 }
 
 button.remove:hover {

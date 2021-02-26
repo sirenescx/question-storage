@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
@@ -23,10 +24,12 @@ namespace QuestionStorage.Controllers
     public class AccountController : Controller
     {
         private readonly StorageContext context;
+        private readonly MessageSender messageSender;
 
         public AccountController(StorageContext context)
         {
             this.context = context;
+            messageSender = new MessageSender();
         }
 
         [HttpGet]
@@ -37,7 +40,7 @@ namespace QuestionStorage.Controllers
             {
                 return RedirectToAction("ListCourses", "Display");
             }
-            
+
             return View();
         }
 
@@ -50,7 +53,7 @@ namespace QuestionStorage.Controllers
             {
                 return View(model);
             }
-            
+
             var user = await context.Users.FirstAsync(user => user.Email.Equals(model.Email));
 
             if (user != null)
@@ -67,6 +70,80 @@ namespace QuestionStorage.Controllers
             ModelState.AddModelError("Email", "Invalid e-mail or password.");
 
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(IFormCollection collection)
+        {
+            var email = collection["Email"];
+            var user = await context.Users.FirstAsync(user => user.Email.Equals(email));
+
+            if (user is null)
+            {
+                return RedirectToAction("ForgotPassword");
+            }
+
+            var token = StorageUtils.GenerateToken();
+            var restorationToken = new RestorationTokens
+            {
+                Token = token,
+                UserId = user.Id
+            };
+
+            messageSender.CreateMessage(email, CreateRestorationLink(token), "Restore password");
+
+            await context.AddAsync(restorationToken);
+            await context.SaveChangesAsync();
+
+            return View("RestoreMessage");
+        }
+
+        private static string CreateRestorationLink(string token) =>
+            $"https://localhost:5000/Account/RestorePassword/?token={token}"; 
+        
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> RestorePassword(string token)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("ListCourses", "Display");
+            }
+
+            var restorationToken = await context.RestorationTokens.FirstOrDefaultAsync(
+                restorationToken => restorationToken.Token.Equals(token));
+
+            if (!(restorationToken is null) && !restorationToken.Expired && StorageUtils.DecodeToken(token))
+            {
+                ViewData["Token"] = token;
+                return View();
+            }
+
+            return RedirectToAction("Login");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> RestorePassword(string token, EditViewModel model)
+        {
+            var restorationToken = await context.RestorationTokens.FirstOrDefaultAsync(
+                restorationToken => restorationToken.Token.Equals(token));
+
+            var user = await context.Users.FirstOrDefaultAsync(user => user.Id == restorationToken.UserId);
+
+            UserExtensions.UpdatePassword(model, user);
+            restorationToken.Expired = true;
+            await context.SaveChangesAsync();
+
+            return View("Login");
         }
 
         private async Task Authenticate(User user)
@@ -141,7 +218,7 @@ namespace QuestionStorage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditViewModel model)
+        public async Task<IActionResult> Edit(NewPasswordViewModel model)
         {
             var user = await DataStorage.GetByPredicateAsync(context.Users,
                 user => user.Email.Equals(User.Identity.Name));

@@ -93,6 +93,10 @@ namespace QuestionStorage
                 endpoints.MapControllerRoute(
                     name: "tags",
                     pattern: "{controller=Quizzes}/{action=Index}/{courseId}/{tagId?}");
+                
+                endpoints.MapControllerRoute(
+                    name: "restorePassword",
+                    pattern: "{controller=Account}/{action=Index}/{token?}");
             });
         }
     }

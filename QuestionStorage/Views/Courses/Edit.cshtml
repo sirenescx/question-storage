@@ -14,18 +14,31 @@
 <body>
 @using (Html.BeginForm("Edit", "Courses", FormMethod.Post, new { SubmitButton = "submitButton", id = "formSubmit" }))
 {
-    <h1 class="page-header">Change course name</h1>
-    @Html.TextAreaFor(model => model.CourseName, 1, 100,
-        new {@class = "textarea short", id = "courseName"})
-    <br/>
-    
-    <input type="submit" class="submit" id="submitButton" value="Save changes">
-    <br/>                                                                   
-    <a class="button remove"
-       asp-action="Delete"
-       asp-controller="Courses"
-       asp-route-courseId="@Model.CourseId">
+    <h1 class="page-header">Course settings</h1>
+    <br/> 
+    <p>
+        @Html.TextAreaFor(model => model.CourseName, 1, 100,
+            new {@class = "textarea short", id = "courseName"})
+        <br/>
+        @* <input type="submit" class="submit" id="submitButton" value="Save changes"> *@
+    </p>
+    <hr/>
+    <a class="a btn" asp-action="Delete" asp-controller="Courses" asp-route-courseId="@Model.CourseId">
         Delete course
     </a>
 }
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#formSubmit").keypress(function (e) {
+                const keycode = e.keyCode || e.charCode || e.which; 
+                if (keycode === 13)    
+                {
+                    let submitButton = $(this).attr("SubmitButton");
+                    $("#" + submitButton).click();
+                    return false;
+                }
+            });
+        });
+    </script>
 </body>

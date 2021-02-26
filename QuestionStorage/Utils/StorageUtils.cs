@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Primitives;
 using QuestionStorage.Models;
 using QuestionStorage.Models.Questions;
+using QuestionStorage.Models.Users;
 using TextCopy;
 
 namespace QuestionStorage.Utils
@@ -239,5 +240,23 @@ namespace QuestionStorage.Utils
 
             return indexOfFirstNotWhitespace;
         }
+        
+        public static string GenerateToken()
+        {
+            var time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            var key = Guid.NewGuid().ToByteArray();
+            var token = Convert.ToBase64String(time.Concat(key).ToArray());
+
+            return token;
+        }
+
+        public static bool DecodeToken(string token)
+        {
+            var data = Convert.FromBase64String(token);
+            var when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
+            
+            return when >= DateTime.UtcNow.AddHours(-24);
+        }
+        
     }
 }

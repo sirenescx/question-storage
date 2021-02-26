@@ -45,16 +45,30 @@ function removeElement(elementId) {
 
 function generateTextAreasCode(choiceCode) {
     let code = '';
-    for (let i = 0; i < 5; ++i) {
-        code += 
+    for (let i = 0; i < 2; ++i) {
+        code +=
+            '<tr>' +
+                '<td>' +
+                    getTextAreaCode(1, '') +
+                '</td>' +
+                '<td style="text-align: center; vertical-align: center">' +
+                    choiceCode +
+                '</td>' +
+                '<td>' +
+                '</td>' +
+            '</tr>'
+    }
+    for (let i = 0; i < 3; ++i) {
+    code +=
         '<tr>' +
             '<td>' +
-                getTextAreaCode(1, '') +
+            getTextAreaCode(1, '') +
             '</td>' +
             '<td style="text-align: center; vertical-align: center">' +
                 choiceCode +
             '</td>' +
-            '<td>' +
+            '<td style="text-align: center; vertical-align: center">' +
+                '<button class="button remove" id="addResponseOptions" onclick="removeRow(this, \'answerTable\')">✕</button>' +
             '</td>' +
         '</tr>'
     }

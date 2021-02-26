@@ -28,7 +28,7 @@ function removeRow(oButton, table) {
 
 function setCellStyle(cell) {
     cell.style.textAlign = "center";
-    cell.style.verticalAlign = "top";
+    cell.style.verticalAlign = "center";
 }
 
 

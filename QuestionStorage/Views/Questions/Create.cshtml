@@ -78,8 +78,19 @@
                         <input type="hidden" value="off" name="Correct">
                         <input name="Correct" type="checkbox" value="on">
                     </td>
-                    <td>
-                    </td>
+                    @if (i > 1)
+                    {
+                        <td style="text-align: center; vertical-align: central">
+                            <button class="button remove" id="addResponseOptions" onclick="removeRow(this, 'answerTable')">✕</button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        </td>
+                    }
+                    
+                    
                 </tr>
             }
         }
