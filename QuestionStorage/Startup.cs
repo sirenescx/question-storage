@@ -29,10 +29,13 @@ namespace QuestionStorage
                 .AddRazorRuntimeCompilation();
             
             services.AddRazorPages();
-            
+
             services.AddDbContext<StorageContext>(options =>
+            {
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("QuestionsStorageContextConnection")));
+                    Configuration.GetConnectionString("QuestionsStorageContextConnection"));
+                options.EnableSensitiveDataLogging();
+            });
             
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

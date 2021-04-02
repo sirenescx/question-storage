@@ -28,9 +28,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#formSubmit").keypress(function (e) {
-                const keycode = e.keyCode || e.charCode || e.which; 
-                if (keycode === 13)    
-                {
+                const keycode = e.keyCode || e.charCode || e.which;
+                if (keycode === 13) {
                     let submitButton = $(this).attr("SubmitButton");
                     $("#" + submitButton).click();
                     return false;

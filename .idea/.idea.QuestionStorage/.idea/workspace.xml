@@ -160,6 +160,23 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< Updated upstream
+=======
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Quizzes/Edit.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Quizzes/Details.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Shared/_Layout.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/Tags/TagsExtensions.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/Quizzes/QuizzesInfo.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/Quizzes/QuizExtensions.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Home/Contact.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/js/add-to-table.js" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/Questions/QuestionExtensions.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/HomeController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Controllers/QuizzesController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Utils/XmlGenerator.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Export.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/ViewModels/ListQuestionsViewModel.cs" />
+>>>>>>> Stashed changes
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Copy.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/node_modules/mathjax/LICENSE" />
         <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/manifest.json" />
@@ -180,7 +197,11 @@
         <option value="$PROJECT_DIR$/QuestionStorage/Controllers/DisplayController.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Display/ListQuestions.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/Edit.cshtml" />
+<<<<<<< Updated upstream
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Courses/Create.cshtml" />
+=======
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Questions/_Edit.cshtml" />
+>>>>>>> Stashed changes
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Courses/Details.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Account/Manage.cshtml" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Account/Login.cshtml" />
@@ -209,8 +230,17 @@
         <option value="$PROJECT_DIR$/QuestionStorage/appsettings.json" />
         <option value="$PROJECT_DIR$/QuestionStorage/Controllers/AccountController.cs" />
         <option value="$PROJECT_DIR$/QuestionStorage/Views/Courses/Edit.cshtml" />
+<<<<<<< Updated upstream
         <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/lib/bootstrap/dist/css/custom-stylesheet.css" />
+=======
+        <option value="$PROJECT_DIR$/QuestionStorage/Startup.cs" />
+>>>>>>> Stashed changes
         <option value="$PROJECT_DIR$/QuestionStorage/Controllers/CoursesController.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Models/StorageContext.cs" />
+        <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/js/submit-by-enter.js" />
+        <option value="$PROJECT_DIR$/QuestionStorage/wwwroot/js/submit-on-enter.js" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Courses/Create.cshtml" />
+        <option value="$PROJECT_DIR$/QuestionStorage/Views/Account/Login.cshtml" />
       </list>
     </option>
   </component>
@@ -464,6 +494,7 @@
       <workItem from="1612472598123" duration="1316000" />
       <workItem from="1612474622528" duration="5583000" />
       <workItem from="1613578676947" duration="8341000" />
+<<<<<<< Updated upstream
       <workItem from="1613761053443" duration="1667000" />
       <workItem from="1613933016656" duration="5467000" />
       <workItem from="1613987124924" duration="4221000" />
@@ -472,6 +503,9 @@
       <workItem from="1613995417907" duration="1185000" />
       <workItem from="1614008745886" duration="419000" />
       <workItem from="1614023006967" duration="2171000" />
+=======
+      <workItem from="1613747941677" duration="3530000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
@@ -500,40 +534,60 @@
     <state width="527" height="464" key="DebuggerActiveHint/0.0.1280.800@0.0.1280.800" timestamp="1613594915619" />
     <state width="593" height="522" key="DebuggerActiveHint/0.0.1440.900@0.0.1440.900" timestamp="1613937887651" />
     <state width="429" height="464" key="DebuggerActiveHint/55.25.1225.775@55.25.1225.775" timestamp="1610212210607" />
+<<<<<<< Updated upstream
     <state width="964" height="331" key="GridCell.Tab.0.bottom" timestamp="1614026216411">
       <screen x="0" y="0" width="1440" height="900" />
+=======
+    <state width="891" height="105" key="GridCell.Tab.0.bottom" timestamp="1613751903196">
+      <screen x="0" y="0" width="1280" height="800" />
+>>>>>>> Stashed changes
     </state>
-    <state width="942" height="181" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1613648577565" />
+    <state width="891" height="105" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1613751903196" />
     <state width="1091" height="83" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1920.1080@0.0.1440.900" timestamp="1610353354129" />
     <state width="964" height="331" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1614026216411" />
     <state width="962" height="346" key="GridCell.Tab.0.bottom/57.25.1223.775@57.25.1223.775" timestamp="1612472873529" />
     <state width="913" height="50" key="GridCell.Tab.0.bottom/62.25.1218.775@62.25.1218.775" timestamp="1613599355172" />
     <state width="699" height="63" key="GridCell.Tab.0.bottom/62.25.1378.875@62.25.1378.875" timestamp="1613989372621" />
     <state width="948" height="222" key="GridCell.Tab.0.bottom/67.25.1213.775@67.25.1213.775" timestamp="1613594947003" />
+<<<<<<< Updated upstream
     <state width="964" height="331" key="GridCell.Tab.0.center" timestamp="1614026216410">
       <screen x="0" y="0" width="1440" height="900" />
+=======
+    <state width="891" height="105" key="GridCell.Tab.0.center" timestamp="1613751903195">
+      <screen x="0" y="0" width="1280" height="800" />
+>>>>>>> Stashed changes
     </state>
-    <state width="942" height="181" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1613648577565" />
+    <state width="891" height="105" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1613751903195" />
     <state width="1091" height="83" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1920.1080@0.0.1440.900" timestamp="1610353354128" />
     <state width="964" height="331" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1614026216410" />
     <state width="962" height="346" key="GridCell.Tab.0.center/57.25.1223.775@57.25.1223.775" timestamp="1612472873527" />
     <state width="913" height="50" key="GridCell.Tab.0.center/62.25.1218.775@62.25.1218.775" timestamp="1613599355171" />
     <state width="699" height="63" key="GridCell.Tab.0.center/62.25.1378.875@62.25.1378.875" timestamp="1613989372620" />
     <state width="948" height="222" key="GridCell.Tab.0.center/67.25.1213.775@67.25.1213.775" timestamp="1613594947001" />
+<<<<<<< Updated upstream
     <state width="964" height="331" key="GridCell.Tab.0.left" timestamp="1614026216408">
       <screen x="0" y="0" width="1440" height="900" />
+=======
+    <state width="891" height="105" key="GridCell.Tab.0.left" timestamp="1613751903193">
+      <screen x="0" y="0" width="1280" height="800" />
+>>>>>>> Stashed changes
     </state>
-    <state width="942" height="181" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1613648577564" />
+    <state width="891" height="105" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1613751903193" />
     <state width="1091" height="83" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1920.1080@0.0.1440.900" timestamp="1610353354127" />
     <state width="964" height="331" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1614026216408" />
     <state width="962" height="346" key="GridCell.Tab.0.left/57.25.1223.775@57.25.1223.775" timestamp="1612472873526" />
     <state width="913" height="50" key="GridCell.Tab.0.left/62.25.1218.775@62.25.1218.775" timestamp="1613599355170" />
     <state width="699" height="63" key="GridCell.Tab.0.left/62.25.1378.875@62.25.1378.875" timestamp="1613989372619" />
     <state width="948" height="222" key="GridCell.Tab.0.left/67.25.1213.775@67.25.1213.775" timestamp="1613594947001" />
+<<<<<<< Updated upstream
     <state width="964" height="331" key="GridCell.Tab.0.right" timestamp="1614026216410">
       <screen x="0" y="0" width="1440" height="900" />
+=======
+    <state width="891" height="105" key="GridCell.Tab.0.right" timestamp="1613751903196">
+      <screen x="0" y="0" width="1280" height="800" />
+>>>>>>> Stashed changes
     </state>
-    <state width="942" height="181" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1613648577565" />
+    <state width="891" height="105" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1613751903196" />
     <state width="1091" height="83" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1920.1080@0.0.1440.900" timestamp="1610353354128" />
     <state width="964" height="331" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1614026216410" />
     <state width="962" height="346" key="GridCell.Tab.0.right/57.25.1223.775@57.25.1223.775" timestamp="1612472873528" />
@@ -712,7 +766,14 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="302" y="155" width="675" height="490" key="find.popup/0.0.1280.800@0.0.1280.800" timestamp="1613599544564" />
+<<<<<<< Updated upstream
     <state x="340" y="174" width="760" height="552" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1613990009873" />
+=======
+    <state x="303" y="121" width="672" height="678" key="search.everywhere.popup" timestamp="1613748976247">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="303" y="121" width="672" height="678" key="search.everywhere.popup/0.0.1280.800@0.0.1280.800" timestamp="1613748976247" />
+>>>>>>> Stashed changes
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -817,6 +878,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/QuestionStorage/Controllers/CoursesController.cs</url>
+<<<<<<< Updated upstream
           <line>109</line>
           <properties documentPath="$PROJECT_DIR$/QuestionStorage/Controllers/CoursesController.cs" initialLine="110">
             <startOffsets>
@@ -824,6 +886,15 @@
             </startOffsets>
             <endOffsets>
               <option value="3927" />
+=======
+          <line>137</line>
+          <properties documentPath="$PROJECT_DIR$/QuestionStorage/Controllers/CoursesController.cs" initialLine="136">
+            <startOffsets>
+              <option value="4731" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4762" />
+>>>>>>> Stashed changes
             </endOffsets>
           </properties>
           <option name="timeStamp" value="99" />
@@ -836,7 +907,11 @@
               <option value="9161" />
             </startOffsets>
             <endOffsets>
+<<<<<<< Updated upstream
               <option value="9223" />
+=======
+              <option value="3936" />
+>>>>>>> Stashed changes
             </endOffsets>
           </properties>
           <option name="timeStamp" value="103" />
