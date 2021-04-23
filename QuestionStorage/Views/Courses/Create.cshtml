@@ -1,4 +1,4 @@
-@model QuestionStorage.Models.Courses.CoursesInfo
+@model QuestionStorage.Models.Courses.Course
 
 @{
     ViewBag.Title = "Create course";
@@ -17,7 +17,7 @@
 {
     <h1 class="page-header">Create course</h1>
     <p class="less-bottom-space">Course name*</p>
-    @Html.TextAreaFor(model => model.CourseName, 1, 100,
+    @Html.TextAreaFor(model => model.Name, 1, 100,
         new {@class = "textarea short", id = "courseName"})
     <br/>
     

@@ -4,7 +4,6 @@ using QuestionStorage.Models.Questions;
 using QuestionStorage.Models.Quizzes;
 using QuestionStorage.Models.Roles;
 using QuestionStorage.Models.Tags;
-using QuestionStorage.Models.Types;
 using QuestionStorage.Models.Users;
 
 namespace QuestionStorage.Models
@@ -20,228 +19,271 @@ namespace QuestionStorage.Models
         {
         }
 
-        public virtual DbSet<CoursesInfo> CoursesInfo { get; set; }
-        public virtual DbSet<QuestionAnswerVariants> QuestionAnswerVariants { get; set; }
-        public virtual DbSet<QuestionsInfo> QuestionsInfo { get; set; }
-        public virtual DbSet<QuizzesInfo> QuizzesInfo { get; set; }
-        public virtual DbSet<QuizzesInfoQuestionsInfo> QuizzesInfoQuestionsInfo { get; set; }
-
-        public virtual DbSet<QuizzesInfoQuestionsInfoQuestionAnswerVariants>
-            QuizzesInfoQuestionsInfoQuestionAnswerVariants { get; set; }
-
+        public virtual DbSet<Course> Courses { get; set; }
+        public virtual DbSet<AnswerOption> AnswerOptions { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<Quiz> Quizzes { get; set; }
+        public virtual DbSet<QuizzesQuestions> QuizzesQuestions { get; set; }
+        public virtual DbSet<QuizzesAnswerOptions> QuizzesAnswerOptions { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<TagsInfo> TagsInfo { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<TagsQuestions> TagsQuestions { get; set; }
-        public virtual DbSet<TypesInfo> TypesInfo { get; set; }
+        public virtual DbSet<Types.Type> Types { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UsersCourses> UsersCourses { get; set; }
-        
-        public virtual DbSet<RestorationTokens> RestorationTokens { get; set; }
+        public virtual DbSet<RestorationToken> RestorationTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CoursesInfo>(entity =>
+            modelBuilder.Entity<Course>(entity =>
             {
-                entity.HasKey(e => e.CourseId)
-                    .HasName("PK__CoursesI__C92D7187DA609270");
+                entity.ToTable("courses");
 
-                entity.Property(e => e.CourseId)
-                    .HasColumnName("CourseID")
-                    .ValueGeneratedNever();
+                entity.HasKey(e => e.Id)
+                    .HasName("PK_Courses");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name");
             });
 
-            modelBuilder.Entity<QuestionAnswerVariants>(entity =>
+            modelBuilder.Entity<AnswerOption>(entity =>
             {
-                entity.HasKey(e => e.VariantId);
+                entity.ToTable("answer_options");
 
-                entity.Property(e => e.VariantId)
-                    .HasColumnName("VariantID")
-                    .ValueGeneratedNever();
+                entity.HasKey(e => e.Id)
+                    .HasName("PK_AnswerOptions");
 
-                entity.Property(e => e.Answer)
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.QuestionId)
+                    .HasColumnName("question_id");
+
+                entity.Property(e => e.Text)
+                    .HasColumnName("text")
                     .IsRequired()
                     .HasMaxLength(256);
 
-                entity.Property(e => e.QuestId).HasColumnName("QuestID");
+                entity.Property(e => e.IsCorrect)
+                    .HasColumnName("is_correct");
 
-                entity.HasOne(d => d.Quest)
-                    .WithMany(p => p.QuestionAnswerVariants)
-                    .HasForeignKey(d => d.QuestId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QuestionAnswerVariants_QuestionsInfo");
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.AnswerOptions)
+                    .HasForeignKey(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_AnswerOptions_Questions");
             });
 
-            modelBuilder.Entity<QuestionsInfo>(entity =>
+            modelBuilder.Entity<Question>(entity =>
             {
-                entity.HasKey(e => e.QuestId);
+                entity.ToTable("questions");
 
-                entity.Property(e => e.QuestId)
-                    .HasColumnName("QuestID")
-                    .ValueGeneratedNever();
+                entity.HasKey(e => e.Id)
+                    .HasName("FK_Questions");
 
-                entity.Property(e => e.AuthorId).HasDefaultValueSql("((1))");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.CourseId)
-                    .HasColumnName("CourseID")
+                entity.Property(e => e.TypeId)
+                    .HasColumnName("type_id");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .IsRequired()
+                    .HasMaxLength(256);
+
+                entity.Property(e => e.Text)
+                    .HasColumnName("text");
+
+                entity.Property(e => e.Xml)
+                    .HasColumnName("xml");
+
+                entity.Property(e => e.IsTemplate)
+                    .HasColumnName("is_template")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.VersionId)
+                    .HasColumnName("version_id")
                     .HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.QuestionName)
-                    .IsRequired()
-                    .HasMaxLength(256);
+                entity.Property(e => e.SourceId)
+                    .HasColumnName("source_question_id");
 
-                entity.Property(e => e.SourceQuestId).HasColumnName("SourceQuestID");
+                entity.Property(e => e.AuthorId)
+                    .HasColumnName("author_id");
 
-                entity.Property(e => e.TypeId).HasColumnName("TypeID");
-
-                entity.Property(e => e.VersionId).HasColumnName("VersionID");
+                entity.Property(e => e.CourseId)
+                    .HasColumnName("course_id");
 
                 entity.HasOne(d => d.Type)
-                    .WithMany(p => p.QuestionsInfo)
+                    .WithMany(p => p.Questions)
                     .HasForeignKey(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QuestionsInfo_TypesInfo");
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Questions_Types");
+
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.Questions)
+                    .HasForeignKey(d => d.CourseId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Questions_Courses");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Questions)
+                    .HasForeignKey(d => d.AuthorId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Questions_Users");
             });
 
-            modelBuilder.Entity<QuizzesInfo>(entity =>
+            modelBuilder.Entity<Quiz>(entity =>
             {
-                entity.HasKey(e => e.QuizId)
-                    .HasName("PK_QuizesInfo");
+                entity.ToTable("quizzes");
 
-                entity.Property(e => e.QuizId)
-                    .HasColumnName("QuizID")
-                    .ValueGeneratedNever();
+                entity.HasKey(e => e.Id)
+                    .HasName("PK_Quizzes");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.CourseId)
+                    .HasColumnName("course_id");
 
                 entity.Property(e => e.Date)
+                    .HasColumnName("date")
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.Comment)
+                    .HasColumnName("comment");
+
                 entity.Property(e => e.Name)
+                    .HasColumnName("name")
                     .HasMaxLength(64);
+
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.Quizzes)
+                    .HasForeignKey(d => d.CourseId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Quizzes_Courses");
             });
 
-            modelBuilder.Entity<QuizzesInfoQuestionsInfo>(entity =>
+            modelBuilder.Entity<Tag>(entity =>
             {
-                entity.HasKey(e => new {e.QuizId, e.QuestId})
-                    .HasName("PK_QuizesInfo_QuestionsInfo");
+                entity.ToTable("tags");
 
-                entity.ToTable("QuizzesInfo_QuestionsInfo");
+                entity.HasKey(e => e.Id)
+                    .HasName("PK_Tags");
 
-                entity.Property(e => e.QuizId).HasColumnName("QuizID");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.QuestId).HasColumnName("QuestID");
-
-                entity.Property(e => e.CodeSort).HasMaxLength(16);
-
-                entity.HasOne(d => d.Quest)
-                    .WithMany(p => p.QuizzesInfoQuestionsInfo)
-                    .HasForeignKey(d => d.QuestId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QuizesInfo_QuestionsInfo_QuestQuest");
-
-                entity.HasOne(d => d.Quiz)
-                    .WithMany(p => p.QuizzesInfoQuestionsInfo)
-                    .HasForeignKey(d => d.QuizId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QuizesInfo_QuestionsInfo_QuestQuizInfo");
-            });
-
-            modelBuilder.Entity<QuizzesInfoQuestionsInfoQuestionAnswerVariants>(entity =>
-            {
-                entity.HasKey(e => new {e.QuizId, e.VariantId})
-                    .HasName("PK_QuizesInfo_QuestionsInfo_QuestionAnswerVariants");
-
-                entity.ToTable("QuizzesInfo_QuestionsInfo_QuestionAnswerVariants");
-
-                entity.Property(e => e.QuizId).HasColumnName("QuizID");
-
-                entity.Property(e => e.VariantId).HasColumnName("VariantID");
-
-                entity.HasOne(d => d.Quiz)
-                    .WithMany(p => p.QuizzesInfoQuestionsInfoQuestionAnswerVariants)
-                    .HasForeignKey(d => d.QuizId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QuizesInfo_QuestionsInfo_QuestionAnswerVariants_QuizesInfo");
-
-                entity.HasOne(d => d.Variant)
-                    .WithMany(p => p.QuizzesInfoQuestionsInfoQuestionAnswerVariants)
-                    .HasForeignKey(d => d.VariantId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QuizesInfo_QuestionsInfo_QuestionAnswerVariants_QuestionAnswerVariants");
-            });
-
-            modelBuilder.Entity<TagsInfo>(entity =>
-            {
-                entity.HasKey(e => e.TagId);
-
-                entity.Property(e => e.TagId)
-                    .HasColumnName("TagID")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.CourseId)
-                    .HasColumnName("CourseID")
-                    .HasDefaultValueSql("((1))");
+                entity.Property(e => e.ParentId)
+                    .HasColumnName("parent_id");
 
                 entity.Property(e => e.Name)
+                    .HasColumnName("name")
                     .IsRequired()
                     .HasMaxLength(64);
 
-                entity.Property(e => e.ParentId).HasColumnName("ParentID");
+                entity.Property(e => e.CourseId)
+                    .HasColumnName("course_id");
 
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK_TagsInfo_TagsInfo");
+                    .HasConstraintName("FK_Tags_Tags");
             });
 
             modelBuilder.Entity<TagsQuestions>(entity =>
             {
-                entity.HasKey(e => new {e.TagId, e.QuestId});
+                entity.ToTable("tags_questions");
 
-                entity.ToTable("Tags_Questions");
+                entity.HasKey(e => new {e.TagId, QuestId = e.QuestionId})
+                    .HasName("PK_Tags_Questions");
 
-                entity.Property(e => e.TagId).HasColumnName("TagID");
+                entity.Property(e => e.TagId)
+                    .HasColumnName("tag_id");
 
-                entity.Property(e => e.QuestId).HasColumnName("QuestID");
+                entity.Property(e => e.QuestionId)
+                    .HasColumnName("question_id");
 
-                entity.HasOne(d => d.Quest)
+                entity.HasOne(d => d.Question)
                     .WithMany(p => p.TagsQuestions)
-                    .HasForeignKey(d => d.QuestId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Tags_Questions_QuestionsInfo");
+                    .HasForeignKey(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Tags_Questions_Questions");
 
                 entity.HasOne(d => d.Tag)
                     .WithMany(p => p.TagsQuestions)
                     .HasForeignKey(d => d.TagId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Tags_Questions_TagsInfo");
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Tags_Questions_Tags");
             });
 
-            modelBuilder.Entity<TypesInfo>(entity =>
+            modelBuilder.Entity<Types.Type>(entity =>
             {
-                entity.HasKey(e => e.TypeId);
+                entity.ToTable("types");
 
-                entity.Property(e => e.TypeId)
-                    .HasColumnName("TypeID")
-                    .ValueGeneratedNever();
+                entity.HasKey(e => e.id)
+                    .HasName("FK_Types");
 
-                entity.Property(e => e.Comment).HasMaxLength(256);
+                entity.Property(e => e.id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Comment)
+                    .HasColumnName("comment")
+                    .HasMaxLength(256);
 
                 entity.Property(e => e.Name)
+                    .HasColumnName("name")
                     .IsRequired()
                     .HasMaxLength(64);
             });
 
-            modelBuilder.Entity<User>(entity => { entity.Property(e => e.Id).ValueGeneratedNever(); });
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("users");
+
+                entity.HasKey(e => e.Id)
+                    .HasName("FK_Users");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Email)
+                    .HasColumnName("email")
+                    .IsRequired();
+
+                entity.Property(e => e.Password)
+                    .HasColumnName("password")
+                    .IsRequired();
+
+                entity.Property(e => e.RoleId)
+                    .HasColumnName("role_id")
+                    .HasDefaultValueSql("((2))");
+            });
 
             modelBuilder.Entity<UsersCourses>(entity =>
             {
-                entity.HasKey(e => new {e.UserId, e.CourseId});
+                entity.ToTable("users_courses");
+                
+                entity.HasKey(e => new {e.UserId, e.CourseId})
+                    .HasName("PK_Users_Courses");
 
-                entity.ToTable("Users_Courses");
+                entity.Property(e => e.UserId)
+                    .HasColumnName("user_id");
 
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.Property(e => e.CourseId).HasColumnName("CourseID");
+                entity.Property(e => e.CourseId)
+                    .HasColumnName("course_id");
 
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.UsersCourses)
@@ -256,20 +298,83 @@ namespace QuestionStorage.Models
                     .HasConstraintName("FK_Users_Users");
             });
 
-            modelBuilder.Entity<RestorationTokens>(entity =>
-                {
-                    entity.HasKey(e => e.Id).
-                        HasName("PK__Restorat__3214EC0784C0132D");
+            modelBuilder.Entity<RestorationToken>(entity =>
+            {
+                entity.ToTable("restoration_tokens");
+                
+                entity.HasKey(e => e.Id)
+                    .HasName("PK_Restoration_Tokens");
 
-                    entity.ToTable("RestorationTokens");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
-                    entity.Property(e => e.Id)
-                        .ValueGeneratedOnAdd();
-                    
-                    entity.Property(e => e.Expired)
-                        .ValueGeneratedOnAdd();
-                }
-            );
+                entity.Property(e => e.Expired)
+                    .HasColumnName("is_expired")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("user_id")
+                    .IsRequired();
+                
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.RestorationTokens)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Restoration_Tokens_Users");
+            });
+
+            modelBuilder.Entity<QuizzesQuestions>(entity =>
+            {
+                entity.ToTable("quizzes_questions");
+                
+                entity.HasKey(e => new {e.QuizId, QuestId = e.QuestionId})
+                    .HasName("PK_Quizzes_Questions");
+
+                entity.Property(e => e.QuizId)
+                    .HasColumnName("quiz_id");
+
+                entity.Property(e => e.QuestionId)
+                    .HasColumnName("question_id");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.QuizzesQuestions)
+                    .HasForeignKey(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Quizzes_Questions_Questions");
+
+                entity.HasOne(d => d.Quiz)
+                    .WithMany(p => p.QuizzesQuestions)
+                    .HasForeignKey(d => d.QuizId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Quizzes_Quizzes");
+            });
+
+            modelBuilder.Entity<QuizzesAnswerOptions>(entity =>
+            {
+                entity.ToTable("quizzes_answer_options");
+                
+                entity.HasKey(e => new {e.QuizId, VariantId = e.AnswerOptionId})
+                    .HasName("PK_Quizzes_Answer_Options");
+
+                entity.Property(e => e.QuizId)
+                    .HasColumnName("quiz_id");
+
+                entity.Property(e => e.AnswerOptionId)
+                    .HasColumnName("answer_option_id");
+
+                entity.HasOne(d => d.Quiz)
+                    .WithMany(p => p.QuizzesAnswerOptions)
+                    .HasForeignKey(d => d.QuizId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Quizzes_Answer_Options_Quizzes");
+
+                entity.HasOne(d => d.Option)
+                    .WithMany(p => p.QuizzesAnswerOptions)
+                    .HasForeignKey(d => d.AnswerOptionId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Quizzes_Answer_Options_Answer_Options");
+            });
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Xml;
 using Microsoft.AspNetCore.Hosting;
 using QuestionStorage.Models.Questions;
 
-namespace QuestionStorage.Utils
+namespace QuestionStorage.Helpers.Xml
 {
     public static class XmlGenerator
     {
@@ -24,17 +24,13 @@ namespace QuestionStorage.Utils
         
         private static string GetTemplatePath(int typeId)
         {
-            switch (typeId)
+            return typeId switch
             {
-                case 1:
-                    return GetPath("single-choice.xml");
-                case 2:
-                    return GetPath("multiple-choice.xml");
-                case 3:
-                    return GetPath("open-answer.xml");
-                default:
-                    return string.Empty;
-            }
+                1 => GetPath("single-choice.xml"),
+                2 => GetPath("multiple-choice.xml"),
+                3 => GetPath("open-answer.xml"),
+                _ => string.Empty
+            };
         }
 
         private static void AddAnswersToXmlDocument(string template, int count, StringBuilder xmlOptions, string value)
@@ -46,10 +42,10 @@ namespace QuestionStorage.Utils
         }
 
         private static MemoryStream ExpandTemplate(string templatePath, 
-            List<QuestionAnswerVariants> responseOptions, int typeId, string webRootPath)
+            List<AnswerOption> responseOptions, int typeId, string webRootPath)
         {
             var (correctOptions, incorrectOptions) = 
-                GetCorrectAndIncorrectOptions(responseOptions);
+                SplitAnswerOptionsToCorrectAndIncorrect(responseOptions);
             var xmlOptions = new StringBuilder();
 
             if (typeId == 3)
@@ -76,7 +72,7 @@ namespace QuestionStorage.Utils
         }
 
         private static void GetTemplate(string templatePath, out XmlDocument template, 
-            out XmlNode questionNode, List<QuestionAnswerVariants> responseOptions, int typeId, string webRootPath)
+            out XmlNode questionNode, List<AnswerOption> responseOptions, int typeId, string webRootPath)
         {
             template = new XmlDocument();
             template.Load(ExpandTemplate(templatePath, responseOptions, typeId, webRootPath));
@@ -94,12 +90,12 @@ namespace QuestionStorage.Utils
             resultQuiz = result.SelectSingleNode("//quiz");
         }
 
-        private static (List<QuestionAnswerVariants>, List<QuestionAnswerVariants>) 
-            GetCorrectAndIncorrectOptions(List<QuestionAnswerVariants> responseOptions)
+        private static (List<AnswerOption>, List<AnswerOption>) 
+            SplitAnswerOptionsToCorrectAndIncorrect(List<AnswerOption> responseOptions)
         {
             PreprocessResponseOptions(responseOptions);
-            var correct = new List<QuestionAnswerVariants>();
-            var incorrect = new List<QuestionAnswerVariants>();
+            var correct = new List<AnswerOption>();
+            var incorrect = new List<AnswerOption>();
 
             foreach (var option in responseOptions)
             {
@@ -116,34 +112,34 @@ namespace QuestionStorage.Utils
             return (correct, incorrect);
         }
 
-        private static void PreprocessResponseOptions(List<QuestionAnswerVariants> responseOptions)
+        private static void PreprocessResponseOptions(List<AnswerOption> responseOptions)
         {
             foreach (var responseOption in responseOptions)
             {
-                responseOption.Answer = responseOption.Answer.Trim();
-                while (responseOption.Answer.EndsWith("&nbsp;"))
+                responseOption.Text = responseOption.Text.Trim();
+                while (responseOption.Text.EndsWith("&nbsp;"))
                 {
-                    responseOption.Answer = responseOption.Answer
-                        .Substring(0, responseOption.Answer.LastIndexOf("&nbsp;", StringComparison.Ordinal));
-                    responseOption.Answer = responseOption.Answer.Trim();
+                    responseOption.Text = responseOption.Text
+                        .Substring(0, responseOption.Text.LastIndexOf("&nbsp;", StringComparison.Ordinal));
+                    responseOption.Text = responseOption.Text.Trim();
                 }
             }
         }
 
-        private static void FillXml(QuestionsInfo question, XmlDocument result, XmlNode resultQuiz,
-            XmlNode questionNode, List<QuestionAnswerVariants> responseOptions)
+        private static void FillXml(Question question, XmlDocument result, XmlNode resultQuiz,
+            XmlNode questionNode, List<AnswerOption> responseOptions)
         {
             var dictionary = new Dictionary<string, string>
             {
-                ["$NAME"] = question.QuestionName, 
-                ["$TEXT"] = ReplaceHtmlTags(question.QuestionText)
+                ["$NAME"] = question.Name, 
+                ["$TEXT"] = ReplaceHtmlTags(question.Text)
             };
             
             var node = result.ImportNode(questionNode, true);
 
             if (question.TypeId == 3)
             {
-                dictionary["$CORRECT"] = TrimParagraph(ReplaceHtmlTags(responseOptions.First().Answer));
+                dictionary["$CORRECT"] = TrimParagraph(ReplaceHtmlTags(responseOptions.First().Text));
             }
             else
             {
@@ -154,11 +150,11 @@ namespace QuestionStorage.Utils
                 {
                     if (option.IsCorrect)
                     {
-                        dictionary[$"$CORRECT{++correct}"] = ReplaceHtmlTags(option.Answer);
+                        dictionary[$"$CORRECT{++correct}"] = ReplaceHtmlTags(option.Text);
                     }
                     else
                     {
-                        dictionary[$"$INCORRECT{++incorrect}"] = ReplaceHtmlTags(option.Answer);
+                        dictionary[$"$INCORRECT{++incorrect}"] = ReplaceHtmlTags(option.Text);
                     }
                 }
             }
@@ -171,7 +167,7 @@ namespace QuestionStorage.Utils
             resultQuiz.AppendChild(node);
         }
 
-        public static XmlDocument ExportToXml(QuestionsInfo question, List<QuestionAnswerVariants> responseOptions, 
+        public static XmlDocument ExportToXml(Question question, List<AnswerOption> responseOptions, 
             IWebHostEnvironment environment)
         {
             var path = environment.WebRootPath + GetTemplatePath(question.TypeId);
@@ -185,8 +181,8 @@ namespace QuestionStorage.Utils
             return result;
         }
         
-        public static XmlDocument ExportQuestionsToXml(List<QuestionsInfo> questions, 
-            List<List<QuestionAnswerVariants>> responseOptions, IWebHostEnvironment environment)
+        public static XmlDocument ExportQuestionsToXml(List<Question> questions, 
+            List<List<AnswerOption>> responseOptions, IWebHostEnvironment environment)
         {
             var xmlDocuments = questions
                 .Select((question, i) => ExportToXml(question, responseOptions[i], environment)).ToList();

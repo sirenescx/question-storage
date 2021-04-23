@@ -4,10 +4,10 @@ using QuestionStorage.Models.Tags;
 
 namespace QuestionStorage.Models.ViewModels
 {
-    public class ListQuestionsViewModel
+    public class ListingViewModel
     {
-        public IEnumerable<QuestionsInfo> QuestionsInfo { get; set; }
+        public IEnumerable<Question> Questions { get; set; }
         
-        public HashSet<TagsInfo> TagsInfo { get; set; }
+        public HashSet<Tag> Tags { get; set; }
     }
 }

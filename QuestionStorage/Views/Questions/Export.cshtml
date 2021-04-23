@@ -1,11 +1,10 @@
-@using QuestionStorage.Models.Questions
 @using QuestionStorage.Models.Tags
 
 @{
     ViewData["Title"] = "Export to XML";
-    HashSet<TagsInfo> tags = ViewBag.Tags;
+    HashSet<Tag> tags = ViewBag.Tags;
     var tagList = new SelectList(tags
-        .Select(t => new {Value = t.TagId, Text = t.Name}),
+        .Select(t => new {Value = t.Id, Text = t.Name}),
         "Value", "Text");
     var errorMessage = ViewBag.Error is null || ViewBag.Error == string.Empty ? string.Empty : ViewBag.Error;
 }

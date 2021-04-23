@@ -1,7 +1,7 @@
 using System;
 using Fare;
 
-namespace QuestionStorage.Utils
+namespace QuestionStorage.Helpers
 {
     public class QRandom : Random
     {
@@ -16,8 +16,8 @@ namespace QuestionStorage.Utils
         public double NextDouble(double lowerBound, double upperBound) =>
             NextDouble() * (upperBound - lowerBound) + lowerBound;
 
-        // public double NextDouble(int lowerBound, int upperBound, int precision) => 
-        //     Next(lowerBound, upperBound) * GetPrecision(precision) / GetPrecision(precision);
+        public double NextDouble(int lowerBound, int upperBound, int precision) => 
+            Next(lowerBound, upperBound) * GetPrecision(precision) / GetPrecision(precision);
 
         public double NextDouble(double lowerBound, double upperBound, int digits)
         {

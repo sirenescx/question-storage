@@ -1,9 +1,9 @@
-﻿@model QuestionStorage.Models.ViewModels.ListQuestionsViewModel
+﻿@model QuestionStorage.Models.ViewModels.ListingViewModel
 
 @{
     ViewData["Title"] = "Questions";
-    var tagSelectList = new SelectList(Model.TagsInfo.Select(
-        t => new {Value = t.TagId, Text = t.Name}).Append(new {Value = 1, Text = "Template"}),
+    var tagSelectList = new SelectList(Model.Tags.Select(
+        t => new {Value = t.Id, Text = t.Name}).Append(new {Value = 1, Text = "Template"}),
         "Value", "Text");
 }
 
@@ -35,15 +35,15 @@
 
     <br/>
 
-    @if (Model.QuestionsInfo != null)
+    @if (Model.Questions != null)
     {
-        @foreach (var item in Model.QuestionsInfo)
+        @foreach (var item in Model.Questions)
         {
             <div>
-                <a asp-action="AboutQuestion" asp-route-questionId="@item.QuestId" asp-route-courseId="@item.CourseId">#@item.QuestId. @item.QuestionName</a>
+                <a asp-action="AboutQuestion" asp-route-questionId="@item.Id" asp-route-courseId="@item.CourseId">#@item.Id. @item.Name</a>
                 <div class="less-bottom-space">
                     @{
-                        var previewData = item.QuestionText.Split().Take(20);
+                        var previewData = item.Text.Split().Take(20);
 
                         var preview = string.Join(' ', previewData);
                     }
@@ -53,7 +53,7 @@
                 @foreach (var tag in item.TagsQuestions)
                 {
                     <a class="tag-button"
-                       href='@Url.Action("ListQuestionsByTag", "Display", new {courseId = tag.Tag.CourseId, tagId = tag.Tag.TagId})'>
+                       href='@Url.Action("ListQuestionsByTag", "Display", new {courseId = tag.Tag.CourseId, tagId = tag.Tag.Id})'>
                         <text>@Url.Content($"{tag.Tag.Name}".TrimEnd('.'))</text>
                     </a>
                 }

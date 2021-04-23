@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace QuestionStorage.Utils
+namespace QuestionStorage.Helpers
 {
     public class NotEqualAttribute : ValidationAttribute
     {

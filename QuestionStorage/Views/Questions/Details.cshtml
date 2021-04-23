@@ -1,4 +1,4 @@
-@model QuestionStorage.Models.Questions.QuestionsInfo
+@model QuestionStorage.Models.Questions.Question
 
 @{
     ViewData["Title"] = "Details";
@@ -21,13 +21,13 @@
 
 <body onload="replaceNewLineWithBr()">
 <div>
-    <h3 class="page-header">#@Html.DisplayFor(model => model.QuestId)</h3>
-    @if (Model.VersionId != Model.QuestId)
+    <h3 class="page-header">#@Html.DisplayFor(model => model.Id)</h3>
+    @if (Model.VersionId != Model.Id)
     {
-        <h5><a asp-action="Details" asp-route-id="@Model.SourceQuestId">@Model.SourceQuestId</a> v.@Model.VersionId</h5>
+        <h5><a asp-action="Details" asp-route-id="@Model.SourceId">@Model.SourceId</a> v.@Model.VersionId</h5>
     }
     <p>
-        <b>@Model.QuestionName</b>
+        <b>@Model.Name</b>
     </p>
     
     @if (task != null)
@@ -48,11 +48,11 @@
     
     @if (Model.TypeId != 3)
     {
-        @foreach (var answer in Model.QuestionAnswerVariants)
+        @foreach (var answer in Model.AnswerOptions)
         {
             <ul class="ul-circle">
                 <li>
-                    <pre class="pre">@Html.Raw(answer.Answer)</pre>
+                    <pre class="pre">@Html.Raw(answer.Text)</pre>
                 </li>
             </ul>
         }
@@ -72,13 +72,13 @@
         <p>
             <b class="content-header">@correctAnswerText</b>
         </p>
-        @foreach (var variant in Model.QuestionAnswerVariants)
+        @foreach (var variant in Model.AnswerOptions)
         {
             if (variant.IsCorrect)
             {
                 <ul class="ul-circle">
                     <li>
-                        <pre class="pre">@Html.Raw(variant.Answer)</pre>
+                        <pre class="pre">@Html.Raw(variant.Text)</pre>
                     </li>
                 </ul>
             }
@@ -92,7 +92,7 @@
     @foreach (var tag in Model.TagsQuestions)
     {
         @Html.ActionLink($"\t{tag.Tag.Name.TrimEnd('.')}\t", "Display",
-            new {courseId = Model.CourseId, tagId = tag.Tag.TagId}, new {@class = "tag-button"})
+            new {courseId = Model.CourseId, tagId = tag.Tag.Id}, new {@class = "tag-button"})
     }
 </div>
 
@@ -109,21 +109,22 @@
 <br/>
 
 <div>
-    <a asp-action="Edit" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Edit</a> |
-    <a asp-action="Copy" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Copy</a> |
-    <a asp-action="ExportToXml" asp-route-questionId="@Model.QuestId">Export to XML</a> |
+    <a asp-action="Edit" asp-route-questionId="@Model.Id" asp-route-courseId="@Model.CourseId">Edit</a> |
+    <a asp-action="Copy" asp-route-questionId="@Model.Id" asp-route-courseId="@Model.CourseId">Copy</a> |
+    <a asp-action="ExportToXml" asp-route-questionId="@Model.Id">Export to XML</a> 
     @if (Model.IsTemplate)
     {
         <text>|</text>
-        <a asp-action="Generate" asp-route-questionId="@Model.QuestId" asp-route-courseId="@Model.CourseId">Generate questions</a>
+        <a asp-action="Generate" asp-route-questionId="@Model.Id" asp-route-courseId="@Model.CourseId">Generate questions</a>
     }
     @if (User.IsInRole("administrator"))
     {
+        <text>|</text>
         <a href="#" id="addComment">Add comment</a>
     }
 </div>
 
-@using (Html.BeginForm("AddComment", "Questions", new {courseId = Model.CourseId, questionId = Model.QuestId}, FormMethod.Post))
+@using (Html.BeginForm("AddComment", "Questions", new {courseId = Model.CourseId, questionId = Model.Id}, FormMethod.Post))
 {
     <hidden id="comment"></hidden>
     <button id="addCommentButton" class="submit" hidden onclick="location.href='@Url.Action("AddComment", "Questions")'">Add</button>

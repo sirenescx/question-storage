@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuestionStorage.Models;
 using QuestionStorage.Models.Courses;
-using QuestionStorage.Utils;
+using QuestionStorage.Models.Users;
 
 namespace QuestionStorage.Controllers
 {
@@ -19,50 +20,41 @@ namespace QuestionStorage.Controllers
             this.context = context;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int courseId)
         {
-            if (!await StorageUtils.CheckAccess(context, courseId, User.Identity.Name))
+            if (!await Helpers.Common.CheckAccess(context, courseId, User.Identity.Name))
             {
                 return RedirectToAction("ListCourses", "Display");
             }
 
-            var course = await DataStorage.GetByPredicateAsync(context.CoursesInfo,
-                coursesInfo => coursesInfo.CourseId == courseId);
+            var course = await context.Courses.FirstOrDefaultAsync(c => c.Id == courseId);
 
-            ViewData["QuestionsCount"] = await StorageUtils.GetQuestionsCountForCourse(context, courseId);
+            ViewData["QuestionsCount"] = await Helpers.Common.GetQuestionsCountForCourse(context, courseId);
 
             return course == null
                 ? ErrorPage(404)
                 : View(course);
         }
 
-        //TODO: Move ErrorPage for common access of Quizzes and Questions controller
-        private ActionResult ErrorPage(int errorCode)
-        {
-            Response.StatusCode = errorCode;
-            ViewData["StatusCode"] = errorCode;
-
-            return View("Error");
-        }
-
         [Authorize(Roles = "administrator")]
         [HttpGet]
         public async Task<IActionResult> Subscribe(int courseId)
         {
-            ViewData["Users"] = await DataStorage.GetTypedHashSetBySelectorAsync(context.Users, user => user);
+            ViewData["Users"] = new HashSet<User>(await context.Users.ToListAsync());
 
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Subscribe(int courseId, IFormCollection collection)
+        public async Task<ActionResult> Subscribe(int courseId, IFormCollection data)
         {
             try
             {
-                ViewData["Users"] = await DataStorage.GetTypedHashSetBySelectorAsync(context.Users, user => user);
+                ViewData["Users"] = new HashSet<User>(await context.Users.ToListAsync());
 
-                var userId = int.Parse(collection["Email"]);
+                var userId = int.Parse(data[nameof(Models.Users.User.Email)]);
 
                 if (!await CheckSubscription(courseId, userId))
                 {
@@ -78,10 +70,6 @@ namespace QuestionStorage.Controllers
             }
         }
 
-        private async Task<bool> CheckSubscription(int courseId, int userId) =>
-            await DataStorage.CheckByPredicateAsync(context.UsersCourses,
-                usersCourses => usersCourses.UserId == userId && usersCourses.CourseId == courseId);
-
         [HttpGet]
         [Authorize(Roles = "administrator")]
         public IActionResult Create()
@@ -91,28 +79,45 @@ namespace QuestionStorage.Controllers
 
         [HttpPost]
         [Authorize(Roles = "administrator")]
-        public async Task<IActionResult> Create(IFormCollection collection)
+        public async Task<IActionResult> Create(IFormCollection data)
         {
-            var userId = await StorageUtils.GetUserId(context, User.Identity.Name);
-            var courseId = await DataStorage.GetIdAsync(context.CoursesInfo,
-                coursesInfo => coursesInfo.CourseId);
+            var userId = await Helpers.Common.GetUserId(context, User.Identity.Name);
 
-            await context.AddAsync(new UsersCourses {CourseId = courseId, UserId = userId});
-            await context.AddAsync(new CoursesInfo {CourseId = courseId, CourseName = collection["CourseName"]});
+            var course = await context.AddAsync(new Course {Name = data[nameof(Course.Name)]});
+            await context.SaveChangesAsync();
+
+            await context.AddAsync(new UsersCourses {CourseId = course.Entity.Id, UserId = userId});
             await context.SaveChangesAsync();
 
             return RedirectToAction("ListCourses", "Display");
         }
-        
+
         [Authorize(Roles = "administrator")]
+        [HttpPost]
         public async Task<IActionResult> Delete(int courseId)
         {
-            var course = await context.CoursesInfo
-                .Include(course => course.UsersCourses)
-                .Where(course => course.CourseId == courseId).FirstOrDefaultAsync();
-            
-            // TODO: 
+            var course = await context.Courses
+                .Include(c => c.UsersCourses)
+                .Include(c => c.Questions)
+                .ThenInclude(q => q.AnswerOptions)
+                .Include(c => c.Quizzes)
+                .ThenInclude(q => q.QuizzesQuestions)
+                .Where(c => c.Id == courseId)
+                .FirstOrDefaultAsync();
 
+            var questions = await context.Questions
+                .Include(q => q.AnswerOptions)
+                .Include(q => q.TagsQuestions)
+                .Where(q => q.CourseId == courseId)
+                .ToListAsync();
+
+            var quizzes = await context.Quizzes
+                .Include(q => q.QuizzesQuestions)
+                .Where(q => q.CourseId == courseId)
+                .ToListAsync();
+
+            context.RemoveRange(questions);
+            context.RemoveRange(quizzes);
             context.Remove(course);
             await context.SaveChangesAsync();
 
@@ -123,23 +128,37 @@ namespace QuestionStorage.Controllers
         [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Edit(int courseId)
         {
-            var course = await context.CoursesInfo
-                .Where(course => course.CourseId == courseId).FirstOrDefaultAsync();
+            var course = await context.Courses.Where(c => c.Id == courseId).FirstOrDefaultAsync();
+
             return View(course);
         }
 
         [HttpPost]
         [Authorize(Roles = "administrator")]
-        public async Task<IActionResult> Edit(int courseId, IFormCollection collection)
+        public async Task<IActionResult> Edit(int courseId, IFormCollection data)
         {
-            var courseName = collection["CourseName"];
-            var course = await context.CoursesInfo
-                .Where(course => course.CourseId == courseId).FirstOrDefaultAsync();
+            var course = await context.Courses.Where(c => c.Id == courseId).FirstOrDefaultAsync();
 
-            course.CourseName = courseName;
+            course.Name = data[nameof(Course.Name)];
             await context.SaveChangesAsync();
 
             return RedirectToAction("Edit");
         }
+
+        #region Helper Functions
+
+        private ActionResult ErrorPage(int errorCode)
+        {
+            Response.StatusCode = errorCode;
+            ViewData["StatusCode"] = errorCode;
+
+            return View("Error");
+        }
+
+        private async Task<bool> CheckSubscription(int courseId, int userId) =>
+            await context.UsersCourses.AnyAsync(usersCourses => usersCourses.UserId == userId &&
+                                                                usersCourses.CourseId == courseId);
+
+        #endregion
     }
 }

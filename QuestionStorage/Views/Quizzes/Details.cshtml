@@ -1,4 +1,4 @@
-@model QuestionStorage.Models.Quizzes.QuizzesInfo
+@model QuestionStorage.Models.Quizzes.Quiz
 
 @{
     ViewData["Title"] = "Details";
@@ -13,25 +13,25 @@
 </head>
 <body>
 <div>
-    <h3 class="page-header">#@Model.QuizId. @Model.Name</h3>
+    <h3 class="page-header">#@Model.Id. @Model.Name</h3>
     <h5 class="page-header">@Model.Date.ToString("dd/MM/yyyy")</h5>
     <br/>
     @foreach (var question in ViewBag.Questions)
     {
         <p>
-            <b>@question.QuestionName</b>
+            <b>@question.Name</b>
         </p>
         <p>
-            <pre class="pre">@Html.Raw(question.QuestionText)</pre>
+            <pre class="pre">@Html.Raw(question.Text)</pre>
         </p>
 
         @if (question.TypeId != 3)
         {
-            @foreach (var answer in question.QuestionAnswerVariants)
+            @foreach (var answer in question.AnswerOptions)
             {
                 <ul class="ul-circle">
                     <li>
-                        <pre class="pre">@Html.Raw(answer.Answer)</pre>
+                        <pre class="pre">@Html.Raw(answer.Text)</pre>
                     </li>
                 </ul>
             }
@@ -46,13 +46,13 @@
             <p>
                 <b class="content-header">@correctAnswerText</b>
             </p>
-            @foreach (var variant in question.QuestionAnswerVariants)
+            @foreach (var variant in question.AnswerOptions)
             {
                 if (variant.IsCorrect)
                 {
                     <ul class="ul-circle">
                         <li>
-                            <pre class="pre">@Html.Raw(variant.Answer)</pre>
+                            <pre class="pre">@Html.Raw(variant.Text)</pre>
                         </li>
                     </ul>
                 }
@@ -65,8 +65,8 @@
 <br/>
 
 <div>
-    <a asp-action="ExportToXml" asp-controller="Quizzes" asp-route-id="@Model.QuizId">Export to XML</a> |
-    <a asp-action="Edit" asp-controller="Quizzes" asp-route-id="@Model.QuizId">Edit</a>
+    <a asp-action="ExportToXml" asp-controller="Quizzes" asp-route-id="@Model.Id">Export to XML</a> |
+    <a asp-action="Edit" asp-controller="Quizzes" asp-route-id="@Model.Id" asp-route-courseId="@Model.CourseId">Edit</a>
 </div>
 </body>
 </html>

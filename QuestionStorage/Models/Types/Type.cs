@@ -4,17 +4,17 @@ using QuestionStorage.Models.Questions;
 
 namespace QuestionStorage.Models.Types
 {
-    public class TypesInfo
+    public class Type
     {
-        public TypesInfo()
+        public Type()
         {
-            QuestionsInfo = new HashSet<QuestionsInfo>();
+            Questions = new HashSet<Question>();
         }
 
-        public int TypeId { get; set; }
+        public int id { get; set; }
         public string Name { get; set; }
         public string Comment { get; set; }
         [InverseProperty("Type")]
-        public virtual ICollection<QuestionsInfo> QuestionsInfo { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }

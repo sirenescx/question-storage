@@ -1,17 +1,17 @@
-@model QuestionStorage.Models.Questions.QuestionsInfo
+@model QuestionStorage.Models.Questions.Question
 
 <p class="less-bottom-space">Question title*</p>
-@Html.TextAreaFor(model => model.QuestionName, 1, 100,
+@Html.TextAreaFor(model => model.Name, 1, 100,
     new
     {
         @class = "textarea long",
-        Value = Html.DisplayFor(model => model.QuestionName)
+        Value = Html.DisplayFor(model => model.Name)
     })
 
 <p class="less-bottom-space">Question content*</p>
-@Html.TextAreaFor(model => model.QuestionText, 15, 100,
+@Html.TextAreaFor(model => model.Text, 15, 100,
     new
     {
         @class = "textarea long",
-        Value = Html.DisplayFor(model => model.QuestionText)
+        Value = Html.DisplayFor(model => model.Text)
     })

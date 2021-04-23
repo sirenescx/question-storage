@@ -1,4 +1,4 @@
-﻿@model QuestionStorage.Models.Questions.QuestionsInfo
+﻿@model QuestionStorage.Models.Questions.Question
 
 @{
     ViewData["Title"] = "Edit";
@@ -19,7 +19,7 @@
 </style>
 
 @using (Html.BeginForm("Edit", "Questions", 
-    new {courseId = Model.CourseId, questionId = Model.QuestId}, FormMethod.Post))
+    new {courseId = Model.CourseId, questionId = Model.Id}, FormMethod.Post))
 {
     <body>
     @Html.AntiForgeryToken()

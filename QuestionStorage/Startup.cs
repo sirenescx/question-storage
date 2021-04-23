@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using QuestionStorage.Models;
+using QuestionStorage.Models.Options;
+using QuestionStorage.Models.Users;
+using UserOptions = Microsoft.AspNetCore.Identity.UserOptions;
 
 namespace QuestionStorage
 {
@@ -20,8 +23,7 @@ namespace QuestionStorage
         }
 
         private IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services
@@ -50,9 +52,11 @@ namespace QuestionStorage
             services.AddSingleton<IFileProvider>(
                 new PhysicalFileProvider(  
                     Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
-        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            services.Configure<UserOptions>(Configuration.GetSection("UserSettings"));
+            services.Configure<QuestionOptions>(Configuration.GetSection("QuestionSettings"));
+        }
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -62,8 +66,6 @@ namespace QuestionStorage
             else
             {
                 app.UseDeveloperExceptionPage();
-                // app.UseExceptionHandler("/Home/Error");
-                // app.UseHsts();
             }
             
             app.UseHttpsRedirection();

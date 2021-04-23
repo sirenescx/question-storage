@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace QuestionStorage
@@ -9,7 +8,6 @@ namespace QuestionStorage
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            
             host.Run();
         }
 

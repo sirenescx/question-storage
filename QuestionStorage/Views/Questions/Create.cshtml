@@ -3,7 +3,6 @@
 
 @{
     ViewData["Title"] = "Create";
-
     var qTypes = new Dictionary<string, string>
     {
         {"mc", "Multiple choice"},
@@ -14,8 +13,8 @@
     var selectList = new SelectList(qTypes.Select(
         x => new {Value = x.Key, Text = x.Value}), "Value", "Text");
 
-    HashSet<TagsInfo> tags = ViewBag.Tags;
-    var tagList = new SelectList(tags.Select(t => new {Value = $"ŧ{t.TagId}", Text = t.Name}),
+    HashSet<Tag> tags = ViewBag.Tags;
+    var tagList = new SelectList(tags.Select(t => new {Value = $"ŧ{t.Id}", Text = t.Name}),
         "Value", "Text");
 }
 
@@ -71,12 +70,12 @@
             {
                 <tr>
                     <td>
-                        @Html.TextAreaFor(model => model.AnswerOption.Answer, 1, 60,
+                        @Html.TextAreaFor(model => model.AnswerOption.Text, 1, 60,
                             new {@class = "textarea long resizable"})
                     </td>
                     <td style="text-align: center; vertical-align: center">
-                        <input type="hidden" value="off" name="Correct">
-                        <input name="Correct" type="checkbox" value="on">
+                        <input type="hidden" value="off" name="IsCorrect">
+                        <input name="IsCorrect" type="checkbox" value="on">
                     </td>
                     @if (i > 1)
                     {

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuestionStorage.Models.Questions.QuestionsInfo>
+﻿@model IEnumerable<QuestionStorage.Models.Questions.Question>
 
 @{
     string title = Model.First().TagsQuestions.First().Tag.Name;
@@ -19,9 +19,9 @@
 @foreach (var item in Model)
 {
     <div>
-        <a asp-action="AboutQuestion" asp-route-courseId="@item.CourseId" asp-route-questionId="@item.QuestId">#@item.QuestId. @item.QuestionName</a>
+        <a asp-action="AboutQuestion" asp-route-courseId="@item.CourseId" asp-route-questionId="@item.Id">#@item.Id. @item.Name</a>
         <div class="less-bottom-space">
-            <pre class="pre smaller-text">@Html.Raw(string.Join(' ', item.QuestionText.Split().Take(20)) + "</code>")...</pre>
+            <pre class="pre smaller-text">@Html.Raw(string.Join(' ', item.Text.Split().Take(20)) + "</code>")...</pre>
         </div>
     </div>
     <br/>

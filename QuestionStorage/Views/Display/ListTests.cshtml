@@ -1,7 +1,7 @@
-@model System.Collections.Generic.List<QuestionStorage.Models.Quizzes.QuizzesInfo>
+@model System.Collections.Generic.List<QuestionStorage.Models.Quizzes.Quiz>
 
 @{
-    ViewData["Title"] = "Tests";
+    ViewData["Title"] = "Quizzes";
 }
 
 <!DOCTYPE html>
@@ -16,7 +16,7 @@
 @using (Html.BeginForm("ListTests", "Display", FormMethod.Post))
 {
 
-    <h1 class="page-header">Tests</h1>
+    <h1 class="page-header">Quizzes</h1>
     <br/>
 
     @if (Model != null)
@@ -24,7 +24,7 @@
         @foreach (var item in Model)
         {
             <div>
-                <a asp-action="AboutTest" asp-route-id="@item.QuizId">#@item.QuizId. @item.Name</a>
+                <a asp-action="AboutTest" asp-route-courseId="@item.CourseId" asp-route-quizId="@item.Id">#@item.Id. @item.Name</a>
             </div>
             <br/>
         }

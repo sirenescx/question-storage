@@ -3,7 +3,7 @@ using QuestionStorage.Models.Quizzes;
 
 namespace QuestionStorage.Models.ViewModels
 {
-    public class TestViewModel : QuizzesInfo
+    public class TestViewModel : Quiz
     {
         [Range(1, int.MaxValue)]
         public string QuestionId { get; set; }

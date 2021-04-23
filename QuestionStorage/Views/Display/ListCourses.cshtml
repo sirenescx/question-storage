@@ -1,4 +1,4 @@
-@model System.Collections.Generic.List<QuestionStorage.Models.Courses.CoursesInfo>
+@model System.Collections.Generic.List<QuestionStorage.Models.Courses.Course>
 
 @{
     ViewData["Title"] = "Courses";
@@ -6,7 +6,6 @@
 }
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <title>Courses</title>
@@ -33,7 +32,7 @@
         {
             var course = Model[i];
             <div>
-                <a asp-action="Details" asp-controller="Courses" asp-route-courseId="@course.CourseId">@course.CourseName [@questionsCount[i]]</a>
+                <a asp-action="Details" asp-controller="Courses" asp-route-courseId="@course.Id">@course.Name [@questionsCount[i]]</a>
             </div>
             <br/>
         }

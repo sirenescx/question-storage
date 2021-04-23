@@ -35,7 +35,7 @@ namespace QuestionStorage.Controllers
         public IActionResult Contact() => View();
 
         public IActionResult Tests() => RedirectToAction("ListTests", "Display");
-        
+
         public IActionResult Courses() => RedirectToAction("ListCourses", "Display");
     }
 }

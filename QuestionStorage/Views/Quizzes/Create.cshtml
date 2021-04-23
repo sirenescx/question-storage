@@ -26,12 +26,12 @@
     @Html.TextAreaFor(model => model.Name, 1, 100,
         new {@class = "textarea short", id = "testName"})
     <p class="less-bottom-space">Date*</p>
-    <input type="date" class="date-textarea" name="date" id="Date"/>
+    <input type="date" class="date-textarea" name="Date" id="Date"/>
     <br/>
     <hr/>
     
      <p
-         class="less-bottom-space">Question ID*
+         class="less-bottom-space">Question Id*
          <button class="plus" id="addQuestionId" type="button" onclick="function addNewIdRow() {
              const tableRef = document.getElementById('questionsTable');
              const newRow = tableRef.insertRow(-1);

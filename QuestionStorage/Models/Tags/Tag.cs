@@ -3,23 +3,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuestionStorage.Models.Tags
 {
-    public class TagsInfo
+    public class Tag
     {
-        public TagsInfo()
+        public Tag()
         {
-            InverseParent = new HashSet<TagsInfo>();
+            InverseParent = new HashSet<Tag>();
             TagsQuestions = new HashSet<TagsQuestions>();
         }
 
-        public int TagId { get; set; }
+        public int Id { get; set; }
         public int? ParentId { get; set; }
         public string Name { get; set; }
         public int CourseId { get; set; }
         [ForeignKey(nameof(ParentId))]
         [InverseProperty(nameof(InverseParent))]
-        public virtual TagsInfo Parent { get; set; }
+        public virtual Tag Parent { get; set; }
         [InverseProperty(nameof(Parent))]
-        public virtual ICollection<TagsInfo> InverseParent { get; set; }
+        public virtual ICollection<Tag> InverseParent { get; set; }
         [InverseProperty("Tag")]
         public virtual ICollection<TagsQuestions> TagsQuestions { get; set; }
     }

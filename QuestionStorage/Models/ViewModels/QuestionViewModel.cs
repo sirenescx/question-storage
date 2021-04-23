@@ -4,7 +4,7 @@ namespace QuestionStorage.Models.ViewModels
 {
     public class QuestionViewModel 
     {
-        public QuestionsInfo Question { get; set; }
-        public QuestionAnswerVariants AnswerOption { get; set; }
+        public Question Question { get; set; }
+        public AnswerOption AnswerOption { get; set; }
     }
 }

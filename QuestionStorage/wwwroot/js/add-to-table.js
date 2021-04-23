@@ -5,18 +5,18 @@
     let cell2 = newRow.insertCell(1);
     let cell3 = newRow.insertCell(2);
     if (tableId === "answerTable") {
-        let textarea = document.getElementsByName("AnswerOption.Answer")[0].cloneNode(false);
+        let textarea = document.getElementsByName("AnswerOption.Text")[0].cloneNode(false);
         textarea.value = "";
         cell1.appendChild(textarea);
         setCellStyle(cell2);
         setCellStyle(cell3);
         let selected = document.getElementById("typeOfQuestionSelector").value;
         if (selected === "sc") {
-            cell2.innerHTML = '<input type="hidden" value="off" name="Correct">' +
-                              '<input name="Correct" type="radio" value="on">';
+            cell2.innerHTML = '<input type="hidden" value="off" name="IsCorrect">' +
+                              '<input name="IsCorrect" type="radio" value="on">';
         } else if (selected === "mc") {
-            cell2.innerHTML = '<input type="hidden" value="off" name="Correct">' +
-                              '<input name="Correct" type="checkbox" value="on">';
+            cell2.innerHTML = '<input type="hidden" value="off" name="IsCorrect">' +
+                              '<input name="IsCorrect" type="checkbox" value="on">';
         }
         cell3.innerHTML = '<button class="button remove" id="addResponseOptions" onclick="removeRow(this, \'answerTable\')">✕</button>';
     } 

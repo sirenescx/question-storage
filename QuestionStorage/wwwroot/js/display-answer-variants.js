@@ -1,7 +1,7 @@
-﻿const checkboxCode = '<input type="hidden" value="off" name="Correct">' +
-                     '<input type="checkbox" value="on" name="Correct">';
-const radioCode = '<input type="hidden" value="off" name="Correct">'+
-                  '<input type="radio" name="Correct" value="on">';
+﻿const checkboxCode = '<input type="hidden" value="off" name="IsCorrect">' +
+                     '<input type="checkbox" value="on" name="IsCorrect">';
+const radioCode = '<input type="hidden" value="off" name="IsCorrect">'+
+                  '<input type="radio" name="IsCorrect" value="on">';
 
 function displayAnswerVariants() {
     const selected = document.getElementById("typeOfQuestionSelector").value;
@@ -107,7 +107,7 @@ function getTextAreaCode(rowsCount, id) {
                      'data-val-length="The field Answer must be a string with a maximum length of 256." ' +
                      'data-val-length-max="256" data-val-minlength="The field Answer must be a string or array type with a minimum length of \'1\'." ' +
                      'data-val-minlength-min="1" data-val-required="Response option text is required." ' +
-                     'maxlength="256" name="AnswerOption.Answer" aria-describedby="answerOption-error AnswerOption.Answer-error" ' + id +
+                     'maxlength="256" name="AnswerOption.Text" aria-describedby="answerOption-error AnswerOption.Text-error" ' + id +
                      `aria-invalid="true" rows=${rowsCount}>` +
            '</textarea>';
 }

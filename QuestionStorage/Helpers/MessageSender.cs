@@ -1,6 +1,6 @@
 using System.Net.Mail;
 
-namespace QuestionStorage.Utils
+namespace QuestionStorage.Helpers
 {
     public class MessageSender
     {

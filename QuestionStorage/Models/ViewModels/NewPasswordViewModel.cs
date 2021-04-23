@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using QuestionStorage.Utils;
+using QuestionStorage.Helpers;
 
 namespace QuestionStorage.Models.ViewModels
 {
-    public class NewPasswordViewModel : EditViewModel
+    public class NewPasswordViewModel : ChangePasswordViewModel
     {
         [Required]
         [DataType(DataType.Password)]

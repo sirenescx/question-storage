@@ -30,10 +30,10 @@
         @Html.EditorFor(model => model.NewPassword,
             new {htmlAttributes = new {@class = "password-textarea"}})</p>
     <p class="smaller-text less-bottom-space less-top-space">Confirmation Password</p>
-    @Html.ValidationMessageFor(model => model.ConfirmPassword, string.Empty,
+    @Html.ValidationMessageFor(model => model.ConfirmationPassword, string.Empty,
         new {@class = "text-danger smaller-text"})
     <p>
-        @Html.EditorFor(model => model.ConfirmPassword,
+        @Html.EditorFor(model => model.ConfirmationPassword,
             new {htmlAttributes = new {@class = "password-textarea"}})</p>
                                                                       
     <input type="submit" class="submit account" value="Change"/>
