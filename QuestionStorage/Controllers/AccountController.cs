@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using QuestionStorage.Helpers;
 using QuestionStorage.Models;
+using QuestionStorage.Models.Options;
 using QuestionStorage.Models.Users;
 using QuestionStorage.Models.ViewModels;
 
@@ -28,15 +29,17 @@ namespace QuestionStorage.Controllers
     {
         private readonly StorageContext context;
         private readonly MessageSender messageSender;
-        private readonly IOptionsMonitor<Models.Options.UserOptions> userOptions;
+        private readonly IOptionsMonitor<UserOptions> userOptions;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AccountController(StorageContext context,
-            IOptionsMonitor<Models.Options.UserOptions> userOptions, IHttpContextAccessor httpContextAccessor)
+        public AccountController(
+            StorageContext context, 
+            IHttpContextAccessor httpContextAccessor, 
+            IOptionsMonitor<UserOptions> userOptions)
         {
             this.context = context;
-            this.userOptions = userOptions;
             this.httpContextAccessor = httpContextAccessor;
+            this.userOptions = userOptions;
             messageSender = new MessageSender();
         }
 
@@ -80,6 +83,11 @@ namespace QuestionStorage.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("ListCourses", "Display");
+            }
+            
             return View();
         }
 
@@ -186,8 +194,7 @@ namespace QuestionStorage.Controllers
                 return View();
             }
 
-            var user = await context.AddAsync(
-                CreateUser(email, userOptions.CurrentValue.DefaultPassword, data["Admin"]));
+            var user = await context.AddAsync(CreateUser(email, data["Admin"]));
             await context.SaveChangesAsync();
 
             await SendPasswordLink(user.Entity, email, "Set password");
@@ -304,11 +311,12 @@ namespace QuestionStorage.Controllers
         private static void UpdatePassword(ChangePasswordViewModel model, User user) =>
             user.Password = GetPasswordHash(model.NewPassword);
 
-        private static User CreateUser(string email, string password, StringValues roleInfo) =>
+        // TODO: Use UserOptions
+        private User CreateUser(string email, StringValues roleInfo) =>
             new User
             {
                 Email = email,
-                Password = GetPasswordHash(password),
+                Password = GetPasswordHash("9L>fzDrgQ9TCxP!."),
                 RoleId = Helpers.Common.PreprocessCheckboxValues(roleInfo).First() ? 1 : 2
             };
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using QuestionStorage.Models;
 using QuestionStorage.Models.Courses;
@@ -81,6 +82,13 @@ namespace QuestionStorage.Controllers
         [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Create(IFormCollection data)
         {
+            ValidateCourse(data, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            
             var userId = await Helpers.Common.GetUserId(context, User.Identity.Name);
 
             var course = await context.AddAsync(new Course {Name = data[nameof(Course.Name)]});
@@ -93,7 +101,6 @@ namespace QuestionStorage.Controllers
         }
 
         [Authorize(Roles = "administrator")]
-        [HttpPost]
         public async Task<IActionResult> Delete(int courseId)
         {
             var course = await context.Courses
@@ -116,9 +123,16 @@ namespace QuestionStorage.Controllers
                 .Where(q => q.CourseId == courseId)
                 .ToListAsync();
 
-            context.RemoveRange(questions);
-            context.RemoveRange(quizzes);
+            if (questions != null)
+            {
+                context.RemoveRange(questions);
+            }
+            if (quizzes != null)
+            {
+                context.RemoveRange(quizzes);
+            }
             context.Remove(course);
+
             await context.SaveChangesAsync();
 
             return RedirectToAction("ListCourses", "Display");
@@ -137,6 +151,13 @@ namespace QuestionStorage.Controllers
         [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Edit(int courseId, IFormCollection data)
         {
+            ValidateCourse(data, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            
             var course = await context.Courses.Where(c => c.Id == courseId).FirstOrDefaultAsync();
 
             course.Name = data[nameof(Course.Name)];
@@ -155,6 +176,11 @@ namespace QuestionStorage.Controllers
             return View("Error");
         }
 
+        private void ValidateCourse(IFormCollection data, ModelStateDictionary modelState)
+        {
+            Helpers.Common.ValidateField(data["Name"], modelState, ("Name", "Course name is required."));
+        }
+        
         private async Task<bool> CheckSubscription(int courseId, int userId) =>
             await context.UsersCourses.AnyAsync(usersCourses => usersCourses.UserId == userId &&
                                                                 usersCourses.CourseId == courseId);

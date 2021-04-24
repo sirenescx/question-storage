@@ -165,14 +165,10 @@ namespace QuestionStorage.Controllers
 
         private async Task<Quiz> CreateTest(int courseId, IFormCollection data)
         {
-            // IActionResult RedirectToPage() => View();
-
             ValidateTestCreation(data, ModelState);
 
             if (!ModelState.IsValid)
             {
-                // RedirectToPage();
-                //
                 return null;
             }
 

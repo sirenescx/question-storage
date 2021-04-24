@@ -52,9 +52,9 @@ namespace QuestionStorage
             services.AddSingleton<IFileProvider>(
                 new PhysicalFileProvider(  
                     Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
-
-            services.Configure<UserOptions>(Configuration.GetSection("UserSettings"));
+            
             services.Configure<QuestionOptions>(Configuration.GetSection("QuestionSettings"));
+            services.Configure<UserOptions>(Configuration.GetSection("UserSettings"));
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

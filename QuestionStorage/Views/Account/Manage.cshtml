@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/custom-stylesheet.css">
 </head>
 <body>
-@using (Html.BeginForm("Manage", "Account", FormMethod.Post))
+@using (Html.BeginForm("Manage", "Account", FormMethod.Post, new { SubmitButton = "submitButton", id = "formSubmit" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary("Please provide the details below and then click submit.",
@@ -28,8 +28,8 @@
         <input type="hidden" value="off" name="Admin"> 
         <input name="Admin" type="checkbox" value="on">
     </p>   
-                            
-    <input type="submit" class="submit" value="Create user" onclick="clipboardAlert()"/>
+        
+    <input type="submit" class="submit" id="submitButton" value="Create user">
 
     <hr/>
     
@@ -51,9 +51,18 @@
 </body>
 
 @section Scripts {
-    <script>
-         function clipboardAlert() {
-             alert("User data was copied to a clipboard.");
-         }
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#formSubmit").keypress(function (e) {
+                    const keycode = e.keyCode || e.charCode || e.which; 
+                    if (keycode === 13)    
+                    {
+                        let submitButton = $(this).attr("SubmitButton");
+                        $("#" + submitButton).click();
+                        return false;
+                    }
+                });
+            });
+        </script>
 }

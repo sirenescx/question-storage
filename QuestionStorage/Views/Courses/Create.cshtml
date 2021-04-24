@@ -15,6 +15,9 @@
 <body>
 @using (Html.BeginForm("Create", "Courses", FormMethod.Post, new { SubmitButton = "submitButton", id = "formSubmit" }))
 {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("Please provide the details below and then click submit.",
+        new {@class = "text-danger"})
     <h1 class="page-header">Create course</h1>
     <p class="less-bottom-space">Course name*</p>
     @Html.TextAreaFor(model => model.Name, 1, 100,
